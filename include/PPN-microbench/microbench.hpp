@@ -7,16 +7,13 @@ using json = nlohmann::json;
 
 class Microbench {
 
-private:
-    
-    
-public:
+  private:
+  public:
     Microbench();
     ~Microbench();
 
     virtual bool executeBench() = 0;
     virtual json getJson() = 0;
 };
-
 
 #endif
