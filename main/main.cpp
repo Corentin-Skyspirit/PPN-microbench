@@ -4,8 +4,8 @@
 #include <PPN-microbench/iops.hpp>
 
 int main() {
-    // Iops test;
-    Flops test;
+    Iops test;
+    // Flops test;
     test.run();
 
     return 1;
