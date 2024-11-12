@@ -2,7 +2,7 @@
 #include <PPN-microbench/test_class.hpp>
 #include <PPN-microbench/cpu_speed.hpp>
 #include <PPN-microbench/flops.hpp>
-#include <PPN-microbench/iops.hpp>
+// #include <PPN-microbench/iops.hpp>
 
 int main() {
     // Iops test;
