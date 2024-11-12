@@ -2,7 +2,7 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE awesome_func.cpp microbench.cpp test_class.cpp)
+target_sources(PPN-microbench PRIVATE awesome_func.cpp microbench.cpp test_class.cpp flops.cpp)
 
 target_sources(
     PPN-microbench
