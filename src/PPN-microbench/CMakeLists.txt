@@ -2,7 +2,7 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE awesome_func.cpp microbench.cpp test_class.cpp flops.cpp cpu_speed.cpp)
+target_sources(PPN-microbench PRIVATE awesome_func.cpp microbench.cpp test_class.cpp flops.cpp cpu_frequency.cpp)
 
 target_sources(
     PPN-microbench
@@ -12,7 +12,7 @@ target_sources(
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/awesome_header.hpp
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/microbench.hpp
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/test_class.hpp
-        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cpu_speed.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cpu_frequency.hpp
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
