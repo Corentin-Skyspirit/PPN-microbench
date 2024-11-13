@@ -1,7 +1,7 @@
 #ifndef IOPS_HPP
 #define IOPS_HPP
 
-#include <PPN-microbench/abstract_ops.hpp>
+#include <PPN-microbench/ops/abstract_ops.hpp>
 
 class Iops : public AbstractOps {
     protected:

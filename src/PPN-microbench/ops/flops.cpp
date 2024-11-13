@@ -1,4 +1,4 @@
-#include <PPN-microbench/flops.hpp>
+#include <PPN-microbench/ops/flops.hpp>
 
 void Flops::compute(int cpu) {
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);

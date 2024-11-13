@@ -1,4 +1,4 @@
-#include <PPN-microbench/iops.hpp>
+#include <PPN-microbench/ops/iops.hpp>
 
 void Iops::compute(int cpu) {
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
