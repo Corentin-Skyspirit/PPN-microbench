@@ -8,8 +8,8 @@ int main() {
 
     std::vector<Microbench *> vec;
 
-    vec.push_back(new Flops(50));
-    vec.push_back(new Iops(50));
+    vec.push_back(new Flops(5));
+    vec.push_back(new Iops(5));
 
     for (Microbench *b : vec) {
         b->run();
