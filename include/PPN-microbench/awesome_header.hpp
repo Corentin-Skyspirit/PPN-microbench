@@ -1,1 +1,0 @@
-void cool_func();

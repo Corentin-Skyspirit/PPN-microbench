@@ -8,12 +8,6 @@ Microbench::Microbench(std::string name, int nbIterations) {
 Microbench::~Microbench() {
 }
 
-void Microbench::run() {
-    for (int i = 0; i < this->nbIterations; i++) {
-        executeBench();
-    }
-}
-
 std::string Microbench::getName(){
     return this->name;
 }
