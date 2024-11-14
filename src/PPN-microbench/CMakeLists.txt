@@ -2,7 +2,7 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp)
 target_sources(PPN-microbench PRIVATE ops/abstract_ops.cpp ops/flops.cpp ops/iops.cpp)
 
 target_sources(
@@ -11,6 +11,7 @@ target_sources(
         FILE_SET HEADERS
         BASE_DIRS ${PROJECT_SOURCE_DIR}/include
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/microbench.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/context.hpp
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/abstract_ops.hpp
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/flops.hpp
         FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/iops.hpp
