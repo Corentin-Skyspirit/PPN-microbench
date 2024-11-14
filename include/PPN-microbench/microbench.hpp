@@ -31,5 +31,4 @@ class Microbench {
         virtual json getJson() = 0;
 };
 
-
 #endif

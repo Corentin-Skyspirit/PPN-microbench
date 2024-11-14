@@ -1,0 +1,30 @@
+# We'll use defaults from the LLVM style, but with 4 columns indentation.
+BasedOnStyle: LLVM
+
+Language: Cpp
+
+# Indentation style
+IndentWidth: 4
+TabWidth: 4
+
+# opening braces style (same line)
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: true
+  BeforeElse: true
+
+# curly braces style
+BreakBeforeBraces: Attach
+
+# Space before opening braces
+SpaceBeforeParens: ControlStatements # for if, for, while, switch, etc.
+SpaceBeforeRangeBasedForLoopColon: true
+
+# maximum line length
+ColumnLimit: 80
