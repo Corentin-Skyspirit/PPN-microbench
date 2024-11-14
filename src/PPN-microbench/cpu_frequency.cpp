@@ -31,5 +31,7 @@ json CPUFrequency::getJson() {
 }
 
 void CPUFrequency::run() {
-    Microbench::run();
+    for (int i = 0; i < getNbIterations(); i++) {
+        executeBench();
+    }
 }

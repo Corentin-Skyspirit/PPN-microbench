@@ -10,7 +10,7 @@ class CPUFrequency : Microbench {
     private:
         std::vector<u64> measures;
         std::vector<u64> benchTimes;
-        void executeBench() override;
+        void executeBench();
         
     public:
         CPUFrequency(std::string name, int nbIterations);

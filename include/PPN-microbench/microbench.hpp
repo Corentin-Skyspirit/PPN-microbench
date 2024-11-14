@@ -14,11 +14,8 @@ using json = nlohmann::json;
 
 class Microbench {
     protected:
-        std::vector<std::any> results;
         std::string name;
         int nbIterations;
-
-        virtual void executeBench() = 0;
 
     public:
         Microbench(std::string name, int nbIterations);
