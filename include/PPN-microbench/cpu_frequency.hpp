@@ -2,15 +2,17 @@
 #define CPU_FREQUENCY
 
 #include <PPN-microbench/microbench.hpp>
+#include <PPN-microbench/rdtsc.hpp>
 #include <vector>
 #include <chrono>
-#include <x86intrin.h>
+#include <thread>
 
 class CPUFrequency : Microbench {
     private:
-        std::vector<u64> measures;
-        std::vector<u64> benchTimes;
-        void executeBench();
+        unsigned int nbThreads;
+        std::vector<std::vector<u64>> measures;
+        std::vector<std::vector<u64>> benchTimes;
+        void executeBench(int id);
         
     public:
         CPUFrequency(std::string name, int nbIterations);
