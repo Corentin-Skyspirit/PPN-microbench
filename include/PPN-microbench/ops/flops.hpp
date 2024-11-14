@@ -7,7 +7,7 @@ class Flops : public AbstractOps {
     protected:
         void compute(int);
     public:
-        Flops() : AbstractOps("FLOPS", 1) {};
+        Flops(int reps) : AbstractOps("FLOPS", reps) {};
         ~Flops() {};
 };
 

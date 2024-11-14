@@ -7,7 +7,7 @@ class Iops : public AbstractOps {
     protected:
         void compute(int);
     public:
-        Iops() : AbstractOps("IOPS", 1) {};
+        Iops(int reps) : AbstractOps("IOPS", reps) {};
         ~Iops() {};
 };
 

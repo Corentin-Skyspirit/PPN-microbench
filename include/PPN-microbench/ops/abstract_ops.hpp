@@ -4,21 +4,20 @@
 #include <PPN-microbench/microbench.hpp>
 
 #include <string>
+#include <vector>
 
 static int c;
 
-class AbstractOps : Microbench {
+class AbstractOps : public Microbench {
     protected:
-        int nb_cpus;
+        int nbCpus;
         u64 *results;
-        u64**polled_results;
+        std::vector<std::vector<u64>> finalResults;
+        
+        // single bench run time in ms
+        int benchTime = 1000;
 
-        // running benchmark time (ms)
-        int const bench_time = 20000;
-        // measurments polling interval (ms)
-        int const poll_interval = 100;
-
-        static void *thread_helper(void *context) {((AbstractOps *) context)->compute(c++); return nullptr;}
+        static void *threadHelper(void *context) {((AbstractOps *) context)->compute(c++); return nullptr;}
         void executeBench();
         virtual void compute(int) = 0;
     public:

@@ -2,8 +2,10 @@
 
 void Iops::compute(int cpu) {
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
+    
+    long long sum = 0;
 
-    u64 ops_per_loop = 25;
+    u64 opsPerLoop = 25;
     i64 i[25] = {
         675804981625017,  712754860957697, 394053602764455, 820993044344894, 208100954703234,
         -60002541372275,  -10938368667033, -69067871329563, -60112960571491, -60908980612608,
@@ -13,9 +15,11 @@ void Iops::compute(int cpu) {
     };
 
     while (1) {
-        i[0] += i[1]  * i[2]  + i[3]  * i[4]  + i[5]  * i[6]  + i[7]  * i[8]  + i[9]  * i[10] + 
+        // if ((results[cpu] % 10000000000) == 0) std::cout << results[cpu] << std::endl;
+
+        sum += i[1]  * i[2]  + i[3]  * i[4]  + i[5]  * i[6]  + i[7]  * i[8]  + i[9]  * i[10] + 
                 i[11] * i[12] + i[13] * i[14] + i[15] * i[16] + i[17] * i[18] + i[19] * i[20] +
                 i[21] * i[22] + i[23] * i[24]; 
-        results[cpu] += ops_per_loop;
+        results[cpu] += opsPerLoop;
     }
 }

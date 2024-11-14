@@ -2,8 +2,8 @@
 
 void Flops::compute(int cpu) {
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
-
-    u64 ops_per_loop = 25;
+    
+    u64 opsPerLoop = 25;
     float f[25] = {
         2.675804981625017,  1.7127548609576937, 8.394053602764455,  1.820993044344894,  3.2081009547032,
         9.600025413727275,  7.010938368667033,  4.690678713295635,  3.6011296057149176, 5.609089806126083,
@@ -15,7 +15,7 @@ void Flops::compute(int cpu) {
     while (1) {
         f[0] += f[1]  * f[2]  + f[3]  * f[4]  + f[5]  * f[6]  + f[7]  * f[8]  + f[9]  * f[10] + 
                 f[11] * f[12] + f[13] * f[14] + f[15] * f[16] + f[17] * f[18] + f[19] * f[20] +
-                f[21] * f[22] + f[23] * f[24]; 
-        results[cpu] += ops_per_loop;
+                f[21] * f[22] + f[23] * f[24];
+        results[cpu] += opsPerLoop;
     }
 }

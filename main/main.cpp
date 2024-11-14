@@ -1,12 +1,19 @@
-#include <PPN-microbench/awesome_header.hpp>
-#include <PPN-microbench/test_class.hpp>
+#include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops/flops.hpp>
 #include <PPN-microbench/ops/iops.hpp>
 
+#include <vector>
+
 int main() {
-    // Iops test;
-    Flops test;
-    test.run();
+
+    std::vector<Microbench *> vec;
+
+    vec.push_back(new Flops(50));
+    vec.push_back(new Iops(50));
+
+    for (Microbench *b : vec) {
+        b->run();
+    }
 
     return 1;
 }
