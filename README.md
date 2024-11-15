@@ -22,9 +22,9 @@ cmake .. && make
 
 The `context` class contains all system informations relevant to the  benchmarks, or needed for the final reports. It includes:
 
-- [ ] Cpu architecture
-- [ ] Word size
-- [ ] Core count
+- [x] Cpu architecture
+- [x] Word size
+- [x] Core count
 - [ ] Hyperthreading
 - [ ] AVX capabilities
 - [ ] Total RAM
@@ -33,3 +33,5 @@ The `context` class contains all system informations relevant to the  benchmarks
 - [ ] L1 cache
 
 as well as other general purpose information such as executed bench set, date/time...
+
+wait idk if it's useful anymore..

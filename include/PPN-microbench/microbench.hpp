@@ -2,6 +2,7 @@
 #define MICROBENCH
 
 #include <PPN-microbench/constants.hpp>
+#include <PPN-microbench/context.hpp>
 
 #include <any>
 #include <iostream>
@@ -21,6 +22,8 @@ class Microbench {
     virtual void executeBench() = 0;
 
   public:
+    Context context = Context::getInstance();
+
     Microbench(std::string name, int nbIterations);
     ~Microbench();
 
