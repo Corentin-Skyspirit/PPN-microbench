@@ -3,9 +3,9 @@
 #include <PPN-microbench/ops/iops.hpp>
 
 int main() {
-    CPUFrequency cpuFrequency("CPU Speed", 7);
+    CPUFrequency cpuFrequency("CPU Speed", 101);
     cpuFrequency.run();
-    std::cout << cpuFrequency.getJson().dump() << std::endl;
+    std::cout << cpuFrequency.getJson().dump(4) << std::endl;
 
 
     // std::vector<Microbench *> vec;

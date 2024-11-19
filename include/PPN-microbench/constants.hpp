@@ -3,7 +3,7 @@
 #define ki 1024;
 #define Mi 1048576;
 #define Gi 1073741824;
-#define Pi 1099511627776;
+#define Ti 1099511627776;
 
 typedef uint64_t u64;
 typedef uint32_t u32;

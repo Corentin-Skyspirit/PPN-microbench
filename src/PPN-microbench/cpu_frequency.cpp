@@ -18,7 +18,7 @@ void CPUFrequency::executeBench(int id) {
     measures[id].push_back(rdtsc() - startMeasure);
     std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
     benchTimes[id].push_back(std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count());
-    std::cout << "Mesure" << std::endl;
+    // std::cout << "Mesure" << std::endl;
 }
 
 json CPUFrequency::getJson() {
@@ -26,7 +26,7 @@ json CPUFrequency::getJson() {
     std::string name;
     for (unsigned int id = 0; id < nbThreads; id++) {
         for (int i = 0; i < getNbIterations(); i++) {
-            cpuSpeedJson["CPU" + std::to_string(id)] += {measures[id][i], benchTimes[id][i]};
+            cpuSpeedJson["CPU" + std::to_string(id)] += {measures[id][i] / benchTimes[id][i], benchTimes[id][i]};
         }
     }
     return cpuSpeedJson;
@@ -45,6 +45,6 @@ void CPUFrequency::run() {
 
     for (auto &th : threads) {
         th.join();
-        std::cout << "Thread fini" << std::endl;
+        // std::cout << "Thread fini" << std::endl;
     }
 }
