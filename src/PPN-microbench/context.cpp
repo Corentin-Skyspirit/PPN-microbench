@@ -7,11 +7,25 @@ Context::Context() {
     memoryInfo();
 }
 
-Context::~Context() { cout << "haha" << endl; }
+Context::~Context() {}
 
 Context &Context::getInstance() {
     static Context instance;
     return instance;
+}
+
+std::string Context::runCmd(const char *cmd) {
+    std::array<char, 128> buffer;
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) !=
+           nullptr) {
+        result += buffer.data();
+    }
+    return result;
 }
 
 void Context::cpuInfo() {
@@ -77,22 +91,45 @@ void Context::cpuInfo() {
 
 void Context::memoryInfo() {
 
+    /////////
+    // RAM //
+    /////////
+
+    memory = std::stoull(
+        runCmd("cat /proc/meminfo | grep MemTotal | awk '{print $2}'"));
+    // /proc/meminfo gives total memory size in kB.
+    memory = memory * 1000;
+
     ///////////
     // CACHE //
     ///////////
 
-    // :(
-    // system("lscpu -B | grep L1d | awk '{print $3}'");
+    l1d = std::stoull(runCmd("lscpu -B | grep L1d | awk '{print $3}'"));
+    l1i = std::stoull(runCmd("lscpu -B | grep L1i | awk '{print $3}'"));
+    l2 = std::stoull(runCmd("lscpu -B | grep L2 | awk '{print $3}'"));
+    l3 = std::stoull(runCmd("lscpu -B | grep L3 | awk '{print $3}'"));
 }
 
-void Context::print() {
-    cout << "archi: " << cpuArchi << endl;
-    cout << "word size: " << wordSize << " bits" << endl;
-    cout << "Core count: " << cpus << endl;
-    cout << "SIMD capabilities: " << endl;
-    for (std::string s : simd) {
-        cout << "\t" << s << endl;
-    }
-}
+json Context::getJson() {
+    json obj;
 
-json Context::getJson() { json obj; }
+    json cpu_info;
+    cpu_info["architechture"] = cpuArchi;
+    cpu_info["word_size"] = wordSize;
+    cpu_info["cpus"] = cpus;
+    cpu_info["simd"] = json(simd);
+
+    json mem_info;
+    mem_info["total_mem"] = memory;
+    mem_info["l1d"] = l1d;
+    mem_info["l1i"] = l1i;
+    mem_info["l2"] = l2;
+    mem_info["l3"] = l3;
+
+    obj["cpu_info"] = cpu_info;
+    obj["mem_info"] = mem_info;
+
+    cout << obj.dump(4) << endl;
+
+    return obj;
+}

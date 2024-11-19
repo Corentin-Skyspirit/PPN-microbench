@@ -56,4 +56,13 @@ void AbstractOps::executeBench() {
     c = 0;
 }
 
-json AbstractOps::getJson() { return json(); }
+json AbstractOps::getJson() {
+    json obj;
+
+    obj["name"] = name;
+    obj["results"] = json(finalResults);
+
+    cout << obj.dump(4) << endl;
+
+    return obj;
+}

@@ -30,6 +30,7 @@ class Context {
 
     Context();
 
+    std::string runCmd(const char *);
     void cpuInfo();
     void memoryInfo();
 
@@ -38,7 +39,6 @@ class Context {
     void operator=(Context const &) = delete;
     ~Context();
 
-    void print();
     json getJson();
 };
 
