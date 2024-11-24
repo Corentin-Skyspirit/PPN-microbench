@@ -6,4 +6,7 @@
 #include <nlohmann/json.hpp>
 #include <vector>
 
-int main() { new Flops(10); }
+int main() {
+    Flops f(10);
+    f.context.getInstance().getJson();
+}

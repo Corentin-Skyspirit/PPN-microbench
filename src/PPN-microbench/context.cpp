@@ -83,9 +83,41 @@ void Context::cpuInfo() {
     // CPUs //
     //////////
 
-    // idk how to get thread to core mapping reliably so we're not getting it
-    // for now
-    cpus = std::thread::hardware_concurrency();
+    std::ifstream f("/proc/cpuinfo");
+    std::string line;
+
+    size_t currProc = 0;
+    std::set<size_t> mappedCores;
+
+    while (std::getline(f, line)) {
+        if (line.find("processor") != std::string::npos) {
+            currProc = getFirstInt(line);
+            threads += 1;
+        }
+
+        if (line.find("core id") != std::string::npos) {
+            size_t proc = getFirstInt(line);
+
+            // only add the current core to the mapping if it hasn't appeared
+            // before.
+            if (mappedCores.find(proc) == mappedCores.end()) {
+                threadMapping.push_back(proc);
+                mappedCores.emplace(currProc);
+            }
+        }
+
+        if (line.find("physical id") != std::string::npos) {
+            size_t sockCout = getFirstInt(line) + 1;
+            if (sockets != sockCout) {
+                // new socket, we need to clear the mapping set
+                mappedCores.clear();
+                sockets = sockCout;
+            }
+        }
+    }
+
+    cpus = threadMapping.size();
+    f.close();
 }
 
 void Context::memoryInfo() {
@@ -103,11 +135,16 @@ void Context::memoryInfo() {
             memory = getFirstInt(line) * 1000;
     }
 
-    std::cout << memory << std::endl;
+    f.close();
 
     ///////////
     // CACHE //
     ///////////
+
+    l1d = sysconf(_SC_LEVEL1_DCACHE_SIZE);
+    l1i = sysconf(_SC_LEVEL1_ICACHE_SIZE);
+    l2 = sysconf(_SC_LEVEL2_CACHE_SIZE);
+    l3 = sysconf(_SC_LEVEL3_CACHE_SIZE);
 }
 
 json Context::getJson() {
@@ -116,7 +153,10 @@ json Context::getJson() {
     json cpu_info;
     cpu_info["architechture"] = cpuArchi;
     cpu_info["word_size"] = wordSize;
+    cpu_info["sockets"] = sockets;
     cpu_info["cpus"] = cpus;
+    cpu_info["threads"] = threads;
+    cpu_info["mapping"] = threadMapping;
     cpu_info["simd"] = json(simd);
 
     json mem_info;
