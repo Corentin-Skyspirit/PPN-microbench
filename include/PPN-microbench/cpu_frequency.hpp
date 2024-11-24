@@ -9,16 +9,19 @@
 
 class CPUFrequency : Microbench {
     private:
-        unsigned int nbThreads;
+        int nbThreads;
+        int nbMeasures = 0;
+        int coresToExecute = 0;
         std::vector<std::vector<u64>> measures;
         std::vector<std::vector<u64>> benchTimes;
-        void executeBench(int id);
+        void executeAdds();
         
     public:
-        CPUFrequency(std::string name, int nbIterations);
+        CPUFrequency(std::string name, int nbIterations, int nbMeasures);
         ~CPUFrequency();
 
-        void run();
+        void run() override;
+        void run(int maxThreads);
         json getJson() override;
 };
 
