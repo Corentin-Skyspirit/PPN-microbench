@@ -3,7 +3,7 @@
 #include <PPN-microbench/ops/iops.hpp>
 
 int main() {
-    CPUFrequency cpuFrequency("CPU Speed", 9999999, 10);
+    CPUFrequency cpuFrequency("CPU Speed", 999999, 50);
     cpuFrequency.run();
     std::cout << cpuFrequency.getJson().dump(4) << std::endl;
 

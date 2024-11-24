@@ -12,7 +12,7 @@ class CPUFrequency : Microbench {
         int nbThreads;
         int nbMeasures = 0;
         int coresToExecute = 0;
-        std::vector<std::vector<u64>> measures;
+        std::vector<std::vector<double>> measures;
         std::vector<std::vector<u64>> benchTimes;
         void executeAdds();
         
