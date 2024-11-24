@@ -14,18 +14,17 @@ Context &Context::getInstance() {
     return instance;
 }
 
-std::string Context::runCmd(const char *cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
+// finds and returns the first int in a string, returns 0 if none.
+i64 Context::getFirstInt(std::string input) {
+    std::regex pattern("(\\d+)");
+    std::smatch match;
+    std::regex_search(input, match, pattern);
+
+    for (auto m : match) {
+        return stoi(m.str());
     }
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) !=
-           nullptr) {
-        result += buffer.data();
-    }
-    return result;
+
+    return 0;
 }
 
 void Context::cpuInfo() {
@@ -84,9 +83,41 @@ void Context::cpuInfo() {
     // CPUs //
     //////////
 
-    // idk how to get thread to core mapping reliably so we're not getting it
-    // for now
-    cpus = std::thread::hardware_concurrency();
+    std::ifstream f("/proc/cpuinfo");
+    std::string line;
+
+    size_t currProc = 0;
+    std::set<size_t> mappedCores;
+
+    while (std::getline(f, line)) {
+        if (line.find("processor") != std::string::npos) {
+            currProc = getFirstInt(line);
+            threads += 1;
+        }
+
+        if (line.find("core id") != std::string::npos) {
+            size_t proc = getFirstInt(line);
+
+            // only add the current core to the mapping if it hasn't appeared
+            // before.
+            if (mappedCores.find(proc) == mappedCores.end()) {
+                threadMapping.push_back(proc);
+                mappedCores.emplace(currProc);
+            }
+        }
+
+        if (line.find("physical id") != std::string::npos) {
+            size_t sockCout = getFirstInt(line) + 1;
+            if (sockets != sockCout) {
+                // new socket, we need to clear the mapping set
+                mappedCores.clear();
+                sockets = sockCout;
+            }
+        }
+    }
+
+    cpus = threadMapping.size();
+    f.close();
 }
 
 void Context::memoryInfo() {
@@ -95,19 +126,25 @@ void Context::memoryInfo() {
     // RAM //
     /////////
 
-    memory = std::stoull(
-        runCmd("cat /proc/meminfo | grep MemTotal | awk '{print $2}'"));
-    // /proc/meminfo gives total memory size in kB.
-    memory = memory * 1000;
+    std::ifstream f("/proc/meminfo");
+    std::string line;
+
+    while (std::getline(f, line)) {
+        // memory in /proc/meminfo is in kB
+        if (line.find("MemTotal:") != std::string::npos)
+            memory = getFirstInt(line) * 1000;
+    }
+
+    f.close();
 
     ///////////
     // CACHE //
     ///////////
 
-    l1d = std::stoull(runCmd("lscpu -B | grep L1d | awk '{print $3}'"));
-    l1i = std::stoull(runCmd("lscpu -B | grep L1i | awk '{print $3}'"));
-    l2 = std::stoull(runCmd("lscpu -B | grep L2 | awk '{print $3}'"));
-    l3 = std::stoull(runCmd("lscpu -B | grep L3 | awk '{print $3}'"));
+    l1d = sysconf(_SC_LEVEL1_DCACHE_SIZE);
+    l1i = sysconf(_SC_LEVEL1_ICACHE_SIZE);
+    l2 = sysconf(_SC_LEVEL2_CACHE_SIZE);
+    l3 = sysconf(_SC_LEVEL3_CACHE_SIZE);
 }
 
 json Context::getJson() {
@@ -116,7 +153,10 @@ json Context::getJson() {
     json cpu_info;
     cpu_info["architechture"] = cpuArchi;
     cpu_info["word_size"] = wordSize;
+    cpu_info["sockets"] = sockets;
     cpu_info["cpus"] = cpus;
+    cpu_info["threads"] = threads;
+    cpu_info["mapping"] = threadMapping;
     cpu_info["simd"] = json(simd);
 
     json mem_info;
