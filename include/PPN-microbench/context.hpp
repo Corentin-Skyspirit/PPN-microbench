@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <regex>
 #include <set>
 #include <string>
 #include <thread>
@@ -30,7 +31,7 @@ class Context {
 
     Context();
 
-    std::string runCmd(const char *);
+    i64 getFirstInt(const std::string);
     void cpuInfo();
     void memoryInfo();
 

@@ -14,18 +14,17 @@ Context &Context::getInstance() {
     return instance;
 }
 
-std::string Context::runCmd(const char *cmd) {
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
+// finds and returns the first int in a string, returns 0 if none.
+i64 Context::getFirstInt(std::string input) {
+    std::regex pattern("(\\d+)");
+    std::smatch match;
+    std::regex_search(input, match, pattern);
+
+    for (auto m : match) {
+        return stoi(m.str());
     }
-    while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) !=
-           nullptr) {
-        result += buffer.data();
-    }
-    return result;
+
+    return 0;
 }
 
 void Context::cpuInfo() {
@@ -95,19 +94,20 @@ void Context::memoryInfo() {
     // RAM //
     /////////
 
-    memory = std::stoull(
-        runCmd("cat /proc/meminfo | grep MemTotal | awk '{print $2}'"));
-    // /proc/meminfo gives total memory size in kB.
-    memory = memory * 1000;
+    std::ifstream f("/proc/meminfo");
+    std::string line;
+
+    while (std::getline(f, line)) {
+        // memory in /proc/meminfo is in kB
+        if (line.find("MemTotal:") != std::string::npos)
+            memory = getFirstInt(line) * 1000;
+    }
+
+    std::cout << memory << std::endl;
 
     ///////////
     // CACHE //
     ///////////
-
-    l1d = std::stoull(runCmd("lscpu -B | grep L1d | awk '{print $3}'"));
-    l1i = std::stoull(runCmd("lscpu -B | grep L1i | awk '{print $3}'"));
-    l2 = std::stoull(runCmd("lscpu -B | grep L2 | awk '{print $3}'"));
-    l3 = std::stoull(runCmd("lscpu -B | grep L3 | awk '{print $3}'"));
 }
 
 json Context::getJson() {
