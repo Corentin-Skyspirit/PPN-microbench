@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <vector>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 class Context {
   private:
