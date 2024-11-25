@@ -11,7 +11,7 @@
 #include <unistd.h> // sleep
 #include <vector>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 class Microbench {
   protected:
