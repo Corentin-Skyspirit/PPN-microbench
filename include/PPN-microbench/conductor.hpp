@@ -6,7 +6,7 @@
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/microbench.hpp>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 class Conductor {
   private:
