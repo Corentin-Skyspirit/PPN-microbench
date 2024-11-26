@@ -1,5 +1,6 @@
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/microbench.hpp>
+#include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/ops/flops.hpp>
 #include <PPN-microbench/ops/iops.hpp>
 
