@@ -1,21 +1,17 @@
-#include <PPN-microbench/cpu_frequency.hpp>
+#include <PPN-microbench/context.hpp>
+#include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops/flops.hpp>
 #include <PPN-microbench/ops/iops.hpp>
 
+#include <nlohmann/json.hpp>
+#include <vector>
+
 int main() {
+    
     CPUFrequency cpuFrequency("CPU Speed", 999999, 50);
     cpuFrequency.run();
     std::cout << cpuFrequency.getJson().dump(4) << std::endl;
 
-
-    // std::vector<Microbench *> vec;
-
-    // vec.push_back(new Flops(5));
-    // vec.push_back(new Iops(5));
-
-    // for (Microbench *b : vec) {
-    //     b->run();
-    // }
-
-    return 1;
+    // Flops f(10);
+    // f.context.getInstance().getJson();
 }
