@@ -102,6 +102,7 @@ json Ops::getJson() {
     json obj;
 
     obj["name"] = name;
+    obj["ops_count"] = N_OPS;
     obj["results"] = json::array();
 
     for (int i = 0; i < 6; i++) {
