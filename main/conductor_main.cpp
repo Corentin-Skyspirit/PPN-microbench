@@ -1,13 +1,14 @@
+#include <PPN-microbench/_ops/ops.hpp>
 #include <PPN-microbench/conductor.hpp>
 #include <PPN-microbench/ops/flops.hpp>
-#include <PPN-microbench/ops/iops.hpp>
+
+#include <iostream>
 
 int main() {
 
     Conductor conductor;
 
-    conductor.addBench(new Flops(5))
-        .addBench(new Iops(5))
+    conductor.addBench(new Ops(50))
         .setOutputFile("../tmp/out.json")
         .run()
         .save()
