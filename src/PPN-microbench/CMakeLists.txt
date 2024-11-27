@@ -2,6 +2,7 @@ add_library(PPN-microbench STATIC)
 
 target_sources(PPN-microbench PRIVATE microbench.cpp cpu_frequency.cpp context.cpp conductor.cpp)
 target_sources(PPN-microbench PRIVATE ops/abstract_ops.cpp ops/flops.cpp ops/iops.cpp)
+target_sources(PPN-microbench PRIVATE _ops/ops.cpp)
 
 target_sources(
     PPN-microbench
