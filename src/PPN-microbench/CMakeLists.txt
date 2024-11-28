@@ -1,22 +1,16 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp cpu_frequency.cpp context.cpp conductor.cpp)
-target_sources(PPN-microbench PRIVATE ops/abstract_ops.cpp ops/flops.cpp ops/iops.cpp)
-target_sources(PPN-microbench PRIVATE _ops/ops.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp conductor.cpp ops.cpp)
 
 target_sources(
     PPN-microbench
     PUBLIC
         FILE_SET HEADERS
         BASE_DIRS ${PROJECT_SOURCE_DIR}/include
-        FILES 
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/microbench.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cpu_frequency.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/context.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/conductor.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/abstract_ops.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/flops.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops/iops.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/microbench.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/context.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/conductor.hpp
+        FILES ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops.hpp
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)

@@ -1,5 +1,5 @@
 #include <PPN-microbench/conductor.hpp>
-#include <PPN-microbench/ops/flops.hpp>
+#include <PPN-microbench/ops.hpp>
 
 #include <iostream>
 #include <PPN-microbench/ops/iops.hpp>
