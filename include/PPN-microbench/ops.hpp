@@ -13,16 +13,10 @@ class Ops : public Microbench {
     size_t const N_OPS = 1024 * 1024;
     size_t cpus;
 
-    // size_t **i32Res;
-    // size_t **i64Res;
-    // size_t **i64SIMDRes;
-    // size_t **f32Res;
-    // size_t **f64Res;
-    // size_t **f64SIMDRes;
-
     size_t **results;
 
-    template <class T> void bench(T, size_t *);
+    template <class T> void bench(T);
+    template <class T> void benchSIMD(T);
     void executeBench() {};
 
   public:
