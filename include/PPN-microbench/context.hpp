@@ -46,6 +46,9 @@ class Context {
     ~Context();
 
     json getJson();
+    size_t getCpus();
+    std::vector<size_t> getThreadMapping();
+    std::set<std::string> getSimd(); 
 };
 
 #endif
