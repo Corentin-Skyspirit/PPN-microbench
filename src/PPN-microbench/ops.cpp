@@ -1,9 +1,5 @@
 #include <PPN-microbench/ops.hpp>
 
-using std::chrono::duration_cast;
-using std::chrono::nanoseconds;
-using std::chrono::steady_clock;
-
 Ops::Ops(int reps) : Microbench("OPS", reps) {
     cpus = context.getJson()["cpu_info"]["cpus"];
     results = new size_t *[6];
@@ -20,6 +16,7 @@ Ops::~Ops() {
 }
 
 template <class T> void Ops::bench(T one) {
+    // T acc = one;
     T acc[16];
     for (size_t i = 0; i < N_OPS; i++) {
         acc[0] += one * one;
@@ -47,8 +44,8 @@ template <class T> void Ops::benchSIMD(T one) {
 
 void Ops::run() {
 
-    steady_clock::time_point t1, t2;
     std::thread threads[cpus];
+    struct timespec t1, t2;
     std::vector<size_t> mapping = context.getJson()["cpu_info"]["mapping"];
     cpu_set_t cpusets[cpus];
 
@@ -60,7 +57,7 @@ void Ops::run() {
     for (int j = 0; j < nbIterations; j++) {
 
         // i32
-        t1 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->bench((i32)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -69,12 +66,13 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        t2 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t2);
 
-        results[0][j] = duration_cast<nanoseconds>(t2 - t1).count();
+        results[0][j] =
+            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
 
         // i64
-        t1 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->bench((i64)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -83,12 +81,13 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        t2 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t2);
 
-        results[1][j] = duration_cast<nanoseconds>(t2 - t1).count();
+        results[1][j] =
+            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
 
         // f32
-        t1 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->bench((float)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -97,12 +96,13 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        t2 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t2);
 
-        results[2][j] = duration_cast<nanoseconds>(t2 - t1).count();
+        results[2][j] =
+            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
 
         // f64
-        t1 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->bench((double)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -111,41 +111,10 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        t2 = steady_clock::now();
+        clock_gettime(CLOCK_MONOTONIC, &t2);
 
-        results[3][j] = duration_cast<nanoseconds>(t2 - t1).count();
-
-        /*
-
-            // i64 SIMD
-            t1 = steady_clock::now();
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::thread([this] { this->benchSIMD((i64)1); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                    sizeof(cpu_set_t), &cpusets[k]);
-            }
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k].join();
-            }
-            t2 = steady_clock::now();
-
-            results[4][j] = duration_cast<nanoseconds>(t2 - t1).count();
-
-            // f64 SIMD
-            t1 = steady_clock::now();
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::thread([this] { this->benchSIMD((double)1);
-           }); pthread_setaffinity_np(threads[k].native_handle(),
-                                    sizeof(cpu_set_t), &cpusets[k]);
-            }
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k].join();
-            }
-            t2 = steady_clock::now();
-
-            results[5][j] = duration_cast<nanoseconds>(t2 - t1).count();
-
-        */
+        results[3][j] =
+            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
     }
 }
 
