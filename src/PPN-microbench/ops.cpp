@@ -1,5 +1,8 @@
 #include <PPN-microbench/ops.hpp>
 
+using std::chrono::high_resolution_clock;
+using std::chrono::time_point;
+
 Ops::Ops(int reps) : Microbench("OPS", reps) {
     cpus = context.getJson()["cpu_info"]["cpus"];
 }
@@ -35,7 +38,7 @@ template <class T> void Ops::benchSIMD(T one) {
 void Ops::run() {
 
     std::thread threads[cpus];
-    struct timespec t1, t2;
+    time_point<high_resolution_clock> t1, t2;
     std::vector<size_t> mapping = context.getJson()["cpu_info"]["mapping"];
     cpu_set_t cpusets[cpus];
 
@@ -47,7 +50,7 @@ void Ops::run() {
     for (int j = 0; j < RUNS; j++) {
 
         // i32
-        clock_gettime(CLOCK_MONOTONIC, &t1);
+        t1 = high_resolution_clock::now();
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->benchhaha((i32)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -56,13 +59,12 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        clock_gettime(CLOCK_MONOTONIC, &t2);
+        t2 = high_resolution_clock::now();
 
-        results[0][j] =
-            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
+        results[0][j] = (t2 - t1).count();
 
         // i64
-        clock_gettime(CLOCK_MONOTONIC, &t1);
+        t1 = high_resolution_clock::now();
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->benchhaha((i64)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -71,13 +73,12 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        clock_gettime(CLOCK_MONOTONIC, &t2);
+        t2 = high_resolution_clock::now();
 
-        results[1][j] =
-            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
+        results[1][j] = (t2 - t1).count();
 
         // f32
-        clock_gettime(CLOCK_MONOTONIC, &t1);
+        t1 = high_resolution_clock::now();
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->benchhaha((float)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -86,13 +87,12 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        clock_gettime(CLOCK_MONOTONIC, &t2);
+        t2 = high_resolution_clock::now();
 
-        results[2][j] =
-            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
+        results[2][j] = (t2 - t1).count();
 
         // f64
-        clock_gettime(CLOCK_MONOTONIC, &t1);
+        t1 = high_resolution_clock::now();
         for (size_t k = 0; k < cpus; k++) {
             threads[k] = std::thread([this] { this->benchhaha((double)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
@@ -101,10 +101,9 @@ void Ops::run() {
         for (size_t k = 0; k < cpus; k++) {
             threads[k].join();
         }
-        clock_gettime(CLOCK_MONOTONIC, &t2);
+        t2 = high_resolution_clock::now();
 
-        results[3][j] =
-            t2.tv_sec * 1e9 + t2.tv_nsec - (t1.tv_sec * 1e9 + t1.tv_nsec);
+        results[3][j] = (t2 - t1).count();
     }
 }
 
