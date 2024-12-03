@@ -2,39 +2,29 @@
 
 Ops::Ops(int reps) : Microbench("OPS", reps) {
     cpus = context.getJson()["cpu_info"]["cpus"];
-    results = new size_t *[6];
-    for (int i = 0; i < 6; i++) {
-        results[i] = new size_t[reps];
-    }
 }
 
-Ops::~Ops() {
-    for (int i = 0; i < 6; i++) {
-        delete[] results[i];
-    }
-    delete[] results;
-}
+Ops::~Ops() {}
 
-template <class T> void Ops::bench(T one) {
-    // T acc = one;
-    T acc[16];
+template <class T> void Ops::benchhaha(T one) {
+    T acc = one;
     for (size_t i = 0; i < N_OPS; i++) {
-        acc[0] += one * one;
-        acc[1] += one * one;
-        acc[2] += one * one;
-        acc[3] += one * one;
-        acc[4] += one * one;
-        acc[5] += one * one;
-        acc[6] += one * one;
-        acc[7] += one * one;
-        acc[8] += one * one;
-        acc[9] += one * one;
-        acc[10] += one * one;
-        acc[11] += one * one;
-        acc[12] += one * one;
-        acc[13] += one * one;
-        acc[14] += one * one;
-        acc[15] += one * one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
+        acc += one;
     }
 }
 
@@ -54,12 +44,12 @@ void Ops::run() {
         CPU_SET(mapping[i], &cpusets[i]);
     }
 
-    for (int j = 0; j < nbIterations; j++) {
+    for (int j = 0; j < RUNS; j++) {
 
         // i32
         clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::thread([this] { this->bench((i32)1); });
+            threads[k] = std::thread([this] { this->benchhaha((i32)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
                                    sizeof(cpu_set_t), &cpusets[k]);
         }
@@ -74,7 +64,7 @@ void Ops::run() {
         // i64
         clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::thread([this] { this->bench((i64)1); });
+            threads[k] = std::thread([this] { this->benchhaha((i64)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
                                    sizeof(cpu_set_t), &cpusets[k]);
         }
@@ -89,7 +79,7 @@ void Ops::run() {
         // f32
         clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::thread([this] { this->bench((float)1); });
+            threads[k] = std::thread([this] { this->benchhaha((float)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
                                    sizeof(cpu_set_t), &cpusets[k]);
         }
@@ -104,7 +94,7 @@ void Ops::run() {
         // f64
         clock_gettime(CLOCK_MONOTONIC, &t1);
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::thread([this] { this->bench((double)1); });
+            threads[k] = std::thread([this] { this->benchhaha((double)1); });
             pthread_setaffinity_np(threads[k].native_handle(),
                                    sizeof(cpu_set_t), &cpusets[k]);
         }
@@ -122,12 +112,12 @@ json Ops::getJson() {
     json obj;
 
     obj["name"] = name;
-    obj["ops_count"] = N_OPS * 16 * 2;
+    obj["ops_count"] = N_OPS * 16;
     obj["results"] = json::array();
 
     for (int i = 0; i < 6; i++) {
         obj["results"][i] = json::array();
-        for (int j = 0; j < nbIterations; j++) {
+        for (int j = 0; j < RUNS; j++) {
             obj["results"][i].push_back(results[i][j]);
         }
     }
