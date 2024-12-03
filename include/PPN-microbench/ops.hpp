@@ -9,6 +9,7 @@
 
 class Ops : public Microbench {
   private:
+    int static const WARMUP_RUNS = 2;
     int static const RUNS = 10;
 
     size_t n_ops;
@@ -16,7 +17,7 @@ class Ops : public Microbench {
 
     size_t results[6][RUNS];
 
-    template <class T> void benchhaha(T);
+    template <class T> void bench(T);
     template <class T> void benchSIMD(T);
     void executeBench() {};
 
