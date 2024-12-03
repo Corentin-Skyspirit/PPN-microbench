@@ -11,7 +11,7 @@ class Ops : public Microbench {
   private:
     int static const RUNS = 10;
 
-    size_t const N_OPS = 1024 * 1024 * 8;
+    size_t n_ops;
     size_t cpus;
 
     size_t results[6][RUNS];
