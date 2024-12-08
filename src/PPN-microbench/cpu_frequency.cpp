@@ -1,11 +1,11 @@
 #include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/context.hpp>
 
-CPUFrequency::CPUFrequency(std::string name, int nbIterations, int nbMeasures) : Microbench(name, nbIterations)  {
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
     this->nbMeasures = nbMeasures;
     nbThreads = std::thread::hardware_concurrency();
-    measures.reserve(nbThreads * nbIterations);
-    benchTimes.reserve(nbThreads * nbIterations);
+    measures.reserve(nbThreads * getNbIterations());
+    benchTimes.reserve(nbThreads * getNbIterations());
 }
 
 CPUFrequency::~CPUFrequency() {}

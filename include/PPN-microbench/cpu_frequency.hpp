@@ -7,7 +7,7 @@
 #include <chrono>
 #include <thread>
 
-class CPUFrequency : Microbench {
+class CPUFrequency : public Microbench {
     private:
         int nbThreads;
         int nbMeasures = 0;
@@ -17,7 +17,7 @@ class CPUFrequency : Microbench {
         void executeAdds();
         
     public:
-        CPUFrequency(std::string name, int nbIterations, int nbMeasures);
+        CPUFrequency(int nbMeasures);
         ~CPUFrequency();
 
         void run() override;

@@ -9,7 +9,7 @@
 
 int main() {
     
-    CPUFrequency cpuFrequency("CPU Speed", 999999, 50);
+    CPUFrequency cpuFrequency(50);
     cpuFrequency.run();
     std::cout << cpuFrequency.getJson().dump(4) << std::endl;
 
