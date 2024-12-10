@@ -14,10 +14,8 @@ target_sources(
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
+# target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json Kokkos::kokkos)
 target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json)
-
-set(DEBUG_FLAGS "-Wall -Wextra -g")
-set(RELEASE_FLAGS "-O3 -march=native")
 
 target_compile_options(PPN-microbench PRIVATE "$<$<CONFIG:DEBUG>:SHELL:${DEBUG_FLAGS}>")
 target_compile_options(PPN-microbench PRIVATE "$<$<CONFIG:RELEASE>:SHELL:${RELEASE_FLAGS}>")
