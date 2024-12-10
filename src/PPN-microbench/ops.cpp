@@ -11,9 +11,29 @@ Ops::Ops(int reps) : Microbench("OPS", reps) {
 
 Ops::~Ops() {}
 
-template <class T> void Ops::bench(T val) {
-    T acc = val;
+// #pragma GCC push_options
+// #pragma GCC optimize("O0")
+template <class T> void Ops::benchhaha(T val) {
+    volatile T acc = val;
+// T *acc = new T[16];
+#pragma omp for simd linear(&acc : 0)
     for (size_t i = 0; i < n_ops; i++) {
+        // acc[0] += val;
+        // acc[1] += val;
+        // acc[2] += val;
+        // acc[3] += val;
+        // acc[4] += val;
+        // acc[5] += val;
+        // acc[6] += val;
+        // acc[7] += val;
+        // acc[8] += val;
+        // acc[9] += val;
+        // acc[10] += val;
+        // acc[11] += val;
+        // acc[12] += val;
+        // acc[13] += val;
+        // acc[14] += val;
+        // acc[15] += val;
         acc += val;
         acc += val;
         acc += val;
@@ -31,10 +51,38 @@ template <class T> void Ops::bench(T val) {
         acc += val;
         acc += val;
     }
+    // delete acc;
+    // return &acc;
+    // std::cout << acc << std::endl;
 }
+// #pragma GCC pop_options
 
 template <class T> void Ops::benchSIMD(T val) {
-    // I can't figure out how to make it work :(
+    // T *acc = new T[16];
+    volatile T acc = val;
+    for (size_t i = 0; i < n_ops; i++) {
+        // #pragma omp for simd linear(acc : 1)
+        // for (int j = 0; j < 16; j++) {
+        //     acc[j] += val;
+        // }
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+        acc += val;
+    }
+    // delete acc;
 }
 
 void Ops::run() {
@@ -47,15 +95,17 @@ void Ops::run() {
         CPU_SET(mapping[i], &cpusets[i]);
     }
 
-    // Warmup runs allow the cpu to spin up before real measure
-    for (int j = 0; j < WARMUP_RUNS; j++) {
+    // Warmup runs
+    {
         std::jthread threads[cpus];
-        for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::jthread([this, t1] {
-                this->bench((i32)t1.time_since_epoch().count());
-            });
-            pthread_setaffinity_np(threads[k].native_handle(),
-                                   sizeof(cpu_set_t), &cpusets[k]);
+        for (int j = 0; j < WARMUP_RUNS; j++) {
+            for (size_t k = 0; k < cpus; k++) {
+                threads[k] = std::jthread([this, t1] {
+                    this->benchhaha((i32)t1.time_since_epoch().count());
+                });
+                pthread_setaffinity_np(threads[k].native_handle(),
+                                       sizeof(cpu_set_t), &cpusets[k]);
+            }
         }
     }
 
@@ -68,7 +118,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 threads[k] = std::jthread([this, t1] {
-                    this->bench((i32)t1.time_since_epoch().count());
+                    this->benchhaha((i32)t1.time_since_epoch().count());
                 });
                 pthread_setaffinity_np(threads[k].native_handle(),
                                        sizeof(cpu_set_t), &cpusets[k]);
@@ -83,7 +133,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 threads[k] = std::jthread([this, t1] {
-                    this->bench((i64)t1.time_since_epoch().count());
+                    this->benchhaha((i64)t1.time_since_epoch().count());
                 });
                 pthread_setaffinity_np(threads[k].native_handle(),
                                        sizeof(cpu_set_t), &cpusets[k]);
@@ -98,7 +148,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 threads[k] = std::jthread([this, t1] {
-                    this->bench((float)t1.time_since_epoch().count());
+                    this->benchhaha((float)t1.time_since_epoch().count());
                 });
                 pthread_setaffinity_np(threads[k].native_handle(),
                                        sizeof(cpu_set_t), &cpusets[k]);
@@ -113,7 +163,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 threads[k] = std::jthread([this, t1] {
-                    this->bench((double)t1.time_since_epoch().count());
+                    this->benchhaha((double)t1.time_since_epoch().count());
                 });
                 pthread_setaffinity_np(threads[k].native_handle(),
                                        sizeof(cpu_set_t), &cpusets[k]);
@@ -121,6 +171,36 @@ void Ops::run() {
         }
         t2 = high_resolution_clock::now();
         results[3][j] = (t2 - t1).count();
+
+        // i64 SIMD
+        t1 = high_resolution_clock::now();
+        {
+            std::jthread threads[cpus];
+            for (size_t k = 0; k < cpus; k++) {
+                threads[k] = std::jthread([this, t1] {
+                    this->benchSIMD((i64)t1.time_since_epoch().count());
+                });
+                pthread_setaffinity_np(threads[k].native_handle(),
+                                       sizeof(cpu_set_t), &cpusets[k]);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        results[4][j] = (t2 - t1).count();
+
+        // f64 SIMD
+        t1 = high_resolution_clock::now();
+        {
+            std::jthread threads[cpus];
+            for (size_t k = 0; k < cpus; k++) {
+                threads[k] = std::jthread([this, t1] {
+                    this->benchSIMD((double)t1.time_since_epoch().count());
+                });
+                pthread_setaffinity_np(threads[k].native_handle(),
+                                       sizeof(cpu_set_t), &cpusets[k]);
+            }
+        }
+        t2 = high_resolution_clock::now();
+        results[5][j] = (t2 - t1).count();
     }
 }
 

@@ -3,6 +3,8 @@
 
 #include <PPN-microbench/microbench.hpp>
 
+// #include <Kokkos_SIMD.hpp>
+
 #include <chrono>
 #include <thread>
 #include <threads.h> // needed to set thread affinty
@@ -17,7 +19,7 @@ class Ops : public Microbench {
 
     size_t results[6][RUNS];
 
-    template <class T> void bench(T);
+    template <class T> void benchhaha(T);
     template <class T> void benchSIMD(T);
     void executeBench() {};
 
