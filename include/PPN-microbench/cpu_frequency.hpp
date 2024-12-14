@@ -21,7 +21,6 @@ class CPUFrequency : public Microbench {
         ~CPUFrequency();
 
         void run() override;
-        void run(int maxThreads);
         json getJson() override;
 };
 

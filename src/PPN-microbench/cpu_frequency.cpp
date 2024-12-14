@@ -45,14 +45,13 @@ json CPUFrequency::getJson() {
 }
 
 void CPUFrequency::run() {
-    run(nbThreads);
-}
-
-void CPUFrequency::run(int maxCores) {
     std::thread threads[nbThreads];
 
+    Context context = Context::getInstance();
+    std::vector<size_t> threadMapping = context.getThreadMapping();
+
     // To stop earlier if it's needed (but protection if maxCores is bigger than the cores count)
-    coresToExecute = std::min(nbThreads, maxCores);
+    coresToExecute = threadMapping.size();
 
     for (int coresExecuted = 1; coresExecuted <= coresToExecute; coresExecuted++) {
         for (int repetitions = 0; repetitions < nbMeasures; repetitions++) {
@@ -61,14 +60,14 @@ void CPUFrequency::run(int maxCores) {
 
             for (int id = 0; id < coresExecuted; id++) {
                 // To call the threads (only 1;  1 and 2;  1, 2 and 3;  etc...)
-                threads[id] = std::thread([this] {
+                threads[threadMapping[id]] = std::thread([this] {
                         this->executeAdds();
                 });
             }
             
             for (int id = 0; id < coresExecuted; id++) {
                 // Waiting for the threads
-                threads[id].join();
+                threads[threadMapping[id]].join();
             }
 
             u64 duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
