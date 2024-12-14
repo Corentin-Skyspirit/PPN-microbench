@@ -13,6 +13,6 @@ int main() {
     cpuFrequency.run();
     std::cout << cpuFrequency.getJson().dump(4) << std::endl;
 
-    // Flops f(10);
-    // f.context.getInstance().getJson();
+    Flops f(10);
+    std::cout << f.context.getInstance().getJson().dump(4) << std::endl;
 }
