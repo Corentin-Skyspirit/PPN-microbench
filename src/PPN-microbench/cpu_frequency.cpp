@@ -1,11 +1,11 @@
 #include <PPN-microbench/cpu_frequency.hpp>
-#include <PPN-microbench/context.hpp>
 
 CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
     this->nbMeasures = nbMeasures;
-    nbThreads = std::thread::hardware_concurrency();
-    measures.reserve(nbThreads * getNbIterations());
-    benchTimes.reserve(nbThreads * getNbIterations());
+    Context context = Context::getInstance();
+    nbCores = context.getCpus();
+    measures = std::make_unique<double[]>(nbCores * getNbIterations());
+    benchTimes = std::make_unique<u64[]>(nbCores * getNbIterations());
 }
 
 CPUFrequency::~CPUFrequency() {}
@@ -38,14 +38,14 @@ json CPUFrequency::getJson() {
     std::string name;
     for (int id = 0; id < coresToExecute; id++) {
         for (int i = 0; i < nbMeasures; i++) {
-            cpuSpeedJson["Cores" + std::to_string(id+1)] += {measures[id][i], benchTimes[id][i]};
+            cpuSpeedJson["Cores" + std::to_string(id+1)] += {measures[id * nbCores + i], benchTimes[id * nbCores + i]};
         }
     }
     return cpuSpeedJson;
 }
 
 void CPUFrequency::run() {
-    std::thread threads[nbThreads];
+    std::thread threads[std::thread::hardware_concurrency()];
 
     Context context = Context::getInstance();
     std::vector<size_t> threadMapping = context.getThreadMapping();
@@ -72,8 +72,8 @@ void CPUFrequency::run() {
 
             u64 duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
 
-            benchTimes[coresExecuted-1].push_back(duration);
-            measures[coresExecuted-1].push_back((16.f * getNbIterations()) / duration);
+            benchTimes[(coresExecuted - 1) * nbCores + repetitions] = duration;
+            measures[(coresExecuted - 1) * nbCores + repetitions] = ((16.f * getNbIterations()) / duration);
         }
     }
 }

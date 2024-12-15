@@ -21,5 +21,6 @@ int main() {
     for (int i = 0; i < threads.size(); i++) {
         std::cout << threads[i] << std::endl;
     }
+    std::cout << context.getCpus() << std::endl;
 
 }

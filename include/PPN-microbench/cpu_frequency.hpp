@@ -3,17 +3,17 @@
 
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/rdtsc.hpp>
-#include <vector>
+#include <PPN-microbench/context.hpp>
 #include <chrono>
 #include <thread>
 
 class CPUFrequency : public Microbench {
     private:
-        int nbThreads;
-        int nbMeasures = 0;
         int coresToExecute = 0;
-        std::vector<std::vector<double>> measures;
-        std::vector<std::vector<u64>> benchTimes;
+        int nbMeasures = 0;
+        int nbCores;
+        std::unique_ptr<double[]> measures;
+        std::unique_ptr<u64[]> benchTimes;
         void executeAdds();
         
     public:
