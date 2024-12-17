@@ -19,8 +19,8 @@ class Ops : public Microbench {
 
     size_t results[6][RUNS];
 
-    template <class T> void benchhaha(T);
-    template <class T> void benchSIMD(T);
+    template <class T> void benchhaha(T *);
+    template <class T> void benchSIMD(T *);
     void executeBench() {};
 
   public:
