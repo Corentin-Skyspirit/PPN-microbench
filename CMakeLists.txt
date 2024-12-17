@@ -19,6 +19,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json)
 # FetchContent_MakeAvailable(kokkos)
 
+set(CMAKE_BUILD_TYPE "Debug")
+
 set(CMAKE_CXX_FLAGS_DEBUG "-Wall -Wextra -g -O3 -march=native -fopenmp")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -fopenmp")
 
