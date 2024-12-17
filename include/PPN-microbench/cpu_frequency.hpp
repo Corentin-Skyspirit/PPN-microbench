@@ -10,7 +10,7 @@
 
 class CPUFrequency : public Microbench {
     private:
-        int coresToExecute = 0;
+        int nbTestingCores = 0;
         int nbMeasures = 0;
         int nbCores;
         std::unique_ptr<double[]> measures;
