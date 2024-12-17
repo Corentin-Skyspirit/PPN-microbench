@@ -6,6 +6,7 @@
 #include <PPN-microbench/context.hpp>
 #include <chrono>
 #include <thread>
+#include <threads.h>
 
 class CPUFrequency : public Microbench {
     private:

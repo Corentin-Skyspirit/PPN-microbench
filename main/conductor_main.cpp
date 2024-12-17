@@ -7,13 +7,13 @@ int main() {
 
     Conductor conductor;
 
-    conductor.addBench(new Flops(5))
-        .addBench(new Iops(5))
-        .addBench(new CPUFrequency(50))
+    // conductor.addBench(new Flops(5))
+        // .addBench(new Iops(5))
+    conductor.addBench(new CPUFrequency(30))
         .setOutputFile("../tmp/out.json")
         .run()
-        .save()
-        .print();
+        .save();
+        // .print();
 
     return 0;
 }
