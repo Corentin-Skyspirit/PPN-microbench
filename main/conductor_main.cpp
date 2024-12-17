@@ -10,7 +10,7 @@ int main() {
 
     conductor.addBench(new Ops(10))
         .addBench(new CPUFrequency(10))
-        .addBench(new Memory("Memory",1))
+        .addBench(new Memory())
         .setOutputFile("../tmp/out.json")
         .run()
         .save()
