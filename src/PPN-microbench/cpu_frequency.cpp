@@ -1,6 +1,6 @@
 #include <PPN-microbench/cpu_frequency.hpp>
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 777777){
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
