@@ -14,7 +14,6 @@ class CPUFrequency : public Microbench {
         int nbMeasures = 0;
         int nbCores;
         std::unique_ptr<double[]> measures;
-        std::unique_ptr<u64[]> benchTimes;
         void executeAdds();
         
     public:

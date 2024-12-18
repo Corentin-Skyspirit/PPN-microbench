@@ -5,7 +5,6 @@ CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 777777)
     Context context = Context::getInstance();
     nbCores = context.getCpus();
     measures = std::make_unique<double[]>(nbMeasures * ((nbCores * (nbCores + 1)) / 2));
-    benchTimes = std::make_unique<u64[]>(nbMeasures * ((nbCores * (nbCores + 1)) / 2));
 }
 
 CPUFrequency::~CPUFrequency() {}
@@ -26,7 +25,7 @@ json CPUFrequency::getJson() {
     cpuSpeedJson["name"] = getName();
     for (int id = 1; id <= nbTestingCores; id++) {
         for (int i = 0; i < nbMeasures * id; i++) {
-            cpuSpeedJson["results"]["Cores" + std::to_string(id)][i/nbMeasures] += {measures[id * nbCores + i], benchTimes[id * nbCores + i]};
+            cpuSpeedJson["results"]["Cores" + std::to_string(id)][i/nbMeasures] += measures[id * nbCores + i];
         }
     }
     return cpuSpeedJson;
@@ -70,7 +69,6 @@ void CPUFrequency::run() {
 
                 u64 duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
                 if (sample >= 0) {
-                    benchTimes[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = duration;
                     measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((32.f * getNbIterations()) / duration);
                 }
             }
