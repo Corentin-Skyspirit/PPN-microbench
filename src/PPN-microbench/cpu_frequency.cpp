@@ -1,6 +1,6 @@
 #include <PPN-microbench/cpu_frequency.hpp>
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 9999999){
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -12,9 +12,7 @@ CPUFrequency::~CPUFrequency() {}
 void CPUFrequency::executeAdds() {
     int cpt = 0;
     for (int i = 0; i < getNbIterations(); i++) {
-        // 32 adds
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+        // 16 adds
         cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
         cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
     }
@@ -37,7 +35,7 @@ void CPUFrequency::run() {
 
     cpu_set_t cpusets[nbCores];
 
-    for (size_t i = 0; i < nbCores; i++) {
+    for (int i = 0; i < nbCores; i++) {
         CPU_ZERO(&cpusets[i]);
         CPU_SET(threadMapping[i], &cpusets[i]);
     }
@@ -69,9 +67,11 @@ void CPUFrequency::run() {
 
                 u64 duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
                 if (sample >= 0) {
-                    measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((32.f * getNbIterations()) / duration);
+                    measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((16.f * getNbIterations()) / duration);
                 }
             }
+            std::cout << "\r# " << name << ": run " << ((coresToExecute * (coresToExecute - 1)) / 2) + coresExecuted << "/" << ((nbCores * (nbCores + 1)) / 2) << std::flush;
         }
     }
+    std::cout << std::endl;
 }
