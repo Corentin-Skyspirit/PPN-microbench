@@ -1,7 +1,8 @@
 .vscode/
 build/
 tmp/
-
+__pycache__/
+report/out/
 # Prerequisites
 *.d
 
