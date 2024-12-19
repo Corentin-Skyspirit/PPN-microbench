@@ -15,15 +15,6 @@ CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999)
 
 CPUFrequency::~CPUFrequency() {}
 
-void CPUFrequency::executeAdds() {
-    int cpt = 0;
-    for (int i = 0; i < getNbIterations(); i++) {
-        // 16 adds
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-    }
-}
-
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
     cpuSpeedJson["name"] = getName();
@@ -60,7 +51,12 @@ void CPUFrequency::run() {
                 for (int id = 0; id < coresExecuted; id++) {
                     // To call the threads (only 1;  1 and 2;  1, 2 and 3;  etc...)
                     threads[id] = std::thread([this] {
-                            this->executeAdds();
+                        int cpt = 0;
+                        for (int i = 0; i < getNbIterations(); i++) {
+                            // 16 adds
+                            cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+                            cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+                        }
                     });
                     pthread_setaffinity_np(threads[id].native_handle(),
                                         sizeof(cpu_set_t), &cpusets[id]);
