@@ -1,6 +1,12 @@
 #include <PPN-microbench/cpu_frequency.hpp>
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 9999999){
+#include <sched.h>
+
+using std::chrono::steady_clock;
+using std::chrono::duration_cast;
+using std::chrono::nanoseconds;
+
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -47,9 +53,9 @@ void CPUFrequency::run() {
 
     for (int coresToExecute = 1; coresToExecute <= nbTestingCores; coresToExecute++) { // Main for, equivalent to a graph
         for (int coresExecuted = 1; coresExecuted <= coresToExecute; coresExecuted++) { // For every core count, equivalent to a point in a graph
-            for (int sample = -5; sample < nbMeasures; sample++) { // 5 Warmup runs and samples to average tests (in python, later)
+            for (int sample = -10; sample < nbMeasures; sample++) { // 5 Warmup runs and samples to average tests (in python, later)
                 // Execute on 1 Core, then 2 Cores, 3 Cores, etc...
-                auto start = std::chrono::steady_clock::now();
+                auto start = steady_clock::now();
 
                 for (int id = 0; id < coresExecuted; id++) {
                     // To call the threads (only 1;  1 and 2;  1, 2 and 3;  etc...)
@@ -65,7 +71,7 @@ void CPUFrequency::run() {
                     threads[id].join();
                 }
 
-                u64 duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+                u64 duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
                 if (sample >= 0) {
                     measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((16.f * getNbIterations()) / duration);
                 }
