@@ -10,5 +10,5 @@ class AbstractBench(ABC):
         raise NotImplementedError("Abstract method call")
     
     @abstractmethod
-    def gen_index(self):
+    def get_index(self):
         raise NotImplementedError("Abstract method call")

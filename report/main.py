@@ -1,5 +1,6 @@
 from elements import *
 
+import traceback
 import os
 
 if __name__ == "__main__":
@@ -13,12 +14,14 @@ if __name__ == "__main__":
 
     try:
         from weasyprint import HTML, CSS
-
-        css = CSS(string="""
-            @page {size: A4; margin: 1cm;} 
-            th, td {border: 1px solid black;}
-            """)
-        HTML("out/haha.html").write_pdf("out/haha.pdf", stylesheets=[css])
+        try:
+            css = CSS(string="""
+                @page {size: A4; margin: 1cm;} 
+                th, td {border: 1px solid black;}
+                """)
+            HTML("out/haha.html").write_pdf("out/haha.pdf", stylesheets=[css])
+        except Exception as e:
+            traceback.print_exc()
     except:
         print("No way to export report to pdf. Run `pip install weasyprint`.")
 

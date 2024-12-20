@@ -32,7 +32,7 @@ class Report(AbstractElement):
         self.pages = [Cover(), Index(), SysInfo()]
 
         for bench in AbstractElement.obj["data"]:
-            self.pages.append(Ops(AbstractElement.obj))
+            self.pages.append(self.mapping[bench["name"]](AbstractElement.obj))
 
         self.pages[1].set_pages(self.pages)
 
@@ -47,6 +47,7 @@ class Report(AbstractElement):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../elements/styles/styles.css">
         <title>PPN-microbench</title>
     </head>
     <body>
@@ -63,7 +64,7 @@ class Cover(AbstractElement):
     """cover page"""
     def to_html(self):
         html = f"""
-        <h1>Haha<h1>
+        <header><h1>Haha<h1><p>hehe</p></header>
 """
         return html
 
@@ -81,7 +82,7 @@ class Index(AbstractElement):
         for p in self.pages:
             tmp += p.get_index()
         html = f"""
-<h1 id='Index'>Index</h1>
+<h2 id='Index'>Index</h2>
 <ul>
     {tmp}
 </ul>
@@ -97,16 +98,16 @@ class SysInfo(AbstractElement):
         obj = AbstractElement.obj
         cpu_info = ""
         for key, info in obj["meta"]["cpu_info"].items():
-            cpu_info += f"<tr><td>{str(key)}</td><td>{str(info)}</td></tr>"
+            cpu_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
         cpu_info = f"<table>{cpu_info}</table>"
 
         mem_info = ""
         for key, info in obj["meta"]["mem_info"].items():
-            mem_info += f"<tr><td>{str(key)}</td><td>{str(info)}</td></tr>"
+            mem_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
         mem_info = f"<table>{mem_info}</table>"
 
 
-        return f"<h1 id='SysInfo'>System information</h1>" + cpu_info + "<br/>" + mem_info
+        return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + "<br/>" + mem_info
     
     def get_index(self):
         return f"<li><a href='#SysInfo'>System information</a></li>"
