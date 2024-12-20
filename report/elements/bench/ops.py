@@ -12,12 +12,7 @@ class Ops(AbstractBench):
         ops_count = self.obj["data"][0]["ops_count"]
         cpus = self.obj["meta"]["cpu_info"]["cpus"]
 
-        self.data[0] = 1e9 / self.data[0] * ops_count * cpus
-        self.data[1] = 1e9 / self.data[1] * ops_count * cpus
-        self.data[2] = 1e9 / self.data[2] * ops_count * cpus
-        self.data[3] = 1e9 / self.data[3] * ops_count * cpus
-        self.data[4] = 1e9 / self.data[4] * ops_count * cpus
-        self.data[5] = 1e9 / self.data[5] * ops_count * cpus
+        self.data = 1e9 / self.data * ops_count * cpus
 
     def to_html(self):
         self.gen_images()
