@@ -15,6 +15,18 @@ CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999)
 
 CPUFrequency::~CPUFrequency() {}
 
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+void CPUFrequency::executeBench() {
+    int cpt = 0;
+    for (int i = 0; i < getNbIterations(); i++) {
+        // 16 adds
+        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+    }
+}
+#pragma GCC pop_options
+
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
     cpuSpeedJson["name"] = getName();
@@ -44,19 +56,14 @@ void CPUFrequency::run() {
 
     for (int coresToExecute = 1; coresToExecute <= nbTestingCores; coresToExecute++) { // Main for, equivalent to a graph
         for (int coresExecuted = 1; coresExecuted <= coresToExecute; coresExecuted++) { // For every core count, equivalent to a point in a graph
-            for (int sample = -10; sample < nbMeasures; sample++) { // 5 Warmup runs and samples to average tests (in python, later)
+            for (int sample = -10; sample < nbMeasures; sample++) { // 10 Warmup runs and samples to average tests (in python, later)
                 // Execute on 1 Core, then 2 Cores, 3 Cores, etc...
                 auto start = steady_clock::now();
 
                 for (int id = 0; id < coresExecuted; id++) {
                     // To call the threads (only 1;  1 and 2;  1, 2 and 3;  etc...)
                     threads[id] = std::thread([this] {
-                        int cpt = 0;
-                        for (int i = 0; i < getNbIterations(); i++) {
-                            // 16 adds
-                            cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-                            cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-                        }
+                        executeBench();
                     });
                     pthread_setaffinity_np(threads[id].native_handle(),
                                         sizeof(cpu_set_t), &cpusets[id]);
