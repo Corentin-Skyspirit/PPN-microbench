@@ -71,21 +71,17 @@ class CpuFrequency(AbstractBench):
             # else :
             #     cadre.fill_between(range(j+1), top, bot, color='blue', alpha=0.1)
             cadre.set_xlabel('Cores')
-            cadre.set_ylabel('Frequency (GHz)')
-            cadre.ticklabel_format(useOffset=False)
+            # cadre.set_ylabel('Frequency (GHz)')
+            # cadre.ticklabel_format(useOffset=False)
             cadre.set_title(str(j+1) + mot)
             cadre.grid(True, which='major', axis='both', linestyle='--', alpha=0.7)
             cadre.xaxis.set_major_locator(MultipleLocator(1))
-            
 
         if (np.std(all_vals) / np.mean(all_vals) * 100 > 5.0) :
             print("/!\ Warning /!\ Standard deviation is too high : {:.2f}%".format(np.std(all_vals) / np.mean(all_vals) * 100))
 
         plt.savefig("out/cpu_frequency_multiplot.png")
         plt.clf()
-
-
-
 
     def get_index(self):
         return "<li><a href='#CPUFreqency'>CPU Frequency</a></li>"
