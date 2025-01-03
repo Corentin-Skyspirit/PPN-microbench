@@ -2,7 +2,8 @@
 #include <PPN-microbench/ops.hpp>
 #include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/memory.hpp>
-
+#include <PPN-microbench/ops/flops.hpp>
+#include <PPN-microbench/ops/iops.hpp>
 
 int main() {
 
