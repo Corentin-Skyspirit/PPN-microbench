@@ -48,24 +48,6 @@ template <class T> void Ops::benchSIMD(T *val) {
         for (size_t j = 0; j < 16; j++) {
             acc[j] += v;
         }
-
-
-        // acc[0] += val;
-        // acc[1] += val;
-        // acc[2] += val;
-        // acc[3] += val;
-        // acc[4] += val;
-        // acc[5] += val;
-        // acc[6] += val;
-        // acc[7] += val;
-        // acc[8] += val;
-        // acc[9] += val;
-        // acc[10] += val;
-        // acc[11] += val;
-        // acc[12] += val;
-        // acc[13] += val;
-        // acc[14] += val;
-        // acc[15] += val;
     }
     *val = (int) acc[0];
 }
