@@ -9,6 +9,7 @@ int main() {
     Conductor conductor;
 
     conductor.addBench(new Ops(10))
+        .addBench(new CPUFrequency(10))
         .setOutputFile("../tmp/out.json")
         .run()
         .save()
