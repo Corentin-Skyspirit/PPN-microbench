@@ -88,7 +88,7 @@ Memory::Memory() : Microbench("Memory", 1000000) { srand(time(nullptr)); }
 // Destructor
 Memory::~Memory() {}
 
-void Memory::executeBench() {} 
+
 
 // Execute the benchmark
 void Memory::run() {
