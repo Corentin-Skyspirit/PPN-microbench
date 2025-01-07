@@ -32,8 +32,8 @@ class Report(AbstractElement):
 
         self.pages = [Cover(), Index(), SysInfo()]
 
-        for bench in AbstractElement.obj["data"]:
-            self.pages.append(self.mapping[bench["name"]](AbstractElement.obj))
+        for bench_obj in AbstractElement.obj["data"]:
+            self.pages.append(self.mapping[bench_obj["name"]](AbstractElement.obj, bench_obj))
 
         self.pages[1].set_pages(self.pages)
 

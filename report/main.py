@@ -24,5 +24,3 @@ if __name__ == "__main__":
             traceback.print_exc()
     except:
         print("No way to export report to pdf. Run `pip install weasyprint`.")
-
-    

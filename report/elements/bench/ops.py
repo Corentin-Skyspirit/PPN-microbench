@@ -5,9 +5,11 @@ import numpy as np
 import os.path
 
 class Ops(AbstractBench):
-    def __init__(self, obj):
+    def __init__(self, obj, bench_obj):
         self.obj = obj
-        self.data = np.array(self.obj["data"][0]["results"])
+        self.bench_obj = bench_obj
+
+        self.data = np.array(self.bench_obj["results"])
 
         ops_count = self.obj["data"][0]["ops_count"]
         cpus = self.obj["meta"]["cpu_info"]["cpus"]

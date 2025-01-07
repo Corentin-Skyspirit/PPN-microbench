@@ -6,8 +6,9 @@ import os.path
 from matplotlib.ticker import MultipleLocator
 
 class CpuFrequency(AbstractBench):
-    def __init__(self, obj):
+    def __init__(self, obj, bench_obj):
         self.obj = obj
+        self.bench_obj = bench_obj
 
     def to_html(self):
         self.gen_images()
@@ -21,7 +22,7 @@ class CpuFrequency(AbstractBench):
         return header + p1 + imgs
 
     def gen_images(self):
-        data = self.obj["data"][1]["results"]
+        data = self.bench_obj["results"]
 
         div = 0
         for k in range(8, 1, -1) :
@@ -32,8 +33,8 @@ class CpuFrequency(AbstractBench):
         figure, truc = plt.subplots(div, (len(data)//div))
         plt.subplots_adjust(hspace=1, wspace=0.3)
 
-        max_val = 0;
-        min_val = 100;
+        max_val = 0
+        min_val = 100
 
         for cpu in data:
             for vals in data[cpu]:
