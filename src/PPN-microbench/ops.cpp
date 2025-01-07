@@ -38,6 +38,8 @@ template <class T> void Ops::benchhaha(T *val) {
 }
 #pragma GCC pop_options
 
+#pragma GCC push_options
+#pragma GCC optimize("O3")
 template <class T> void Ops::benchSIMD(T *val) {
     T acc[16];
     T v = *val;
@@ -51,6 +53,7 @@ template <class T> void Ops::benchSIMD(T *val) {
     }
     *val = (int) acc[0];
 }
+#pragma GCC pop_options
 
 void Ops::run() {
     time_point<high_resolution_clock> t1, t2;
