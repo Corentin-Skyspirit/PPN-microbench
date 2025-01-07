@@ -1,6 +1,6 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp conductor.cpp ops.cpp cpu_frequency.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp conductor.cpp ops.cpp cpu_frequency.cpp memory.cpp)
 
 target_sources(
     PPN-microbench
@@ -12,6 +12,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/context.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/conductor.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/memory.hpp
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)

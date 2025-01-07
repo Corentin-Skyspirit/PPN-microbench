@@ -1,6 +1,7 @@
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
+#include <PPN-microbench/memory.hpp>
 
 #include <nlohmann/json.hpp>
 #include <vector>
