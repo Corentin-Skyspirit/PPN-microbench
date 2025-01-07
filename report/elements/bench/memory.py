@@ -114,5 +114,8 @@ class Memory(AbstractBench):
         changes = np.diff(latencies)
         threshold = threshold_factor * np.mean(np.abs(changes))
         significant_changes = np.where(np.abs(changes) > threshold)[0]
-        cache_sizes = memory_sizes[significant_changes]
+        cache_sizes = np.array([])
+        for i in significant_changes:
+            # cache_sizes += (memory_sizes[i])
+            cache_sizes = np.append(cache_sizes, memory_sizes[i])
         return cache_sizes
