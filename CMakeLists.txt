@@ -9,14 +9,7 @@ FetchContent_Declare(
     https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
 )
 
-# FetchContent_Declare(
-#     kokkos
-#     URL
-#     https://github.com/kokkos/kokkos/releases/download/4.5.00/kokkos-4.5.00.tar.gz
-# )
-
 FetchContent_MakeAvailable(json)
-# FetchContent_MakeAvailable(kokkos)
 
 find_package(OpenMP)
 
