@@ -11,6 +11,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(json)
 
+find_package(OpenMP)
+
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
 

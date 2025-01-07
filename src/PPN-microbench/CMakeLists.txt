@@ -15,8 +15,4 @@ target_sources(
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
-# target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json Kokkos::kokkos)
-target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json)
-
-target_compile_options(PPN-microbench PRIVATE "$<$<CONFIG:DEBUG>:SHELL:${DEBUG_FLAGS}>")
-target_compile_options(PPN-microbench PRIVATE "$<$<CONFIG:RELEASE>:SHELL:${RELEASE_FLAGS}>")
+target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json OpenMP::OpenMP_CXX)
