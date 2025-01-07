@@ -99,11 +99,10 @@ void Memory::run() {
     }
 
     mem_times.resize(mem_sizes.size());
-
+    std::cout << "Memory benchmark start \n";
     for (size_t i = 0; i < mem_sizes.size(); ++i) {
-        u64 size_B = mem_sizes[i] /**sizeof(void *)*/;
+        u64 size_B = mem_sizes[i] ;
 
-        std::cout << size_B << std::endl;
         double latency = measure_latency(size_B, getNbIterations());
 
         if (latency == 0.0) {
@@ -112,6 +111,7 @@ void Memory::run() {
         
         mem_times[i] = latency;
     }
+    std::cout << "Memory benchmark end \n";
 }
 // Get the results in JSON format
 json Memory::getJson() {
