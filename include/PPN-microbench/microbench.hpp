@@ -15,17 +15,15 @@ using json = nlohmann::ordered_json;
 
 class Microbench {
   protected:
-    std::vector<std::any> results;
+    // std::vector<std::any> results;
     std::string name;
     int nbIterations;
-
-    virtual void executeBench() = 0;
 
   public:
     Context context = Context::getInstance();
 
     Microbench(std::string name, int nbIterations);
-    ~Microbench();
+    virtual ~Microbench();
 
     std::string getName();
     int getNbIterations();
