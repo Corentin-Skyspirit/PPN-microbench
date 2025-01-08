@@ -28,7 +28,7 @@ class Memory(AbstractBench):
         cache_labels = ['L1 Cache', 'L2 Cache', 'L3 Cache']
 
         # Detect cache sizes and find the closest matches to theoretical sizes
-        detected_cache_sizes = self.detect_cache_sizes(self.obj["data"][2]["Results"][0]["Memory_Size"], self.obj["data"][2]["Results"][1]["Latency"]) / 1024
+        detected_cache_sizes = self.detect_cache_sizes(self.bench_obj["Results"][0]["Memory_Size"], self.bench_obj["Results"][1]["Latency"], 0.3) / 1024
         detected_cache_sizes.sort()
         closest_cache_sizes = self.find_closest_cache_sizes(detected_cache_sizes, theoretical_cache_sizes)
 
@@ -47,8 +47,8 @@ class Memory(AbstractBench):
         data = self.obj
 
         # Extract memory sizes and latencies from the data
-        memory_sizes = data["data"][2]["Results"][0]["Memory_Size"]
-        latencies = data["data"][2]["Results"][1]["Latency"]
+        memory_sizes = self.bench_obj["Results"][0]["Memory_Size"]
+        latencies = self.bench_obj["Results"][1]["Latency"]
 
         # Convert lists to numpy arrays for easier manipulation
         memory_sizes = np.array(memory_sizes)
@@ -57,7 +57,12 @@ class Memory(AbstractBench):
         # Convert memory sizes to KiB
         memory_sizes_kib = memory_sizes / 1024
 
-        
+        # Theoretical cache sizes in KiB
+        theoretical_cache_sizes = [
+            data["meta"]["mem_info"]["l1d"] / 1024,
+            data["meta"]["mem_info"]["l2"] / 1024,
+            data["meta"]["mem_info"]["l3"] / 1024
+        ]
 
         # Generate warnings for aberrations and print results to console
         threshold_factor = 0.3  # Adjusted threshold factor
@@ -68,22 +73,13 @@ class Memory(AbstractBench):
                 print(warning_message)
 
         # Detect cache sizes based on significant changes in latency
-        cache_sizes = self.detect_cache_sizes(memory_sizes, latencies, threshold_factor)
-
-
-        # Theoretical cache sizes in KiB
-        theoretical_cache_sizes = [
-            data["meta"]["mem_info"]["l1d"] / 1024,
-            data["meta"]["mem_info"]["l2"] / 1024,
-            data["meta"]["mem_info"]["l3"] / 1024
-        ]
-
-        # Find the closest detected cache sizes to the theoretical sizes
-        closest_cache_sizes = self.find_closest_cache_sizes(cache_sizes / 1024, theoretical_cache_sizes)
+        cache_sizes = self.detect_cache_sizes(memory_sizes, latencies, threshold_factor)  / 1024
+        cache_sizes.sort()
+        closest_cache_sizes = self.find_closest_cache_sizes(cache_sizes, theoretical_cache_sizes)
 
         # # Display detected cache sizes
         # print("\nDetected cache sizes (in KiB):", cache_sizes / 1024)
-        print("\nClosest detected cache sizes to theoretical sizes (in KiB):", closest_cache_sizes)
+        # print("\nClosest detected cache sizes to theoretical sizes (in KiB):", closest_cache_sizes)
 
         # Plot the data
         plt.figure(figsize=(10, 6))

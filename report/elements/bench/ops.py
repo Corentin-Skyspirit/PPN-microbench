@@ -11,7 +11,7 @@ class Ops(AbstractBench):
 
         self.data = np.array(self.bench_obj["results"])
 
-        ops_count = self.obj["data"][0]["ops_count"]
+        ops_count = self.bench_obj["ops_count"]
         cpus = self.obj["meta"]["cpu_info"]["cpus"]
 
         self.data = 1e9 / self.data * ops_count * cpus
