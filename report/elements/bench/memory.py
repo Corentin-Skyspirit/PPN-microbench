@@ -15,25 +15,31 @@ class Memory(AbstractBench):
         wd = os.getcwd()
 
         header = "<h2 id='Memory'>Memory</h2>"
-        #p1 = "<p> All values are in GHz. </p>"
-        
-        theoretical_cache_sizes = [
-        self.obj["meta"]["mem_info"]["l1d"] / 1024,
-        self.obj["meta"]["mem_info"]["l2"] / 1024,
-        self.obj["meta"]["mem_info"]["l3"] / 1024
-    ]
-        cache_labels = ['L1 Cache', 'L2 Cache', 'L3 Cache']
-        closest_cache_sizes = self.find_closest_cache_sizes(self.detect_cache_sizes(self.obj["data"][2]["Results"][0]["Memory_Size"], self.obj["data"][2]["Results"][1]["Latency"]) / 1024, theoretical_cache_sizes)
 
-        # Créer le tableau HTML
+        # Adjusted threshold factor
+        threshold_factor = 0.3
+
+        # Theoretical cache sizes in KiB
+        theoretical_cache_sizes = [
+            self.obj["meta"]["mem_info"]["l1d"] / 1024,
+            self.obj["meta"]["mem_info"]["l2"] / 1024,
+            self.obj["meta"]["mem_info"]["l3"] / 1024
+        ]
+        cache_labels = ['L1 Cache', 'L2 Cache', 'L3 Cache']
+
+        # Detect cache sizes and find the closest matches to theoretical sizes
+        detected_cache_sizes = self.detect_cache_sizes(self.obj["data"][2]["Results"][0]["Memory_Size"], self.obj["data"][2]["Results"][1]["Latency"]) / 1024
+        detected_cache_sizes.sort()
+        closest_cache_sizes = self.find_closest_cache_sizes(detected_cache_sizes, theoretical_cache_sizes)
+
+        # Create the HTML table
         table = "<table><tr><th>Cache</th><th>Theoretical Size (KiB)</th><th>Detected Size (KiB)</th></tr>"
         for label, theoretical_size, detected_size in zip(cache_labels, theoretical_cache_sizes, closest_cache_sizes):
             table += f"<tr><td>{label}</td><td>{theoretical_size}</td><td>{detected_size}</td></tr>"
         table += "</table>"
 
         imgs = f"<img src='{wd}/out/cache_latency.png'/>"
-        
-        return header + table + imgs
+        return header + imgs + table
 
     def gen_images(self):
 
@@ -77,7 +83,7 @@ class Memory(AbstractBench):
 
         # # Display detected cache sizes
         # print("\nDetected cache sizes (in KiB):", cache_sizes / 1024)
-        # print("\nClosest detected cache sizes to theoretical sizes (in KiB):", closest_cache_sizes)
+        print("\nClosest detected cache sizes to theoretical sizes (in KiB):", closest_cache_sizes)
 
         # Plot the data
         plt.figure(figsize=(10, 6))
@@ -101,14 +107,7 @@ class Memory(AbstractBench):
     def get_index(self):
         return "<li><a href='#Memory'>Memory</a></li>"
     
-# Function to find the closest detected cache sizes to the theoretical sizes
-    def find_closest_cache_sizes(self, detected_cache_sizes, theoretical_cache_sizes):
-        closest_cache_sizes = []
-        for theoretical_size in theoretical_cache_sizes:
-            closest_size = min(detected_cache_sizes, key=lambda x: abs(x - theoretical_size))
-            closest_cache_sizes.append(closest_size)
-        return closest_cache_sizes
-
+    threshold_factor = 0.3  # Adjusted threshold factor
 # Function to detect significant changes in latency
     def detect_cache_sizes(self, memory_sizes, latencies, threshold_factor=2):
         changes = np.diff(latencies)
@@ -119,3 +118,11 @@ class Memory(AbstractBench):
             # cache_sizes += (memory_sizes[i])
             cache_sizes = np.append(cache_sizes, memory_sizes[i])
         return cache_sizes
+    
+# Function to find the closest detected cache sizes to the theoretical sizes
+    def find_closest_cache_sizes(self, detected_cache_sizes, theoretical_cache_sizes):
+        closest_cache_sizes = []
+        for theoretical_size in theoretical_cache_sizes:
+            closest_size = min(detected_cache_sizes, key=lambda x: abs(x - theoretical_size))
+            closest_cache_sizes.append(closest_size)
+        return closest_cache_sizes
