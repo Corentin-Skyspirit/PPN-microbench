@@ -85,4 +85,4 @@ class CpuFrequency(AbstractBench):
         plt.clf()
 
     def get_index(self):
-        return "<li><a href='#CPUFreqency'>CPU Frequency</a></li>"
+        return "<li><a href='#CPUFrequency'>CPU Frequency</a></li>"

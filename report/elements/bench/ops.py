@@ -37,9 +37,9 @@ class Ops(AbstractBench):
             ])
 
         header = "<h2 id='Ops'>Integer and Floating point operations per seconds</h2>"
-        p1 = "<p> All values are in GHz. SIMD operation are generated using openmp's #pragma omp simd directive. </p>"
+        p1 = "<p> All values are in Giga operation/instruction per seconds. SIMD operation are generated using openmp's #pragma omp simd directive. </p>"
 
-        table = "<tr><th></th><th>Average</th><th>Max</th><th>Std.</th></tr>"
+        table = "<tr><th></th><th>Average (GIPS)</th><th>Max (GIPS)</th><th>Std. (GIPS)</th></tr>"
         table += "<tr><th>i32</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[0][0], t[0][1], t[0][2])
         table += "<tr><th>i64</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[1][0], t[1][1], t[1][2])
         table += "<tr><th>f32</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[2][0], t[2][1], t[2][2])
@@ -50,7 +50,7 @@ class Ops(AbstractBench):
 
         imgs = f"<img src='{wd}/out/ops_scalar.png'/></br><img src='{wd}/out/ops_simd.png'/>"
         
-        return header + p1 + table + imgs
+        return header + p1 + table
 
     def gen_images(self):
         x = [i for i in range(len(self.data[0]))]

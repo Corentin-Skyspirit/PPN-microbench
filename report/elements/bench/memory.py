@@ -99,7 +99,7 @@ class Memory(AbstractBench):
         plt.savefig("out/cache_latency.png")
 
     def get_index(self):
-        return "<li><a href='#CPUFreqency'>CPU Frequency</a></li>"
+        return "<li><a href='#Memory'>Memory</a></li>"
     
 # Function to find the closest detected cache sizes to the theoretical sizes
     def find_closest_cache_sizes(self, detected_cache_sizes, theoretical_cache_sizes):

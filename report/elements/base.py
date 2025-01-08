@@ -2,6 +2,7 @@ from elements.bench import *
 
 from abc import ABC, abstractmethod
 import json
+import datetime
 
 class AbstractElement(ABC):
 
@@ -66,7 +67,11 @@ class Cover(AbstractElement):
     """cover page"""
     def to_html(self):
         html = f"""
-        <header><h1>Haha<h1><p>hehe</p></header>
+<header>
+    <h1>PPN-microbench Automatic Report<h1>
+    <p>{datetime.datetime.now()}</p>
+    <p>{len(AbstractElement.obj["data"])} microbenches</p>
+</header>
 """
         return html
 
@@ -98,12 +103,12 @@ class SysInfo(AbstractElement):
     """cpu, ram and gpu information"""
     def to_html(self):
         obj = AbstractElement.obj
-        cpu_info = ""
+        cpu_info = "<tr><th colspan='2'>CPU informations</th></tr>"
         for key, info in obj["meta"]["cpu_info"].items():
             cpu_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
         cpu_info = f"<table>{cpu_info}</table>"
 
-        mem_info = ""
+        mem_info = "<tr><th colspan='2'>Cache / Memory informations</th></tr>"
         for key, info in obj["meta"]["mem_info"].items():
             mem_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
         mem_info = f"<table>{mem_info}</table>"
