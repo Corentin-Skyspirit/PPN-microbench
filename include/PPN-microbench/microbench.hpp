@@ -7,9 +7,9 @@
 #include <nlohmann/json.hpp>
 
 #include <iostream>
+#include <vector>
 #include <threads.h>
 #include <unistd.h> // sleep
-#include <vector>
 
 using json = nlohmann::ordered_json;
 

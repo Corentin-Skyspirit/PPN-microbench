@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#include <stdint.h>
+#include <cstdint>
 
 #define ki 1024;
 #define Mi 1048576;
