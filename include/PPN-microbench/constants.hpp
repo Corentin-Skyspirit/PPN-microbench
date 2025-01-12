@@ -3,10 +3,10 @@
 
 #include <cstdint>
 
-constexpr size_t ki = 1024;
-constexpr size_t Mi = 1048576;
-constexpr size_t Gi = 1073741824;
-constexpr size_t Ti = 1099511627776;
+constexpr uint64_t ki = 1024;
+constexpr uint64_t Mi = 1048576;
+constexpr uint64_t Gi = 1073741824;
+constexpr uint64_t Ti = 1099511627776;
 
 using u64 = uint64_t;
 using u32 = uint32_t;
