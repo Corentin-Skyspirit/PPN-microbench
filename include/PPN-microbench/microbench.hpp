@@ -4,9 +4,9 @@
 #include <PPN-microbench/constants.hpp>
 #include <PPN-microbench/context.hpp>
 
-#include <any>
-#include <iostream>
 #include <nlohmann/json.hpp>
+
+#include <iostream>
 #include <threads.h>
 #include <unistd.h> // sleep
 #include <vector>
@@ -15,7 +15,6 @@ using json = nlohmann::ordered_json;
 
 class Microbench {
   protected:
-    // std::vector<std::any> results;
     std::string name;
     int nbIterations;
 

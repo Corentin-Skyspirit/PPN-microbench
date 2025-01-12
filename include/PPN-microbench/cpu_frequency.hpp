@@ -2,11 +2,11 @@
 #define CPU_FREQUENCY
 
 #include <PPN-microbench/microbench.hpp>
-#include <PPN-microbench/rdtsc.hpp>
 #include <PPN-microbench/context.hpp>
+
 #include <chrono>
 #include <thread>
-#include <threads.h>
+#include <sched.h>
 
 class CPUFrequency : public Microbench {
     private:
