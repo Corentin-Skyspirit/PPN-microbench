@@ -1,5 +1,5 @@
-#ifndef PPN_MICROBENCH_CACHE_HPP
-#define PPN_MICROBENCH_CACHE_HPP
+#ifndef PPN_MICROBENCH_MEMORY
+#define PPN_MICROBENCH_MEMOERY
 
 // Include necessary headers
 #include <PPN-microbench/microbench.hpp>

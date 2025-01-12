@@ -1,5 +1,5 @@
-#ifndef MICROBENCH
-#define MICROBENCH
+#ifndef PPN_MICROBENCH_MICROBENCH
+#define PPN_MICROBENCH_MICROBENCH
 
 #include <PPN-microbench/constants.hpp>
 #include <PPN-microbench/context.hpp>

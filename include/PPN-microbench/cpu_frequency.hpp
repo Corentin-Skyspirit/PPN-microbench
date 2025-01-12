@@ -1,5 +1,5 @@
-#ifndef CPU_FREQUENCY
-#define CPU_FREQUENCY
+#ifndef PPN_MICROBENCH_CPU_FREQUENCY
+#define PPN_MICROBENCH_CPU_FREQUENCY
 
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>

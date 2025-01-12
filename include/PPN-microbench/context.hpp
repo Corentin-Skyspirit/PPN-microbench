@@ -1,5 +1,5 @@
-#ifndef CONTEXT_HPP
-#define CONTEXT_HPP
+#ifndef PPN_MICROBENCH_CONTEXT_HPP
+#define PPN_MICROBENCH_CONTEXT_HPP
 
 #include <PPN-microbench/constants.hpp>
 
