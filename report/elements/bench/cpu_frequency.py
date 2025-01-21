@@ -30,7 +30,7 @@ class CpuFrequency(AbstractBench):
                 div = k
                 break
 
-        figure, truc = plt.subplots(div, (len(data)//div))
+        figure, truc = plt.subplots(div, (len(data)//div), figsize=(10,13))
         plt.subplots_adjust(hspace=1, wspace=0.3)
 
         max_val = 0
