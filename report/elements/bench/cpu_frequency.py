@@ -75,7 +75,7 @@ class CpuFrequency(AbstractBench):
             cadre.set_xlabel('Cores')
             # cadre.set_ylabel('Frequency (GHz)')
             # cadre.ticklabel_format(useOffset=False)
-            cadre.set_title(str(j+1) + mot)
+            cadre.legend(loc="lower left", fontsize=10)
             cadre.grid(True, which='major', axis='both', linestyle='--', alpha=0.7)
             cadre.xaxis.set_major_locator(MultipleLocator(1))
 
