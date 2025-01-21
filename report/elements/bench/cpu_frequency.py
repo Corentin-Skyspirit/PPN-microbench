@@ -15,7 +15,6 @@ class CpuFrequency(AbstractBench):
         wd = os.getcwd()
 
         header = "<h2 id='CPUFrequency'>CPU Frequency</h2>"
-        p1 = "<p> All values are in GHz. </p>"
 
         imgs = f"<img src='{wd}/out/cpu_frequency_multiplot.png'/>"
         title = "<center><p>Frequencies of cores in GHz depending of their number</p></center>"
