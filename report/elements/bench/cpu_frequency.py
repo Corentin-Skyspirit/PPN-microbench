@@ -20,7 +20,7 @@ class CpuFrequency(AbstractBench):
         imgs = f"<img src='{wd}/out/cpu_frequency_multiplot.png'/>"
         title = "<center><p>Frequencies of cores in GHz depending of their number</p></center>"
         
-        return header + p1 + imgs
+        return header+ imgs + title
 
     def gen_images(self):
         data = self.bench_obj["results"]
