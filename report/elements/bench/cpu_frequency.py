@@ -80,7 +80,11 @@ class CpuFrequency(AbstractBench):
             cadre.xaxis.set_major_locator(MultipleLocator(1))
 
         if (np.std(all_vals) / np.mean(all_vals) * 100 > 5.0) :
-            print("/!\ Warning /!\ Standard deviation is too high : {:.2f}%".format(np.std(all_vals) / np.mean(all_vals) * 100))
+            plt.figtext(0.5, 0.035, "/!\ Warning /!\ Standard deviation is too high : {:.2f}%".format(np.std(all_vals) / np.mean(all_vals) * 100), horizontalalignment = 'center', color="red")
+        else :
+            plt.figtext(0.5, 0.035, "Standard deviation is : {:.2f}%".format(np.std(all_vals) / np.mean(all_vals) * 100), horizontalalignment = 'center')
+            
+        plt.tight_layout(pad=3.5)
 
         plt.savefig("out/cpu_frequency_multiplot.png")
         plt.clf()
