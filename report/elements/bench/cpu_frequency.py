@@ -66,7 +66,7 @@ class CpuFrequency(AbstractBench):
                 cadre = truc[j//((len(data)//div)), j%((len(data)//div))] 
             else :
                 cade = truc[j//((len(data)//div))]
-            cadre.plot(range(1, j + 2), values, marker=".")
+            cadre.plot(range(1, j + 2), values, marker=".", label=str(j+1) + mot)
             cadre.set_ylim(min_val, max_val)
             # if warning :
             #     cadre.fill_between(range(j+1), top, bot, color='red', alpha=0.1)
