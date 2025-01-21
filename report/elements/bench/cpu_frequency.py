@@ -31,7 +31,8 @@ class CpuFrequency(AbstractBench):
                 break
 
         figure, truc = plt.subplots(div, (len(data)//div), figsize=(10,13))
-        plt.subplots_adjust(hspace=1, wspace=0.3)
+        plt.subplots_adjust(hspace=0.35, wspace=0.1)
+        plt.figtext(0.5, 0.02, "All values are in GHz", horizontalalignment = 'center')
 
         max_val = 0
         min_val = 100
