@@ -2,14 +2,16 @@
 #include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/memory.hpp>
 #include <PPN-microbench/ops.hpp>
+#include <PPN-microbench/load_test.hpp>
 
 int main() {
 
     Conductor conductor;
 
     conductor.addBench(new CPUFrequency(10))
+        .addBench(new LoadTest(10))
         .addBench(new Ops(10))
-        .addBench(new Memory())
+        // .addBench(new Memory())
         .setOutputFile("../tmp/out.json")
         .run()
         .save()

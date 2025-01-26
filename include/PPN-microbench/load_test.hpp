@@ -10,10 +10,12 @@
 class LoadTest : public Microbench {
     private:
         int nbCores;
+        int nbMeasures;
         double* measures;
+        void executeBench();
         
     public:
-        LoadTest();
+        LoadTest(int nbMeasures);
         ~LoadTest();
 
         void run() override;
