@@ -4,7 +4,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -16,12 +16,37 @@ CPUFrequency::~CPUFrequency() {}
 #pragma GCC push_options
 #pragma GCC optimize("O0")
 void CPUFrequency::executeBench() {
-    int cpt = 0;
-    for (int i = 0; i < getNbIterations(); i++) {
+    // int cpt = 0;
+    // for (int i = 0; i < getNbIterations(); i++) {
+    //     // 16 adds
+    //     cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+    //     cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
+    // }
+    asm(
+        "start:"
         // 16 adds
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-    }
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "add %0, %1;"
+        "cmp %0, %2;"
+        "jl start;"
+        :
+        : "r" (0), "r" (1), "r" (getNbIterations()*16)
+        : 
+    );
 }
 #pragma GCC pop_options
 
