@@ -1,11 +1,22 @@
 #include <PPN-microbench/memory.hpp>
 
-// Function to generate a random index within a given threshold
-inline uint64_t random_index(uint64_t threshold) { return rand() % threshold; }
+/// Function to generate a random index within a given threshold
+inline uint64_t random_index(uint64_t threshold) { 
+    uint64_t a = (uint64_t)rand() << 48;
+    uint64_t b = (uint64_t)rand() << 32;
+    uint64_t c = (uint64_t)rand() << 16;
+    uint64_t d = (uint64_t)rand();
+    
+    return (a ^ b ^ c ^ d) % threshold; }
 
 // Function to measure cache/memory latency using pointer chasing
 double measure_latency(uint64_t size, double nbIterations) {
     std::vector<void**> memblock(size);
+    int cycle_lenght = 1;
+
+    if (memblock[0] == nullptr) {
+        memblock[0] = (void**)&memblock[0];
+    }
 
     // Initialize the memory block with pointers to itself
     for (uint64_t i = 0; i < size; ++i) {
@@ -18,8 +29,13 @@ double measure_latency(uint64_t size, double nbIterations) {
 
     // Shuffle the pointers to create a random access pattern
     for (uint64_t i = size - 1; i > 0; --i) {
-        uint64_t j = random_index(i + 1);
-        std::swap(memblock[i], memblock[j]);
+        if (i < cycle_lenght) {
+            continue;
+        }
+        uint64_t j = random_index(i / cycle_lenght) * cycle_lenght + (i % cycle_lenght);
+        void *tmp = memblock[i];
+        memblock[i]= memblock[j];
+        memblock[j] = (void**)tmp;
     }
 
     // Warmup run
@@ -51,7 +67,7 @@ double measure_latency(uint64_t size, double nbIterations) {
 
         auto start = std::chrono::high_resolution_clock::now();
         // Pointer chasing loop
-        for (uint64_t i = 0; i < nbIterations; i+=16) {
+        for (uint64_t i = nbIterations; i; --i) {
             p = *(void **)p;
             p = *(void **)p;
             p = *(void **)p;
@@ -74,7 +90,7 @@ double measure_latency(uint64_t size, double nbIterations) {
         std::chrono::duration<double, std::nano> elapsed = end - start;
 
         // Accumulate the latency
-        total_latency += (double)elapsed.count() / (double)nbIterations;
+        total_latency += (double)elapsed.count() / (double)nbIterations*16.0;
     }
 
     // Calculate the average latency over 11 runs
@@ -93,8 +109,13 @@ Memory::~Memory() {}
 void Memory::run() {
     // Define the sizes to test (in B)
     size_t size = 512;
-    for (size_t i = 0; i < mem_sizes.size(); i++) { 
-        mem_sizes[i] = size *= 1.04;
+    size_t step = 16;
+    for (size_t i = 0; i < mem_sizes.size(); i++) {
+        mem_sizes[i] = size;
+        size += step;
+        if ((size & (size - 1)) == 0) { // Double step size at powers of two
+            step <<= 1;
+        }
     }
 
     mem_times.resize(mem_sizes.size());
