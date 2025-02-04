@@ -23,29 +23,34 @@ void CPUFrequency::executeBench() {
     //     cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
     // }
     asm(
+        "xor rax, rax;"
         "start:"
         // 16 adds
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "add %0, %1;"
-        "cmp %0, %2;"
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+        "add rax, 1;"
+
+        "cmp rax, %0;"
         "jl start;"
         :
-        : "r" (0), "r" (1), "r" (getNbIterations()*16)
-        : 
+        : "r" (getNbIterations() * 16)
+        : "rax"
     );
 }
 #pragma GCC pop_options

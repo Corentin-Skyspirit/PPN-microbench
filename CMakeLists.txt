@@ -17,9 +17,9 @@ add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -march=native)
+    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -march=native -masm=intel)
 else()
-    target_compile_options(PPN-microbench PRIVATE -march=native)
+    target_compile_options(PPN-microbench PRIVATE -march=native -masm=intel)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)
