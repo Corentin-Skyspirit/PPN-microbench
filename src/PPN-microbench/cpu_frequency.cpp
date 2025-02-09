@@ -13,15 +13,11 @@ CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999)
 
 CPUFrequency::~CPUFrequency() {}
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void CPUFrequency::executeBench() {
-    // int cpt = 0;
-    // for (int i = 0; i < getNbIterations(); i++) {
-    //     // 16 adds
-    //     cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-    //     cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-    // }
+    #if defined(__i386__) || defined(_M_IX86)
+    // x86 32
+    #elif defined(__x86_64__)
+    // x86 64
     asm(
         "xor rax, rax;"
         "start:"
@@ -52,8 +48,44 @@ void CPUFrequency::executeBench() {
         : "r" (getNbIterations() * 16)
         : "rax"
     );
+    #elif defined(__arm__) || defined(_M_ARM)
+    // ARM 32
+    #elif defined(__aarch64__) || defined(_M_ARM64)
+    // arm 64
+    asm(
+        "mov x0, #0;"         // x0 = 0
+        "start:;"
+        // 16 additions
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+        "add x0, x0, #1;"
+
+        "cmp x0, %0;" 
+        "b.lt start;"  
+        :
+        : "r" (getNbIterations() * 16)
+        : "x0"
+    );
+    #else
+    // Unknown Architecture
+    #endif
 }
-#pragma GCC pop_options
 
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
