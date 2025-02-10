@@ -20,7 +20,7 @@ void CPUFrequency::executeBench() {
     // x86 64
     asm(
         "xor rax, rax;"
-        "start:"
+        "start_bench:"
         // 16 adds
         "add rax, 1;"
         "add rax, 1;"
@@ -43,7 +43,7 @@ void CPUFrequency::executeBench() {
         "add rax, 1;"
 
         "cmp rax, %0;"
-        "jl start;"
+        "jl start_bench;"
         :
         : "r" (getNbIterations() * 16)
         : "rax"
@@ -54,7 +54,7 @@ void CPUFrequency::executeBench() {
     // arm 64
     asm(
         "mov x0, #0;"         // x0 = 0
-        "start:;"
+        "start_bench:;"
         // 16 additions
         "add x0, x0, #1;"
         "add x0, x0, #1;"
@@ -77,7 +77,7 @@ void CPUFrequency::executeBench() {
         "add x0, x0, #1;"
 
         "cmp x0, %0;" 
-        "b.lt start;"  
+        "b.lt start_bench;"  
         :
         : "r" (getNbIterations() * 16)
         : "x0"
