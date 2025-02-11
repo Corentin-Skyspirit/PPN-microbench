@@ -85,7 +85,7 @@ void CPUFrequency::executeBench() {
         : "x0"
     );
     #else
-    // Unknown Architecture
+    #error Unknown architecture: no support for CPU frequency benchmark
     #endif
 }
 #pragma GCC pop_options
