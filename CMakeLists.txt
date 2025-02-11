@@ -20,7 +20,7 @@ add_subdirectory(main)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
     message(STATUS "Configuring for ARM")
-    target_compile_options(PPN-microbench PRIVATE -march=armv8-a -mtune=cortex-a72)
+    target_compile_options(PPN-microbench PRIVATE -mcpu=native)
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
     message(STATUS "Configuring for x86")
     target_compile_options(PPN-microbench PRIVATE -march=native -masm=intel)
@@ -32,8 +32,6 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     target_compile_options(PPN-microbench PRIVATE -Wall -Wextra)
-else()
-    target_compile_options(PPN-microbench PRIVATE)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)
