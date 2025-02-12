@@ -1,6 +1,6 @@
 #include <PPN-microbench/microbench.hpp>
 
-Microbench::Microbench(std::string name, u64 nbIterations) {
+Microbench::Microbench(std::string name, uint64_t nbIterations) {
     this->name = name;
     this->nbIterations = nbIterations;
 }

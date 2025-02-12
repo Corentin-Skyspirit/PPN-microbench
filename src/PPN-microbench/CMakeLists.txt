@@ -13,6 +13,13 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/conductor.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/memory.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
+)
+
+target_sources(PPN-microbench 
+    PRIVATE 
+    ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_x86_64.s
+    ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_arm_64.s
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
