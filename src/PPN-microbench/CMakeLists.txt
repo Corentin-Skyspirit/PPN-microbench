@@ -16,10 +16,17 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
 )
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
+    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_arm_64.S)
+
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
+    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_x86_64.S)
+    
+endif()
+
 target_sources(PPN-microbench 
     PRIVATE 
-    ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_x86_64.s
-    ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_arm_64.s
+    ${ASM_FILES}
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)

@@ -1,32 +1,32 @@
 .global cpu_frequency_x86_64
 
 cpu_frequency_x86_64:
-    xor rax, rax
-    mov rcx, rdi
-    shl rcx, 4
+    xor %rax, %rax 
+    mov %rdi, %rcx
+    shl $4, %rcx 
 
-start:
-    add rax, 1
-    add rax, 1
-    add rax, 1
-    add rax, 1
+1: 
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
 
-    add rax, 1
-    add rax, 1
-    add rax, 1
-    add rax, 1
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
 
-    add rax, 1
-    add rax, 1
-    add rax, 1
-    add rax, 1
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
 
-    add rax, 1
-    add rax, 1
-    add rax, 1
-    add rax, 1
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
+    add $1, %rax
 
-    cmp rax, rcx
-    jl start
+    cmp %rcx, %rax
+    jl 1b  
 
     ret
