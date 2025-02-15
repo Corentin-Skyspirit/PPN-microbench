@@ -29,4 +29,4 @@ SpaceBeforeParens: ControlStatements # for if, for, while, switch, etc.
 SpaceBeforeRangeBasedForLoopColon: true
 
 # maximum line length
-ColumnLimit: 80
+ColumnLimit: 120

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
+set(CMAKE_C_COMPILER "/usr/bin/gcc")
 project(PPN-microbench)
+enable_language(C ASM)
 
 enable_language(CXX ASM)
 

@@ -3,10 +3,15 @@
 
 #include <PPN-microbench/microbench.hpp>
 
-// #include <Kokkos_SIMD.hpp>
+#include <immintrin.h>
 
 #include <chrono>
 #include <thread>
+
+extern "C" i32 ADD_X86_i32(i32, i32);
+extern "C" i64 ADD_X86_i64(i64, i64);
+extern "C" float ADD_X86_f32(float, float);
+extern "C" double ADD_X86_f64(double, double);
 
 class Ops : public Microbench {
   private:
@@ -19,7 +24,7 @@ class Ops : public Microbench {
     size_t results[6][RUNS];
 
     template <class T> void benchhaha(T *);
-    template <class T> void benchSIMD(T *);
+    template <class T> void wrap(T (*f)(T, T), T *val);
     void executeBench() {};
 
   public:

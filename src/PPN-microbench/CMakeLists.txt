@@ -1,6 +1,6 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp conductor.cpp ops.cpp cpu_frequency.cpp memory.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp conductor.cpp ops.cpp cpu_frequency.cpp memory.cpp asm/add_x86.S)
 
 target_sources(
     PPN-microbench
