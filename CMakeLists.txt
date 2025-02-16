@@ -35,7 +35,9 @@ endif()
 # Debug or not debug, that is the question
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra)
+    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -O2)
+else()
+    target_compile_options(PPN-microbench PRIVATE)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)

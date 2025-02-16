@@ -12,33 +12,6 @@ Ops::Ops(int reps) : Microbench("OPS", reps) {
 Ops::~Ops() {}
 
 #pragma GCC push_options
-#pragma GCC optimize("O0")
-template <class T> void Ops::benchhaha(T *val) {
-    T acc = *val;
-    T v = *val;
-    for (size_t i = 0; i < n_ops; i++) {
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-    }
-    *val = acc;
-}
-#pragma GCC pop_options
-
-#pragma GCC push_options
 #pragma GCC optimize("O3")
 template <class T> void Ops::wrap(T (*f)(T, T), T *val) {
     T v = *val;
@@ -69,14 +42,6 @@ void Ops::run() {
     std::vector<size_t> mapping = context.getJson()["cpu_info"]["mapping"];
     cpu_set_t cpusets[cpus];
 
-    // _PRINT(SIMD_INT_MAX_FN);
-    // _PRINT(SIMD_INT_MAX_TYPE);
-    // _PRINT(SIMD_FLOAT_MAX_FN);
-    // _PRINT(SIMD_FLOAT_MAX_TYPE);
-
-    std::cout << _STR(SIMD_INT_MAX_FN) << " " << _STR(SIMD_INT_MAX_TYPE) << std::endl;
-    std::cout << _STR(SIMD_FLOAT_MAX_FN) << " " << _STR(SIMD_FLOAT_MAX_TYPE) << std::endl;
-
     // anti-optimise-secret-pointer
     char *haha = (char *)std::aligned_alloc(64, 64);
 
@@ -92,7 +57,7 @@ void Ops::run() {
 
         std::jthread threads[cpus];
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] = std::jthread([this, t1, haha] { this->benchhaha(haha); });
+            threads[k] = std::jthread([this, t1, haha] { wrap(ADD_i64, (i64 *)haha); });
             pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
         }
     }
@@ -105,8 +70,7 @@ void Ops::run() {
         {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((i32 *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_i32, (i32 *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(ADD_i32, (i32 *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -118,8 +82,7 @@ void Ops::run() {
         {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((i64 *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_i64, (i64 *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(ADD_i64, (i64 *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -131,8 +94,7 @@ void Ops::run() {
         {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((float *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_f32, (float *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(ADD_f32, (float *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -145,8 +107,7 @@ void Ops::run() {
 
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((double *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_f64, (double *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(ADD_f64, (double *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -177,7 +138,7 @@ void Ops::run() {
         t2 = high_resolution_clock::now();
         results[5][j] = (t2 - t1).count();
     }
-    delete haha;
+    std::free(haha);
 }
 
 json Ops::getJson() {
@@ -186,6 +147,8 @@ json Ops::getJson() {
     obj["name"] = name;
     obj["ops_count"] = n_ops * 16;
     obj["results"] = json::array();
+    obj["simd_int_fn"] = _STR(SIMD_INT_MAX_FN);
+    obj["simd_float_fn"] = _STR(SIMD_FLOAT_MAX_FN);
 
     for (int i = 0; i < 6; i++) {
         obj["results"][i] = json::array();

@@ -39,22 +39,8 @@ void Context::cpuInfo() {
 #endif
 
 // x86
-#if defined(__i386__)
+#if defined(__i386__) || defined(__x86_64__)
     cpuArchi = "x86";
-
-    _add_i32 = &ADD_X86_i32;
-    _add_i64 = NULL;
-    _add_f32 = &ADD_X86_f32;
-    _add_f64 = NULL;
-#endif
-
-#if defined(__x86_64__)
-    cpuArchi = "x86";
-
-    _add_i32 = ADD_X86_i32;
-    _add_i64 = ADD_X86_i64;
-    _add_f32 = ADD_X86_f32;
-    _add_f64 = ADD_X86_f64;
 #endif
 
     ///////////////

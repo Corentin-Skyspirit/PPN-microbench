@@ -1,12 +1,25 @@
 #ifndef PPN_MICROBENCH_INTRINSICS_H
 #define PPN_MICROBENCH_INTRINSICS_H
 
+#include <PPN-microbench/constants.hpp>
+
 #include <immintrin.h>
 
 #define __STR(HAHA) #HAHA
 #define _STR(HAHA) __STR(HAHA)
 
 #if defined(__i386__) || defined(__x86_64__)
+
+extern "C" i32 ADD_X86_i32(i32, i32);
+extern "C" i64 ADD_X86_i64(i64, i64);
+extern "C" float ADD_X86_f32(float, float);
+extern "C" double ADD_X86_f64(double, double);
+
+#    define ADD_i32 ADD_X86_i32
+#    define ADD_i64 ADD_X86_i64
+#    define ADD_f32 ADD_X86_f32
+#    define ADD_f64 ADD_X86_f64
+
 #    if defined(__SSE2__)
 #        define SIMD_INT_MAX_FN _mm_add_epi64
 #        define SIMD_INT_MAX_TYPE __m128i
