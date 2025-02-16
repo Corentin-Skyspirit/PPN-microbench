@@ -64,10 +64,21 @@ extern "C" double ADD_ARM_f64(double, double);
 #    define ADD_f32 ADD_ARM_f32
 #    define ADD_f64 ADD_ARM_f64
 
+#if defined(__ARM_NEON)
+
+    #define SIMD_INT_MAX_FN vaddq_s64
+    #define SIMD_INT_MAX_TYPE int64x2_t
+    #define SIMD_FLOAT_MAX_FN vaddq_f64
+    #define SIMD_FLOAT_MAX_TYPE float64x2_t
+
+#else
+
 #    define SIMD_INT_MAX_FN ADD_i64
 #    define SIMD_INT_MAX_TYPE i64
 #    define SIMD_FLOAT_MAX_FN ADD_f64
-#    define SIMD_INT_MAX_TYPE double
+#    define SIMD_FLOAT_MAX_TYPE double
+
+#endif 
 
 #endif
 

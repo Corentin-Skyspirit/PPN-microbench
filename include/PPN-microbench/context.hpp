@@ -4,7 +4,6 @@
 #include <PPN-microbench/constants.hpp>
 
 #include <fstream>
-#include <immintrin.h>
 #include <iostream>
 #include <nlohmann/json.hpp>
 #include <regex>
