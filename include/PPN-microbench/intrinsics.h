@@ -3,12 +3,12 @@
 
 #include <PPN-microbench/constants.hpp>
 
-#include <immintrin.h>
-
 #define __STR(HAHA) #HAHA
 #define _STR(HAHA) __STR(HAHA)
 
 #if defined(__i386__) || defined(__x86_64__)
+
+#    include <immintrin.h>
 
 extern "C" i32 ADD_X86_i32(i32, i32);
 extern "C" i64 ADD_X86_i64(i64, i64);
@@ -48,6 +48,27 @@ extern "C" double ADD_X86_f64(double, double);
 #        define SIMD_FLOAT_MAX_FN _mm512_add_pd
 #        define SIMD_FLOAT_MAX_TYPE __m512d
 #    endif
+#endif
+
+#if defined(__arm__) || defined(__aarch64__)
+
+#    include <arm_neon.h>
+
+extern "C" i32 ADD_ARM_i32(i32, i32);
+extern "C" i64 ADD_ARM_i64(i64, i64);
+extern "C" float ADD_ARM_f32(float, float);
+extern "C" double ADD_ARM_f64(double, double);
+
+#    define ADD_i32 ADD_ARM_i32
+#    define ADD_i64 ADD_ARM_i64
+#    define ADD_f32 ADD_ARM_f32
+#    define ADD_f64 ADD_ARM_f64
+
+#    define SIMD_INT_MAX_FN ADD_i64
+#    define SIMD_INT_MAX_TYPE i64
+#    define SIMD_FLOAT_MAX_FN ADD_f64
+#    define SIMD_INT_MAX_TYPE double
+
 #endif
 
 #endif
