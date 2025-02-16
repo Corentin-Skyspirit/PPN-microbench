@@ -1,17 +1,11 @@
 #ifndef PPN_MICROBENCH_OPS_HPP
 #define PPN_MICROBENCH_OPS_HPP
 
+#include <PPN-microbench/intrinsics.h>
 #include <PPN-microbench/microbench.hpp>
-
-#include <immintrin.h>
 
 #include <chrono>
 #include <thread>
-
-extern "C" i32 ADD_X86_i32(i32, i32);
-extern "C" i64 ADD_X86_i64(i64, i64);
-extern "C" float ADD_X86_f32(float, float);
-extern "C" double ADD_X86_f64(double, double);
 
 class Ops : public Microbench {
   private:

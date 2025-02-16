@@ -3,8 +3,6 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-template <class T> T _add(T a, T b) { return a + b; }
-
 Ops::Ops(int reps) : Microbench("OPS", reps) {
     cpus = context.getJson()["cpu_info"]["cpus"];
     size_t rnd = high_resolution_clock::to_time_t(high_resolution_clock::now());
@@ -71,8 +69,16 @@ void Ops::run() {
     std::vector<size_t> mapping = context.getJson()["cpu_info"]["mapping"];
     cpu_set_t cpusets[cpus];
 
+    // _PRINT(SIMD_INT_MAX_FN);
+    // _PRINT(SIMD_INT_MAX_TYPE);
+    // _PRINT(SIMD_FLOAT_MAX_FN);
+    // _PRINT(SIMD_FLOAT_MAX_TYPE);
+
+    std::cout << _STR(SIMD_INT_MAX_FN) << " " << _STR(SIMD_INT_MAX_TYPE) << std::endl;
+    std::cout << _STR(SIMD_FLOAT_MAX_FN) << " " << _STR(SIMD_FLOAT_MAX_TYPE) << std::endl;
+
     // anti-optimise-secret-pointer
-    void *haha = std::aligned_alloc(64, 64);
+    char *haha = (char *)std::aligned_alloc(64, 64);
 
     for (size_t i = 0; i < cpus; i++) {
         CPU_ZERO(&cpusets[i]);
@@ -100,7 +106,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((i32 *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(&ADD_X86_i32, (i32 *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_i32, (i32 *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -113,7 +119,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((i64 *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(&ADD_X86_i64, (i64 *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_i64, (i64 *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -126,7 +132,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((float *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(&ADD_X86_f32, (float *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_f32, (float *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -140,7 +146,7 @@ void Ops::run() {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
                 // threads[k] = std::jthread([this, t1, haha] { this->benchhaha((double *)haha); });
-                threads[k] = std::jthread([this, t1, haha] { wrap(&ADD_X86_f64, (double *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(context._add_f64, (double *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -152,7 +158,7 @@ void Ops::run() {
         {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread([this, t1, haha] { wrap(&_mm256_add_epi64, (__m256i *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(SIMD_INT_MAX_FN, (SIMD_INT_MAX_TYPE *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }
@@ -164,7 +170,7 @@ void Ops::run() {
         {
             std::jthread threads[cpus];
             for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread([this, t1, haha] { wrap(&_mm256_add_pd, (__m256d *)haha); });
+                threads[k] = std::jthread([this, t1, haha] { wrap(SIMD_FLOAT_MAX_FN, (SIMD_FLOAT_MAX_TYPE *)haha); });
                 pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
             }
         }

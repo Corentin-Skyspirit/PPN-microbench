@@ -30,3 +30,6 @@ SpaceBeforeRangeBasedForLoopColon: true
 
 # maximum line length
 ColumnLimit: 120
+
+# preprocessor macro indentation
+PPDirectiveIndentStyle: PPDIS_BeforeHash

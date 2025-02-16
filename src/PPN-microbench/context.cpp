@@ -39,8 +39,22 @@ void Context::cpuInfo() {
 #endif
 
 // x86
-#if defined(__i386__) || defined(__x86_64__)
+#if defined(__i386__)
     cpuArchi = "x86";
+
+    _add_i32 = &ADD_X86_i32;
+    _add_i64 = NULL;
+    _add_f32 = &ADD_X86_f32;
+    _add_f64 = NULL;
+#endif
+
+#if defined(__x86_64__)
+    cpuArchi = "x86";
+
+    _add_i32 = ADD_X86_i32;
+    _add_i64 = ADD_X86_i64;
+    _add_f32 = ADD_X86_f32;
+    _add_f64 = ADD_X86_f64;
 #endif
 
     ///////////////
@@ -76,6 +90,8 @@ void Context::cpuInfo() {
     }
     if (__builtin_cpu_supports("avx512f")) {
         simd.emplace("AVX512");
+
+        // _add_iSIMD = _mm512_add_epi64;
     }
 #endif
 
@@ -181,10 +197,6 @@ json Context::getJson() {
     return obj;
 }
 
-size_t Context::getCpus() { 
-    return this->cpus; 
-}
+size_t Context::getCpus() { return this->cpus; }
 
-std::vector<size_t> Context::getThreadMapping() {
-    return this->threadMapping;
-}
+std::vector<size_t> Context::getThreadMapping() { return this->threadMapping; }
