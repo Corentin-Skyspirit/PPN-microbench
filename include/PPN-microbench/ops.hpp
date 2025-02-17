@@ -17,7 +17,8 @@ class Ops : public Microbench {
 
     size_t results[6][RUNS];
 
-    template <class T> void wrap(T (*f)(T, T), T *val);
+    // 'reps' represents the number of operations executed in 'f'
+    template <class T> void wrap(T (*f)(T, T), T *val, int reps);
     void executeBench() {};
 
   public:
