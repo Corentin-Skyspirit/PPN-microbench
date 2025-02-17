@@ -9,4 +9,4 @@ Microbench::~Microbench() {}
 
 std::string Microbench::getName() { return this->name; }
 
-u64 Microbench::getNbIterations() { return this->nbIterations; }
+uint64_t Microbench::getNbIterations() { return this->nbIterations; }

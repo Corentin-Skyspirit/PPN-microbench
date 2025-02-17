@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 project(PPN-microbench)
 
-enable_language(C ASM)
+enable_language(CXX ASM)
 
 include(FetchContent)
 

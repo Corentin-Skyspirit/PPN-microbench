@@ -5,7 +5,7 @@ cpu_frequency_x86_64:
     mov %rdi, %rcx
     shl $4, %rcx 
 
-1: 
+cpu_frequency_x86_64_loop_entry: 
     add $1, %rax
     add $1, %rax
     add $1, %rax
@@ -27,6 +27,6 @@ cpu_frequency_x86_64:
     add $1, %rax
 
     cmp %rcx, %rax
-    jl 1b  
+    jl cpu_frequency_x86_64_loop_entry 
 
     ret
