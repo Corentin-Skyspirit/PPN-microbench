@@ -3,6 +3,7 @@
 
 #include <PPN-microbench/constants.hpp>
 #include <PPN-microbench/context.hpp>
+#include <PPN-microbench/asm_functions.hpp>
 
 #include <nlohmann/json.hpp>
 
@@ -16,16 +17,16 @@ using json = nlohmann::ordered_json;
 class Microbench {
   protected:
     std::string name;
-    int nbIterations;
+    uint64_t nbIterations;
 
   public:
     Context context = Context::getInstance();
 
-    Microbench(std::string name, int nbIterations);
+    Microbench(std::string name, uint64_t nbIterations);
     virtual ~Microbench();
 
     std::string getName();
-    int getNbIterations();
+    uint64_t getNbIterations();
 
     virtual void run() = 0;
     virtual json getJson() = 0;

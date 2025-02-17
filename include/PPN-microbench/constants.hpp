@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-constexpr uint64_t ki = 1024;
+constexpr uint64_t Ki = 1024;
 constexpr uint64_t Mi = 1048576;
 constexpr uint64_t Gi = 1073741824;
 constexpr uint64_t Ti = 1099511627776;

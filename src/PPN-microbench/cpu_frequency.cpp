@@ -4,7 +4,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999){
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -16,12 +16,78 @@ CPUFrequency::~CPUFrequency() {}
 #pragma GCC push_options
 #pragma GCC optimize("O0")
 void CPUFrequency::executeBench() {
-    int cpt = 0;
-    for (int i = 0; i < getNbIterations(); i++) {
-        // 16 adds
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-        cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++; cpt++;
-    }
+    #if defined(__i386__) || defined(_M_IX86)
+    // x86 32
+    #elif defined(__x86_64__)
+    // x86 64
+    cpu_frequency_x86_64(getNbIterations());
+    // asm(
+    //     "xor rax, rax;"
+    //     "start:"
+    //     // 16 adds
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+    //     "add rax, 1;"
+
+    //     "cmp rax, %0;"
+    //     "jl start;"
+    //     :
+    //     : "r" (getNbIterations() * 16)
+    //     : "rax"
+    // );
+    #elif defined(__arm__) || defined(_M_ARM)
+    // ARM 32
+    #elif defined(__aarch64__) || defined(_M_ARM64)
+    // arm 64
+    // asm(
+    //     "mov x0, #0;"         // x0 = 0
+    //     "start:;"
+    //     // 16 additions
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+    //     "add x0, x0, #1;"
+
+    //     "cmp x0, %0;" 
+    //     "b.lt start;"  
+    //     :
+    //     : "r" (getNbIterations() * 16)
+    //     : "x0"
+    // );
+    #else
+    #error Unknown architecture: no support for CPU frequency benchmark
+    #endif
 }
 #pragma GCC pop_options
 
