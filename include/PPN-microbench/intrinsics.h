@@ -3,8 +3,8 @@
 
 #include <PPN-microbench/constants.hpp>
 
-#define __STR(HAHA) #HAHA
-#define _STR(HAHA) __STR(HAHA)
+#define __STR(S) #S
+#define _STR(S) __STR(S)
 
 #if defined(__i386__) || defined(__x86_64__)
 

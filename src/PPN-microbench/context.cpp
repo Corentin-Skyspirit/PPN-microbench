@@ -76,8 +76,6 @@ void Context::cpuInfo() {
     }
     if (__builtin_cpu_supports("avx512f")) {
         simd.emplace("AVX512");
-
-        // _add_iSIMD = _mm512_add_epi64;
     }
 #endif
 

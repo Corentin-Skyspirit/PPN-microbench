@@ -6,50 +6,42 @@
 .section .text
 
 ADD_X86_i32:
-    pushq %rax
-
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-    addl %eax, %eax
-
-    popq %rax
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
+    addl %R8D, %R8D
     ret
 
 ADD_X86_i64:
-    pushq %rax
-
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-    addq %rax, %rax
-
-    popq %rax
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
+    addq %R8, %R8
     ret
 
 ADD_X86_f32:
