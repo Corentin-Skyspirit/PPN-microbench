@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-set(CMAKE_C_COMPILER "/usr/bin/gcc")
 project(PPN-microbench)
-enable_language(C ASM)
 
 enable_language(CXX ASM)
 
@@ -14,8 +12,6 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(json)
-
-find_package(OpenMP)
 
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
@@ -36,8 +32,6 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -O2)
-else()
-    target_compile_options(PPN-microbench PRIVATE)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)
