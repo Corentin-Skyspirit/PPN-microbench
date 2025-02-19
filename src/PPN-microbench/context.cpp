@@ -67,7 +67,7 @@ void Context::cpuInfo() {
         cpuArchi = "ARM";
 
         #if defined(__ARM_NEON)
-            simd.emplace("NEON")
+            simd.emplace("NEON");
         #endif
     #endif
 
