@@ -1,7 +1,7 @@
 #ifndef PPN_MICROBENCH_OPS_HPP
 #define PPN_MICROBENCH_OPS_HPP
 
-#include <PPN-microbench/intrinsics.h>
+#include <PPN-microbench/intrinsics.hpp>
 #include <PPN-microbench/microbench.hpp>
 
 #include <chrono>
