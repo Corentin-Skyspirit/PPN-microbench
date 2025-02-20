@@ -18,7 +18,7 @@ class Ops : public Microbench {
 
     size_t results[6][RUNS];
 
-    size_t wrap(void (*f)(i64));
+    size_t wrap(void (*f)(int64_t));
     void executeBench() {};
 
   public:

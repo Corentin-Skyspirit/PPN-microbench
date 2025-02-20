@@ -1,10 +1,7 @@
 #ifndef PPN_MICROBENCH_CONTEXT_HPP
 #define PPN_MICROBENCH_CONTEXT_HPP
 
-#include <PPN-microbench/constants.hpp>
-
 #include <nlohmann/json.hpp>
-
 #include <fstream>
 #include <iostream>
 #include <regex>
@@ -37,7 +34,7 @@ class Context {
 
     Context();
 
-    i64 getFirstInt(const std::string);
+    int64_t getFirstInt(const std::string);
     void cpuInfo();
     void memoryInfo();
 

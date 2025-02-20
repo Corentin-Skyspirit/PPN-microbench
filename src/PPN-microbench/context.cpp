@@ -13,7 +13,7 @@ Context &Context::getInstance() {
 }
 
 // finds and returns the first int in a string, returns 0 if none.
-i64 Context::getFirstInt(std::string input) {
+int64_t Context::getFirstInt(std::string input) {
     std::regex pattern("(\\d+)");
     std::smatch match;
     std::regex_search(input, match, pattern);

@@ -79,7 +79,7 @@ void CPUFrequency::run() {
                     threads[id].join();
                 }
 
-                u64 duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
+                uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
                 if (sample >= 0) {
                     measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((16.f * getNbIterations()) / duration);
                 }
