@@ -5,7 +5,7 @@
 
 using json = nlohmann::ordered_json;
 
-class Conductor {
+class Driver {
   private:
     Context context = Context::getInstance();
     std::vector<Microbench *> benches;
@@ -15,12 +15,12 @@ class Conductor {
     void buildJson();
 
   public:
-    Conductor();
-    Conductor(int, char **);
-    ~Conductor();
-    Conductor &addBench(Microbench *);
-    Conductor &setOutputFile(std::string);
-    Conductor &run();
-    Conductor &print();
-    Conductor &save();
+    Driver();
+    Driver(int, char **);
+    ~Driver();
+    Driver &addBench(Microbench *);
+    Driver &setOutputFile(std::string);
+    Driver &run();
+    Driver &print();
+    Driver &save();
 };
