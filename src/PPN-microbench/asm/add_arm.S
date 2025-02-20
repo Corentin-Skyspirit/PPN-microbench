@@ -10,47 +10,47 @@
 
 ADD_ARM_i32:
 loop1:
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
-    add w0, w0, w0
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
+    add w1, w1, w1
     
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop1
     ret
 
 ADD_ARM_i64:
 loop2:
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
-    add x0, x0, x0
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
+    add x1, x1, x1
     
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop2
     ret
 
@@ -73,7 +73,7 @@ loop3:
     fadd s0, s0, s0
     fadd s0, s0, s0
 
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop3
     ret
 
@@ -96,7 +96,7 @@ loop4:
     fadd d0, d0, d0
     fadd d0, d0, d0
 
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop4
     ret
 
@@ -119,7 +119,7 @@ loop5:
     addp v0.8b, v0.8b, v0.8b
     addp v0.8b, v0.8b, v0.8b
 
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop5
     ret
     
@@ -141,7 +141,7 @@ loop6:
     faddp v0.2d, v0.2d, v0.2d
     faddp v0.2d, v0.2d, v0.2d
 
-    subs w0, w0, #1
+    subs x0, x0, #1
     bgt loop6
     ret
 
