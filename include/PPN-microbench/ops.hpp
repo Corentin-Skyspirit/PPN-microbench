@@ -1,9 +1,8 @@
 #ifndef PPN_MICROBENCH_OPS_HPP
 #define PPN_MICROBENCH_OPS_HPP
 
+#include <PPN-microbench/asm_functions.hpp>
 #include <PPN-microbench/microbench.hpp>
-
-// #include <Kokkos_SIMD.hpp>
 
 #include <chrono>
 #include <thread>
@@ -13,13 +12,13 @@ class Ops : public Microbench {
     int static const WARMUP_RUNS = 2;
     int static const RUNS = 10;
 
-    size_t n_ops;
+    i64 n_ops;
     size_t cpus;
+    cpu_set_t *cpusets;
 
     size_t results[6][RUNS];
 
-    template <class T> void benchhaha(T *);
-    template <class T> void benchSIMD(T *);
+    size_t wrap(void (*f)(i64));
     void executeBench() {};
 
   public:
