@@ -13,8 +13,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(json)
 
-find_package(OpenMP)
-
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
 
@@ -33,7 +31,7 @@ endif()
 # Debug or not debug, that is the question
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra)
+    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -g)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)

@@ -29,19 +29,47 @@ i64 Context::getFirstInt(std::string input) {
 
 void Context::cpuInfo() {
 
-//////////////////////
-// CPU Architecture //
-//////////////////////
+    //////////////////////
+    // CPU Architecture //
+    //////////////////////
+    //       SIMD       //
+    //////////////////////
 
-// ARM
-#if defined(__arm__) || defined(__aarch64__)
-    cpuArchi = "ARM";
-#endif
+    // x86
+    #if defined(__i386__) || defined(__x86_64__)
+        cpuArchi = "x86";
 
-// x86
-#if defined(__i386__) || defined(__x86_64__)
-    cpuArchi = "x86";
-#endif
+        if (__builtin_cpu_supports("sse")) {
+            simd.emplace("SSE");
+        }
+        if (__builtin_cpu_supports("sse2")) {
+            simd.emplace("SSE2");
+        }
+        if (__builtin_cpu_supports("sse3")) {
+            simd.emplace("SSE3");
+        }
+        if (__builtin_cpu_supports("sse4.2")) {
+            simd.emplace("SSE4.2");
+        }
+        if (__builtin_cpu_supports("avx")) {
+            simd.emplace("AVX");
+        }
+        if (__builtin_cpu_supports("avx2")) {
+            simd.emplace("AVX2");
+        }
+        if (__builtin_cpu_supports("avx512f")) {
+            simd.emplace("AVX512");
+        }
+    #endif
+
+    // ARM
+    #if defined(__arm__) || defined(__aarch64__)
+        cpuArchi = "ARM";
+
+        #if defined(__ARM_NEON)
+            simd.emplace("NEON");
+        #endif
+    #endif
 
     ///////////////
     // Word Size //
@@ -49,35 +77,6 @@ void Context::cpuInfo() {
 
     // I don't know how cursed that is
     wordSize = sizeof(size_t) * 8;
-
-//////////
-// SIMD // x86 only for now SORRY
-//////////
-
-// bro..
-#if defined(__i386__) || defined(__x86_64__)
-    if (__builtin_cpu_supports("sse")) {
-        simd.emplace("SSE");
-    }
-    if (__builtin_cpu_supports("sse2")) {
-        simd.emplace("SSE2");
-    }
-    if (__builtin_cpu_supports("sse3")) {
-        simd.emplace("SSE3");
-    }
-    if (__builtin_cpu_supports("sse4.2")) {
-        simd.emplace("SSE4.2");
-    }
-    if (__builtin_cpu_supports("avx")) {
-        simd.emplace("AVX");
-    }
-    if (__builtin_cpu_supports("avx2")) {
-        simd.emplace("AVX2");
-    }
-    if (__builtin_cpu_supports("avx512f")) {
-        simd.emplace("AVX512");
-    }
-#endif
 
     //////////
     // CPUs //
@@ -181,10 +180,6 @@ json Context::getJson() {
     return obj;
 }
 
-size_t Context::getCpus() { 
-    return this->cpus; 
-}
+size_t Context::getCpus() { return this->cpus; }
 
-std::vector<size_t> Context::getThreadMapping() {
-    return this->threadMapping;
-}
+std::vector<size_t> Context::getThreadMapping() { return this->threadMapping; }
