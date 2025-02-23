@@ -65,7 +65,7 @@ class CpuFrequency(AbstractBench):
             if div != 1 :
                 cadre = truc[j//((len(data)//div)), j%((len(data)//div))] 
             else :
-                cade = truc[j//((len(data)//div))]
+                cadre = truc[j//((len(data)//div))]
             # cadre.plot(range(1, j + 2), values, marker=".", label=str(j+1) + mot)
             cadre.errorbar(range(1, j + 2), values, yerr=std, marker=".", label=str(j+1) + mot, capsize=5, capthick=1, ecolor='gray')
             cadre.set_ylim(min_val, max_val)
