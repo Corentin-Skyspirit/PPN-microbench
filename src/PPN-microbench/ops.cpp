@@ -4,173 +4,66 @@ using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
 Ops::Ops(int reps) : Microbench("OPS", reps) {
-    cpus = context.getJson()["cpu_info"]["cpus"];
+    cpus = context.getCpus();
     size_t rnd = high_resolution_clock::to_time_t(high_resolution_clock::now());
     n_ops = 1024 * 1024 * 8 + (rnd % 123123);
-}
 
-Ops::~Ops() {}
-
-#pragma GCC push_options
-#pragma GCC optimize("O0")
-template <class T> void Ops::benchhaha(T *val) {
-    T acc = *val;
-    T v = *val;
-    for (size_t i = 0; i < n_ops; i++) {
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-        acc += v;
-    }
-    *val = acc;
-}
-#pragma GCC pop_options
-
-#pragma GCC push_options
-#pragma GCC optimize("O3")
-template <class T> void Ops::benchSIMD(T *val) {
-    T acc[16];
-    T v = *val;
-    // #pragma omp for simd
-    for (size_t i = 0; i < n_ops; i++) {
-
-#pragma omp simd
-        for (size_t j = 0; j < 16; j++) {
-            acc[j] += v;
-        }
-    }
-    *val = (int)acc[0];
-}
-#pragma GCC pop_options
-
-void Ops::run() {
-    time_point<high_resolution_clock> t1, t2;
-    std::vector<size_t> mapping = context.getJson()["cpu_info"]["mapping"];
-    cpu_set_t cpusets[cpus];
-
-    // anti-optimise-secret-pointer
-    void *haha = new char[8];
-
+    std::vector<size_t> mapping = context.getThreadMapping();
+    cpusets = new cpu_set_t[cpus];
     for (size_t i = 0; i < cpus; i++) {
         CPU_ZERO(&cpusets[i]);
         CPU_SET(mapping[i], &cpusets[i]);
     }
+}
 
-    // Warmup runs
+Ops::~Ops() {
+    delete[] cpusets;
+}
+
+size_t Ops::wrap(void (*f)(i64)) {
+    time_point<high_resolution_clock> t1, t2;
+
+    t1 = high_resolution_clock::now();
     {
-        i32 *haha = new i32;
-        *haha = (i64)t1.time_since_epoch().count();
-
         std::jthread threads[cpus];
         for (size_t k = 0; k < cpus; k++) {
-            threads[k] =
-                std::jthread([this, t1, haha] { this->benchhaha(haha); });
-            pthread_setaffinity_np(threads[k].native_handle(),
-                                   sizeof(cpu_set_t), &cpusets[k]);
+            threads[k] = std::jthread([this, f] { f(n_ops); });
+            pthread_setaffinity_np(threads[k].native_handle(), sizeof(cpu_set_t), &cpusets[k]);
         }
+    }
+    t2 = high_resolution_clock::now();
+
+    return (t2 - t1).count();
+}
+
+void Ops::run() {
+
+    // Warmup runs
+    for (int i = 0; i < WARMUP_RUNS; i++) {
+        wrap(SIMD_FLOAT_MAX_FN);
     }
 
     // Actual runs
-    for (int j = 0; j < RUNS; j++) {
+    for (int i = 0; i < RUNS; i++) {
 
         // i32
-        t1 = high_resolution_clock::now();
-        {
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchhaha((i32 *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[0][j] = (t2 - t1).count();
+        results[0][i] = wrap(ADD_i32);
 
         // i64
-        t1 = high_resolution_clock::now();
-        {
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchhaha((i64 *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[1][j] = (t2 - t1).count();
+        results[1][i] = wrap(ADD_f32);
 
         // f32
-        t1 = high_resolution_clock::now();
-        {
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchhaha((float *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[2][j] = (t2 - t1).count();
+        results[2][i] = wrap(ADD_i64);
 
         // f64
-        t1 = high_resolution_clock::now();
-        {
-
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchhaha((double *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[3][j] = (t2 - t1).count();
+        results[3][i] = wrap(ADD_f64);
 
         // i64 SIMD
-        t1 = high_resolution_clock::now();
-        {
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchSIMD((i64 *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[4][j] = (t2 - t1).count();
+        results[4][i] = wrap(SIMD_INT_MAX_FN);
 
         // f64 SIMD
-        t1 = high_resolution_clock::now();
-        {
-            std::jthread threads[cpus];
-            for (size_t k = 0; k < cpus; k++) {
-                threads[k] = std::jthread(
-                    [this, t1, haha] { this->benchSIMD((double *)haha); });
-                pthread_setaffinity_np(threads[k].native_handle(),
-                                       sizeof(cpu_set_t), &cpusets[k]);
-            }
-        }
-        t2 = high_resolution_clock::now();
-        results[5][j] = (t2 - t1).count();
+        results[5][i] = wrap(SIMD_FLOAT_MAX_FN);
     }
-    delete haha;
 }
 
 json Ops::getJson() {

@@ -10,8 +10,8 @@
 #include <regex>
 #include <set>
 #include <string>
-#include <vector>
 #include <unistd.h>
+#include <vector>
 
 using json = nlohmann::ordered_json;
 
@@ -62,7 +62,7 @@ class Context {
     json getJson();
     size_t getCpus();
     std::vector<size_t> getThreadMapping();
-    std::set<std::string> getSimd(); 
+    std::set<std::string> getSimd();
 };
 
 #endif

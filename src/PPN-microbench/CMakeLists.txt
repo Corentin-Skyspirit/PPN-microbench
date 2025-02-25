@@ -29,5 +29,18 @@ target_sources(PPN-microbench
     ${ASM_FILES}
 )
 
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
+    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_arm.S)
+
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
+    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_x86.S)
+    
+endif()
+
+target_sources(PPN-microbench 
+    PRIVATE 
+    ${ASM_FILES}
+)
+
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
-target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json OpenMP::OpenMP_CXX)
+target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json)

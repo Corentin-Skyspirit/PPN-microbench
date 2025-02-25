@@ -37,7 +37,7 @@ class Ops(AbstractBench):
             ])
 
         header = "<h2 id='Ops'>Integer and Floating point operations per seconds</h2>"
-        p1 = "<p> All values are in Giga operation/instruction per seconds. SIMD operation are generated using openmp's #pragma omp simd directive. </p>"
+        p1 = "<p> All values are in Giga operation/instruction per seconds.</p>"
 
         table = "<tr><th></th><th>Average (GIPS)</th><th>Max (GIPS)</th><th>Std. (GIPS)</th></tr>"
         table += "<tr><th>i32</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[0][0], t[0][1], t[0][2])
