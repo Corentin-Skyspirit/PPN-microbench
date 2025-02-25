@@ -10,7 +10,7 @@ int main() {
     driver.addBench(new CPUFrequency(10))
         .addBench(new Ops(10))
         .addBench(new Memory())
-        .setOutputFile("../tmp/out.json")
+        .setOutputFile("../report/out.json")
         .run()
         .save()
         .print();
