@@ -13,8 +13,6 @@ CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999)
 
 CPUFrequency::~CPUFrequency() {}
 
-#pragma GCC push_options
-#pragma GCC optimize("O0")
 void CPUFrequency::executeBench() {
     #if defined(__i386__) || defined(_M_IX86)
     // x86 32
@@ -30,7 +28,6 @@ void CPUFrequency::executeBench() {
     #error Unknown architecture: no support for CPU frequency benchmark
     #endif
 }
-#pragma GCC pop_options
 
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
@@ -56,7 +53,6 @@ void CPUFrequency::run() {
 
     std::thread threads[nbCores];
 
-    // To stop earlier if it's needed (but protection if maxCores is bigger than the cores count)
     nbTestingCores = threadMapping.size();
 
     for (int coresToExecute = 1; coresToExecute <= nbTestingCores; coresToExecute++) { // Main for, equivalent to a graph
