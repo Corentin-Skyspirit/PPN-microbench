@@ -2,6 +2,7 @@
 #define PPN_MICROBENCH_CONTEXT_HPP
 
 #include <nlohmann/json.hpp>
+
 #include <fstream>
 #include <iostream>
 #include <regex>
