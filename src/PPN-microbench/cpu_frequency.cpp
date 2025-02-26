@@ -84,8 +84,7 @@ void CPUFrequency::run() {
                     measures[(coresToExecute * (coresToExecute - 1) / 2) * nbMeasures + (coresExecuted - 1) * nbMeasures + sample] = ((16.f * getNbIterations()) / duration);
                 }
             }
-            std::cout << "\r# " << name << ": run " << ((coresToExecute * (coresToExecute - 1)) / 2) + coresExecuted << "/" << ((nbCores * (nbCores + 1)) / 2) << std::flush;
+            spdlog::debug("{}: run {}/{}", name, ((coresToExecute * (coresToExecute - 1)) / 2) + coresExecuted, ((nbCores * (nbCores + 1)) / 2));
         }
     }
-    std::cout << std::endl;
 }

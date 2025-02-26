@@ -14,7 +14,9 @@ Conductor::~Conductor() {
 }
 
 void Conductor::start() {
+    spdlog::info("Executing {} microbenches", benches.size());
     for (Microbench *bench : benches) {
+        spdlog::info("Running bench: {}", bench->getName());
         bench->run();
     }
 }
@@ -36,7 +38,8 @@ Conductor &Conductor::addBench(Microbench *bench) {
 }
 
 Conductor &Conductor::setOutputFile(std::string fname) {
-    fileName = fname;
+    path = std::filesystem::canonical(fname);
+    spdlog::info("Output path is {}", path.string());
     return *this;
 }
 
@@ -52,8 +55,13 @@ Conductor &Conductor::print() {
 }
 
 Conductor &Conductor::save() {
-    std::ofstream o(fileName);
+    std::ofstream o(path);
     o << std::setw(4) << results << std::endl;
+    if (o.is_open()) {
+        spdlog::info("Saved results to {}", path.string());
+    } else {
+        spdlog::warn("Failed to save results to {}, file is closed", path.string());
+    }
     o.close();
     return *this;
 }

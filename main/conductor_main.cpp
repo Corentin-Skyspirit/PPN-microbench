@@ -12,8 +12,7 @@ int main() {
         .addBench(new Memory())
         .setOutputFile("../tmp/out.json")
         .run()
-        .save()
-        .print();
+        .save();
 
     return 0;
 }
