@@ -6,6 +6,7 @@
 #include <PPN-microbench/asm_functions.hpp>
 
 #include <nlohmann/json.hpp>
+#include <spdlog/spdlog.h>
 
 #include <iostream>
 #include <vector>

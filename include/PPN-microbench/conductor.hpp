@@ -1,13 +1,15 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 
+#include <filesystem>
+
 using json = nlohmann::ordered_json;
 
 class Conductor {
   private:
     Context context = Context::getInstance();
     std::vector<Microbench *> benches;
-    std::string fileName = ".";
+    std::filesystem::path path = std::filesystem::canonical(".");
     json results;
     void start();
     void buildJson();
