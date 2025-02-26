@@ -1,7 +1,5 @@
 #include <PPN-microbench/context.hpp>
 
-using std::cout, std::endl;
-
 Context::Context() {
     cpuInfo();
     memoryInfo();

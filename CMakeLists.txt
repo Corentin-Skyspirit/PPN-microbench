@@ -13,6 +13,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(json)
 
+FetchContent_Declare(
+    spdlog
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG v1.15.1
+)
+
+FetchContent_MakeAvailable(spdlog)
+
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
 
