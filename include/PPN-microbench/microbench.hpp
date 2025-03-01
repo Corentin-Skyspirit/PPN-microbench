@@ -1,7 +1,6 @@
 #ifndef PPN_MICROBENCH_MICROBENCH
 #define PPN_MICROBENCH_MICROBENCH
 
-#include <PPN-microbench/constants.hpp>
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/asm_functions.hpp>
 
