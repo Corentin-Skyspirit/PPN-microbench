@@ -16,8 +16,19 @@ class Driver {
 
   public:
     Driver();
-    Driver(int, char **);
-    ~Driver();
+    Driver(int argc, char ** argv);
+
+    Driver(Driver const & d) = delete;
+    Driver(Driver&&) = delete;
+    Driver& operator=(const Driver&) = delete;
+    Driver operator=(Driver&&) = delete;
+    
+    ~Driver() {
+      for (Microbench *bench : benches) {
+          delete bench;
+      }
+      benches.clear();
+    };
     Driver &addBench(Microbench *);
     Driver &setOutputFile(std::string);
     Driver &run();

@@ -6,13 +6,6 @@ Driver::Driver(int argc, char **argv) {
     // TODO
 }
 
-Driver::~Driver() {
-    for (Microbench *bench : benches) {
-        delete bench;
-    }
-    benches.clear();
-}
-
 void Driver::start() {
     spdlog::info("Executing {} microbenches", benches.size());
     for (Microbench *bench : benches) {
@@ -38,7 +31,7 @@ Driver &Driver::addBench(Microbench *bench) {
 }
 
 Driver &Driver::setOutputFile(std::string fname) {
-    path = std::filesystem::canonical(fname);
+    path = std::filesystem::weakly_canonical(fname);
     spdlog::info("Output path is {}", path.string());
     return *this;
 }
