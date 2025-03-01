@@ -2,14 +2,26 @@
 
 Driver::Driver() {}
 
+void haha(const std::string &value) {
+    spdlog::info(value);
+}
+
 Driver::Driver(int argc, char **argv) {
     CLI::App app("PPN-microbench");
     argv = app.ensure_utf8(argv);
 
-    std::string fname = ".";
-    app.add_option("-o,--output", fname, "JSON output file path");
+    // logging level
+    app.add_option_function<std::string>("-l,--log", [&](const std::string level){spdlog::set_level(spdlog::level::from_str(level));}, "Logging level");
+    // output path
+    app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path");
+    // benchmark selection
+    app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
+    app.add_flag_callback("--memory_latency", [this](){this->addBench(new Memory);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--cpu_frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
+
     app.parse(argc, argv);
-    spdlog::info(fname);
+    run();
+    save();
 }
 
 void Driver::start() {

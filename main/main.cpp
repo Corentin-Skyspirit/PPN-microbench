@@ -1,8 +1,4 @@
 #include <PPN-microbench/driver.hpp>
-#include <PPN-microbench/cpu_frequency.hpp>
-#include <PPN-microbench/cache_latency.hpp>
-#include <PPN-microbench/ops.hpp>
-#include <PPN-microbench/core_to_core_latency.hpp>
 
 int main(int argc, char **argv) {
 
