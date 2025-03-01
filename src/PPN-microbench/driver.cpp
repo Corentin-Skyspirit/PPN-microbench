@@ -50,7 +50,19 @@ Driver &Driver::addBench(Microbench *bench) {
 
 Driver &Driver::setOutputFile(std::string fname) {
     path = std::filesystem::weakly_canonical(fname);
-    spdlog::info("Output path is {}", path.string());
+
+    std::filesystem::path dirPath = path.parent_path();
+    std::filesystem::path fileName = path.filename();
+
+    if (!std::filesystem::exists(dirPath)) {
+        spdlog::warn("Directory {} does not exist!", dirPath.string());
+    } else if (std::filesystem::is_directory(path)) {
+        spdlog::warn("{} is a directory, setting output to {}/out.json.", path.string(), path.string());
+        path.append("out.json");
+    } else {
+        spdlog::info("Output path is {}", path.string());
+    }
+
     return *this;
 }
 
@@ -71,7 +83,7 @@ Driver &Driver::save() {
     if (o.is_open()) {
         spdlog::info("Saved results to {}", path.string());
     } else {
-        spdlog::warn("Failed to save results to {}, file is closed", path.string());
+        spdlog::warn("Failed to save results to {}", path.string());
     }
     o.close();
     return *this;
