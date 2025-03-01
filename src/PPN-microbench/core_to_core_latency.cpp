@@ -32,9 +32,8 @@ void CoreToCoreLatency::run() {
 
                 u64 duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
                 results.push_back(duration);
-                std::cout << "\n" << id_1 << " " << id_2 << " " << duration << std::endl;
             }
-            std::cout << "\r# " << name << ": run " << id_1 * nbCores + (id_2 + 1) << "/" << nbCores * nbCores << std::flush;
+            spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
         }
     }
 }
