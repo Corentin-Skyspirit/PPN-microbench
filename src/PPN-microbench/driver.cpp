@@ -3,7 +3,13 @@
 Driver::Driver() {}
 
 Driver::Driver(int argc, char **argv) {
-    // TODO
+    CLI::App app("PPN-microbench");
+    argv = app.ensure_utf8(argv);
+
+    std::string fname = ".";
+    app.add_option("-o,--output", fname, "JSON output file path");
+    app.parse(argc, argv);
+    spdlog::info(fname);
 }
 
 void Driver::start() {

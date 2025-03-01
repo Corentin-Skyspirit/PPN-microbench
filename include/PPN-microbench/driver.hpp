@@ -1,6 +1,8 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 
+#include <CLI/CLI.hpp>
+
 #include <filesystem>
 
 using json = nlohmann::ordered_json;
