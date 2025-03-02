@@ -7,7 +7,7 @@ Driver::Driver(int argc, char **argv) {
     argv = app.ensure_utf8(argv);
 
     // logging level
-    app.add_option_function<std::string>("-l,--log", [&](const std::string level){spdlog::set_level(spdlog::level::from_str(level));}, "Logging level");
+    app.add_flag_callback("-d,--debug", [this](){spdlog::set_level(spdlog::level::debug);}, "Sets logging level to debug");
     // output path
     app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path");
     // benchmark selection

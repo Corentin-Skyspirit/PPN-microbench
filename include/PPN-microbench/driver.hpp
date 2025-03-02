@@ -14,7 +14,7 @@ class Driver {
   private:
     Context context = Context::getInstance();
     std::vector<Microbench *> benches;
-    std::filesystem::path path = std::filesystem::canonical(".");
+    std::filesystem::path path = std::filesystem::canonical("../report/out.json");
     json results;
     void start();
     void buildJson();
