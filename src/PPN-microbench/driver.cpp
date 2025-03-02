@@ -9,11 +9,14 @@ Driver::Driver(int argc, char **argv) {
     // logging level
     app.add_flag_callback("-d,--debug", [this](){spdlog::set_level(spdlog::level::debug);}, "Sets logging level to debug");
     // output path
-    app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path");
+    app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path")->multi_option_policy(CLI::MultiOptionPolicy::TakeLast);
     // benchmark selection
     app.add_flag_callback("--cpu_frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--memory_latency", [this](){this->addBench(new Memory);}, "Run cpu ram/cache latency benchmark");
+    // benchmark group selection
+    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10));}, "Run CPU related benchmarks");
+    app.add_flag_callback("--mem", [this](){this->addBench(new Memory);}, "Memory related benchmarks");
 
     app.parse(argc, argv);
 

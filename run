@@ -1,0 +1,25 @@
+#!/usr/bin/bash
+
+build_tool=""
+if [ -f "/usr/bin/ninja" ]; then
+    build_tool="-G Ninja"
+fi
+
+# build
+cmake -B build $build_tool
+cmake --build ./build
+
+# run
+build/main/main -o report/out.json $@
+
+# check for python venv
+python_path="python3"
+if [ -f ".venv/bin/python3" ]; then
+    python_path="../.venv/bin/python3"
+elif [ -f "report/.venv/bin/python3" ]; then
+    python_path=".venv/bin/python3"
+fi
+
+# report
+cd report/
+$python_path main.py
