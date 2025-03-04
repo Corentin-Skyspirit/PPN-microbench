@@ -40,3 +40,4 @@ report/out/
 *.exe
 *.out
 *.app
+report/out.json
