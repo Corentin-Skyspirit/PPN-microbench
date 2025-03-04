@@ -99,6 +99,7 @@ class Memory(AbstractBench):
 
         # Save the plot as an image file
         plt.savefig("out/cache_latency.png")
+        plt.close()
 
     def get_index(self):
         return "<li><a href='#Memory'>Memory</a></li>"

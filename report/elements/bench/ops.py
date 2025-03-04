@@ -76,9 +76,7 @@ class Ops(AbstractBench):
 
         plt.savefig("out/ops_simd.png")
         plt.clf()
-
-
-
+        plt.close()
 
     def get_index(self):
         return "<li><a href='#Ops'>Integer and Floating point operations per seconds</a></li>"
