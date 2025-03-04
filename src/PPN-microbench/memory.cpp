@@ -1,14 +1,14 @@
 #include <PPN-microbench/memory.hpp>
 
 // Function to generate a random index within a given threshold
-inline u64 random_index(u64 threshold) { return rand() % threshold; }
+inline uint64_t random_index(uint64_t threshold) { return rand() % threshold; }
 
 // Function to measure cache/memory latency using pointer chasing
-double measure_latency(u64 size, double nbIterations) {
+double measure_latency(uint64_t size, double nbIterations) {
     std::vector<void**> memblock(size);
 
     // Initialize the memory block with pointers to itself
-    for (u64 i = 0; i < size; ++i) {
+    for (uint64_t i = 0; i < size; ++i) {
         if (i + 1 < size) {
             memblock[i] = (void**)&memblock[i + 1];
         } else {
@@ -17,14 +17,14 @@ double measure_latency(u64 size, double nbIterations) {
     }
 
     // Shuffle the pointers to create a random access pattern
-    for (u64 i = size - 1; i > 0; --i) {
-        u64 j = random_index(i + 1);
+    for (uint64_t i = size - 1; i > 0; --i) {
+        uint64_t j = random_index(i + 1);
         std::swap(memblock[i], memblock[j]);
     }
 
     // Warmup run
     void *p = memblock[0];
-    for (u64 i = 0; i < nbIterations; i+=16) {
+    for (uint64_t i = 0; i < nbIterations; i+=16) {
         p = *(void **)p;
         p = *(void **)p;
         p = *(void **)p;
@@ -51,7 +51,7 @@ double measure_latency(u64 size, double nbIterations) {
 
         auto start = std::chrono::high_resolution_clock::now();
         // Pointer chasing loop
-        for (u64 i = 0; i < nbIterations; i+=16) {
+        for (uint64_t i = 0; i < nbIterations; i+=16) {
             p = *(void **)p;
             p = *(void **)p;
             p = *(void **)p;
@@ -99,7 +99,7 @@ void Memory::run() {
 
     mem_times.resize(mem_sizes.size());
     for (size_t i = 0; i < mem_sizes.size(); ++i) {
-        u64 size_B = mem_sizes[i] ;
+        uint64_t size_B = mem_sizes[i] ;
 
         double latency = measure_latency(size_B, getNbIterations());
 

@@ -3,7 +3,6 @@
 
 // Include necessary headers
 #include <PPN-microbench/microbench.hpp>
-#include <PPN-microbench/constants.hpp>
 
 #include <chrono>
 #include <cmath>
@@ -15,7 +14,7 @@
 class Memory : public Microbench {
   private:
     // Vectors to store memory sizes and times
-    std::vector<u64> mem_sizes = std::vector<u64>(300);
+    std::vector<uint64_t> mem_sizes = std::vector<uint64_t>(300);
     std::vector<double> mem_times;
 
     

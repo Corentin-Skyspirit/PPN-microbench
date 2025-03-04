@@ -20,7 +20,7 @@ Ops::~Ops() {
     delete[] cpusets;
 }
 
-size_t Ops::wrap(void (*f)(i64)) {
+size_t Ops::wrap(void (*f)(int64_t)) {
     time_point<high_resolution_clock> t1, t2;
 
     t1 = high_resolution_clock::now();

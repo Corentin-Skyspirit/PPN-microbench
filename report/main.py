@@ -4,7 +4,7 @@ import traceback
 import os
 
 if __name__ == "__main__":
-    report = Report("../tmp/out.json")
+    report = Report("./out.json")
 
     if not os.path.exists("./out"):
         os.mkdir("./out")
