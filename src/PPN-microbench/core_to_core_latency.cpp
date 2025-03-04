@@ -4,7 +4,7 @@ using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 using std::chrono::steady_clock;
 
-CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("CoreToCoreLatency", 10) {
+CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 10) {
     nbCores = context.getCpus();
 }
 
@@ -30,7 +30,7 @@ void CoreToCoreLatency::run() {
             } else {
                 auto start = steady_clock::now();
 
-                u64 duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
+                uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
                 results.push_back(duration);
             }
             spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
