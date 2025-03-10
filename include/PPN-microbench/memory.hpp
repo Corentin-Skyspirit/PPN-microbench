@@ -1,20 +1,23 @@
-#ifndef PPN_MICROBENCH_MEMORY
-#define PPN_MICROBENCH_MEMOERY
+#ifndef PPN_MICROBENCH_CACHE_HPP
+#define PPN_MICROBENCH_CACHE_HPP
 
 // Include necessary headers
+#include <PPN-microbench/constants.hpp>
 #include <PPN-microbench/microbench.hpp>
-
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include <nlohmann/json.hpp>
 #include <numeric>
+#include <vector>
 
 // Memory class inherits from Microbench
 class Memory : public Microbench {
   private:
     // Vectors to store memory sizes and times
-    std::vector<uint64_t> mem_sizes = std::vector<uint64_t>(300);
+    std::vector<uint64_t> mem_sizes; 
     std::vector<double> mem_times;
 
     

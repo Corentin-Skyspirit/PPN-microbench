@@ -215,7 +215,7 @@ double cache_latency(uint64_t size, uint64_t iterations) {
         clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
         elapsed = (t2.tv_sec - t1.tv_sec) * 1e9 + (t2.tv_nsec - t1.tv_nsec);
 
-    } while (elapsed <= 0.0);
+    } while (elapsed <= 0.0); // Repeat until we get a valid measurement
 
     ns_per_it = elapsed / ((double)iterations * 16.0);
     pos       = p;
@@ -234,7 +234,7 @@ void** allocate_memory(u64 size) {
     void** memblock = static_cast<void**>(aligned_alloc(64, size * sizeof(void*)));
     return memblock;
 }
-// Execute the benchmark
+/*// Execute the benchmark
 void Memory::run() {
 
 /*
@@ -268,7 +268,7 @@ void Memory::run() {
     
     std::cerr << "Measuring cache/memory latency up to " 
         << addr_space_sz / sizeof(void*) << " B (" << std::fixed << std::setprecision(3) 
-        << (static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0 << " MiB)\n";
+          << ((static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0) << " MiB)\n";
     
     u64 rounds = 0;
     u64 min_iterations = 1024;// 1 KiB
@@ -332,7 +332,91 @@ void Memory::run() {
     if (memblock != NULL) {
         free(memblock);
     }
+   //free(memblock);
+}*/
+
+void Memory::run() {
+    std::cout << "Memory benchmark start\n";
+    u64 addr_space_sz = 67108864; // 64 MiB
+    
+    std::cerr << "Measuring cache/memory latency up to " 
+              << addr_space_sz / sizeof(void*) << " B (" 
+              << std::fixed << std::setprecision(3) 
+              << ((static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0) << " MiB)\n";
+    
+    u64 rounds = 0;
+    u64 min_iterations = 1024;   // 1 KiB
+    u64 max_iterations = 9437184; // 9 MiB
+    u64 iterations = max_iterations;
+    
+    std::vector<double> nanos;
+    std::vector<u64> sizes;
+    
+    memblock = static_cast<void**>(aligned_alloc(64, addr_space_sz));
+    if (memblock == NULL) {
+        std::cerr << "Memory allocation failed" << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < addr_space_sz / sizeof(void*); ++i) {
+        memblock[i] = &memblock[i];
+    }
+    
+    std::cout << "Memory size (B), Cache latency (ns)\n";
+    for (size_t size = 512, step = 16; size <= addr_space_sz / sizeof(void*); size += step) {
+        if (size == 0) continue;
+        
+        // Barre de progression (affichée sur la même ligne)
+        std::cerr << "Current cache size: " << size << " B (" 
+                  << std::fixed << std::setprecision(3) 
+                  << (static_cast<double>(size) / 1024.0) << " KiB)" << "\r";
+
+        double ns_per_it = cache_latency(size, iterations);
+
+        if (ns_per_it == 0.0) {
+            std::cerr << "Warning: cache latency is 0.0 for size " << size << " B\n";
+        }
+
+        sizes.push_back(size);
+        nanos.push_back(ns_per_it);
+        rounds++;
+
+        // Doubler la taille du pas tous les puissances de 2
+        if (0 == ((size - 1) & size)) {
+            step <<= 1;
+        }
+
+        // Ajuster le nombre d'itérations pour les prochaines mesures
+        iterations = static_cast<u64>(static_cast<double>(max_iterations) / ns_per_it);
+        if (iterations < min_iterations) {
+            iterations = min_iterations;
+        }
+
+        // Output the results every 2048 rounds
+        if (rounds == 2048) {
+            for (size_t r = 0; r < 2048; ++r) {
+                std::cout << sizes[r] << "," << nanos[r] << std::endl;
+            }
+            rounds = 0;
+        }
+    }
+    
+    for (size_t r = 0; r < rounds; ++r) {
+        std::cout << sizes[r] << "," << nanos[r] << std::endl;
+    }
+
+    // Copier dans les membres de la classe
+    mem_sizes = sizes;
+    mem_times = nanos;
+
+    std::cout << "Memory benchmark end\n";
+
+    if (memblock != NULL) {
+        free(memblock);
+    }
 }
+
+
 
 // Get the results in JSON format
 json Memory::getJson() {
