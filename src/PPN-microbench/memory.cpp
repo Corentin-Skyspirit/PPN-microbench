@@ -1,6 +1,5 @@
 #include <PPN-microbench/memory.hpp>
 
-/// Function to generate a random index within a given threshold
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -79,13 +78,9 @@ double measure_latency(uint64_t size, uint64_t nbIterations) {
        //     
        // }
     //}
-<<<<<<< HEAD
-    /*// Ensure the shuffled pointers form a single cycle
-    for (uint64_t i = 0; i < size - 1; ++i) {
-=======
+
     /// Ensure the shuffled pointers form a single cycle
     for (u64 i = 0; i < size - 1; ++i) {
->>>>>>> f69a865 (Almost copy paste code from Gabriel's code to verify where the error is, but I can't find it. I'm not sure if the error is in the code or in the way I'm running it.)
         memblock[i] = (void**)&memblock[i + 1];
     }
     memblock[size - 1] = (void**)&memblock[0];
@@ -218,7 +213,8 @@ double cache_latency(uint64_t size, uint64_t iterations) {
             p = *(void**)p;
         }
         clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
-        elapsed = (double)(t2.tv_nsec - t1.tv_nsec);
+        elapsed = (t2.tv_sec - t1.tv_sec) * 1e9 + (t2.tv_nsec - t1.tv_nsec);
+
     } while (elapsed <= 0.0);
 
     ns_per_it = elapsed / ((double)iterations * 16.0);
@@ -240,6 +236,7 @@ void** allocate_memory(u64 size) {
 }
 // Execute the benchmark
 void Memory::run() {
+
 /*
     // Define the sizes to test (in B)
     size_t size = 512;
@@ -265,20 +262,17 @@ void Memory::run() {
         
         mem_times[i] = latency;
     }
-<<<<<<< HEAD
-=======
-    std::cout << "Memory benchmark end \n";
-}*/
-    
-    u64 addr_space_sz = 67108864;
+
+    std::cout << "Memory benchmark start\n";
+    u64 addr_space_sz = 67108864;// 64 MiB
     
     std::cerr << "Measuring cache/memory latency up to " 
         << addr_space_sz / sizeof(void*) << " B (" << std::fixed << std::setprecision(3) 
         << (static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0 << " MiB)\n";
     
     u64 rounds = 0;
-    u64 min_iterations = 1024;
-    u64 max_iterations = 8388608;
+    u64 min_iterations = 1024;// 1 KiB
+    u64 max_iterations = 9437184; // 9 MiB
     u64 iterations = max_iterations;
     
     std::vector<double> nanos(2048);
@@ -296,9 +290,14 @@ void Memory::run() {
     
     std::cout << "Memory size (B), Cache latency (ns)\n";
     for (size_t size = 512, step = 16; size <= addr_space_sz / sizeof(void*); size += step) {
+        if (size == 0) continue;
         std::cerr << "Current cache size: " << size << " B (" << std::fixed << std::setprecision(3) << (static_cast<double>(size) / 1024.0) << " KiB)\r";
         double ns_per_it = cache_latency(size, iterations);
     
+        if (ns_per_it == 0.0){
+            std::cerr << "Warning: cache latency is 0.0 for size " << size << " B\n";
+        }
+
         sizes[rounds] = size;
         nanos[rounds] = ns_per_it;
         rounds++;
@@ -333,7 +332,6 @@ void Memory::run() {
     if (memblock != NULL) {
         free(memblock);
     }
->>>>>>> f69a865 (Almost copy paste code from Gabriel's code to verify where the error is, but I can't find it. I'm not sure if the error is in the code or in the way I'm running it.)
 }
 
 // Get the results in JSON format
