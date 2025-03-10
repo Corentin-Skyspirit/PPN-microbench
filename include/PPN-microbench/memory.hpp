@@ -2,7 +2,7 @@
 #define PPN_MICROBENCH_CACHE_HPP
 
 // Include necessary headers
-#include <PPN-microbench/constants.hpp>
+
 #include <PPN-microbench/microbench.hpp>
 #include <chrono>
 #include <cmath>
@@ -12,6 +12,9 @@
 #include <nlohmann/json.hpp>
 #include <numeric>
 #include <vector>
+#include <algorithm>
+#include <random>
+#include <time.h>
 
 // Memory class inherits from Microbench
 class Memory : public Microbench {
