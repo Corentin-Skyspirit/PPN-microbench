@@ -11,7 +11,7 @@ if __name__ == "__main__":
     if not os.path.exists("./out"):
         os.mkdir("./out")
 
-    with open("out/haha.html", "w") as f:
+    with open("out/report.html", "w") as f:
         f.write(report.to_html())
 
     try:
@@ -21,7 +21,7 @@ if __name__ == "__main__":
                 @page {size: A4; margin: 1cm;} 
                 th, td {border: 1px solid black;}
                 """)
-            HTML("out/haha.html").write_pdf("out/haha.pdf", stylesheets=[css])
+            HTML("out/report.html").write_pdf("out/report.pdf", stylesheets=[css])
         except Exception as e:
             traceback.print_exc()
     except:
