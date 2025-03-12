@@ -1,3 +1,5 @@
+#!../venv/bin/python3
+
 from elements import *
 
 import traceback
