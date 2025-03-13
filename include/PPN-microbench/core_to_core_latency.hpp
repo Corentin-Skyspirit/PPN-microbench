@@ -10,6 +10,8 @@
 class CoreToCoreLatency : public Microbench {
     private:
         int nbCores;
+        int nbMeasures;
+        int sumDuration = 0;
         std::vector<int> results;
     public:
         CoreToCoreLatency(int nbMeasures);

@@ -11,7 +11,7 @@ int main() {
     driver.addBench(new CPUFrequency(10))
         .addBench(new CoreToCoreLatency(10))
         .addBench(new Ops(10))
-        .addBench(new Memory())
+        // .addBench(new Memory())
         .setOutputFile("../report/out.json")
         .run()
         .save();

@@ -4,8 +4,10 @@ using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 using std::chrono::steady_clock;
 
-CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 10) {
+CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 100) {
+    nbMeasures = nbMeasures;
     nbCores = context.getCpus();
+    results.reserve(nbCores * nbCores);
 }
 
 CoreToCoreLatency::~CoreToCoreLatency() {}
@@ -28,10 +30,21 @@ void CoreToCoreLatency::run() {
             if (id_1 == id_2) {
                 results.push_back(0);
             } else {
-                auto start = steady_clock::now();
+                for (int sample; sample < nbMeasures; sample++) {
+                    auto start = steady_clock::now();
 
-                uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
-                results.push_back(duration);
+                    alignas(64) std::atomic<int> core1 = {-1};
+                    alignas(64) std::atomic<int> core2 = {-1};
+
+                    for (int n = 0; n < getNbIterations(); ++n) {
+                        while (core1.load(std::memory_order_acquire) != n) {;}
+                        core2.store(n, std::memory_order_release);
+                    }
+                    
+                    uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
+                    sumDuration += duration;
+                }
+                results.push_back(sumDuration / nbMeasures);
             }
             spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
         }
