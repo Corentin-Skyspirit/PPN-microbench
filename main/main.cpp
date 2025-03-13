@@ -5,6 +5,7 @@
 
 int main() {
 
+    spdlog::set_level(spdlog::level::debug) ; /////// A ne pas laisser !!! Je dois l'enlever après
     Driver driver;
 
     driver.addBench(new CPUFrequency(10))

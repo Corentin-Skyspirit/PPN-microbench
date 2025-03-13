@@ -73,7 +73,7 @@ double cache_latency(uint64_t size, uint64_t iterations) {
 }
 
 // Constructor
-Memory::Memory() : Microbench("Memory", 1) { srand(time(nullptr)); }
+Memory::Memory() : Microbench("Cache Latency", 1) { srand(time(nullptr)); }
 
 // Destructor
 Memory::~Memory() {}
@@ -85,13 +85,12 @@ void** allocate_memory(uint64_t size) {
 }
 
 void Memory::run() {
-    std::cout << "Memory benchmark start\n";
+
     uint64_t addr_space_sz = 67108864; // 64 MiB
     
-    std::cerr << "Measuring cache/memory latency up to " 
-              << addr_space_sz / sizeof(void*) << " B (" 
-              << std::fixed << std::setprecision(3) 
-              << ((static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0) << " MiB)\n";
+    spdlog::debug("Measuring cache/memory latency up to {} B ({:.3f} MiB)", 
+                  addr_space_sz / sizeof(void*), 
+                  (static_cast<double>(addr_space_sz) / static_cast<double>(sizeof(void*))) / 1024.0 / 1024.0);
     
     uint64_t rounds = 0;
     uint64_t min_iterations = 1024;   // 1 KiB
@@ -103,7 +102,7 @@ void Memory::run() {
     
     memblock = static_cast<void**>(aligned_alloc(64, addr_space_sz));
     if (memblock == NULL) {
-        std::cerr << "Memory allocation failed" << std::endl;
+        spdlog::warn ("Memory allocation failed\n");
         return;
     }
 
@@ -111,31 +110,29 @@ void Memory::run() {
         memblock[i] = &memblock[i];
     }
     
-    std::cout << "Memory size (B), Cache latency (ns)\n";
+
     for (size_t size = 512, step = 16; size <= addr_space_sz / sizeof(void*); size += step) {
         if (size == 0) continue;
         
-        // Barre de progression (affichée sur la même ligne)
-        std::cerr << "Current cache size: " << size << " B (" 
-                  << std::fixed << std::setprecision(3) 
-                  << (static_cast<double>(size) / 1024.0) << " KiB)" << "\r";
+        // Output the current cache size    
+        spdlog::debug("Current cache size: {} B ({:.3f} KiB)\r", size, static_cast<double>(size) / 1024.0);
 
         double ns_per_it = cache_latency(size, iterations);
 
         if (ns_per_it == 0.0) {
-            std::cerr << "Warning: cache latency is 0.0 for size " << size << " B\n";
+            spdlog::warn("Warning: cache latency is 0.0 for size {} B", size);
         }
 
         sizes.push_back(size);
         nanos.push_back(ns_per_it);
         rounds++;
 
-        // Doubler la taille du pas tous les puissances de 2
+        // Double the step size at powers of two
         if (0 == ((size - 1) & size)) {
             step <<= 1;
         }
 
-        // Ajuster le nombre d'itérations pour les prochaines mesures
+        //  Adjust the number of iterations based on latency
         iterations = static_cast<uint64_t>(static_cast<double>(max_iterations) / ns_per_it);
         if (iterations < min_iterations) {
             iterations = min_iterations;
@@ -144,21 +141,19 @@ void Memory::run() {
         // Output the results every 2048 rounds
         if (rounds == 2048) {
             for (size_t r = 0; r < 2048; ++r) {
-                std::cout << sizes[r] << "," << nanos[r] << std::endl;
+                spdlog::debug("{} , {}", sizes[r], nanos[r]);
             }
             rounds = 0;
         }
     }
     
-    for (size_t r = 0; r < rounds; ++r) {
-        std::cout << sizes[r] << "," << nanos[r] << std::endl;
-    }
 
-    // Copier dans les membres de la classe
+
+    // Store the results
     mem_sizes = sizes;
     mem_times = nanos;
 
-    std::cout << "Memory benchmark end\n";
+
 
     if (memblock != NULL) {
         free(memblock);
@@ -178,6 +173,11 @@ json Memory::getJson() {
     }
     return result;
 }
-///Closest detected cache sizes to theoretical sizes (in KiB): [3200.0, 3200.0, 8192.0]
-/// Is there a pb with the cache size detection?
-/// or is the json storage wrong? 
+/////// remplacer tous les cout par spdlog::info --> fait
+//////// remplacer tous les cout par spdlog::debug --> fait
+//////// remplacer tous les cout par spdlog::warn --> fait
+//////// remplacer tous les cerr par spdlog::error
+//////// remplacer les noms Memory par Cache_latency --> fait
+//////// changer destrucs dans le json??? --> demander à Miguet
+//////// changer truc dans json pour que ça marche pour ARM et x86 , car pas les même caches dans ARM 
+//////// changer le python pour trouver les bons caches expérimentaux 
