@@ -3,7 +3,7 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-MemoryBandwidth::MemoryBandwidth() : Microbench("Memory bandwidth", 10) {}
+MemoryBandwidth::MemoryBandwidth() : Microbench("Memory bandwidth", 5) {}
 
 // https://github.com/besnardjb/memmapper/blob/master/cache.c
 void MemoryBandwidth::run() {
@@ -22,25 +22,31 @@ void MemoryBandwidth::run() {
     }
     spdlog::debug("done!");
 
+    int cpt = 0;
     for (uint64_t size = min_size; size <= max_size; size *= 2) {
 
-        if (size > 1024 * 1024 * 2)
+        if (size >= 1024 * 1024 * 2)
             reps = 100;
 
         t1 = high_resolution_clock::now();
 
-        for (int i = 0; i < reps; i++) {
+        for (int j = 0; j < reps; j++) {
             memcpy(dest, source, size);
         }
 
         t2 = high_resolution_clock::now();
 
-        // time in ns
         uint64_t time = (t2 - t1).count();
-        // GB/s
+
+        // B/ns AKA GB/s
         double bandwidth = (double)(size * reps) / (double)time;
 
-        spdlog::debug("{:<10}KB {:>6}reps {:.2f} GB/s {:.3f}s", size / 1024, reps, bandwidth, (double)time / 1e9);
+        res[cpt][0] = size;
+        res[cpt][1] = reps;
+        res[cpt][2] = time;
+
+        spdlog::debug("{:<10}KB {:>7}reps {:.2f} GB/s {:.3f}s", size / 1024, reps, bandwidth, (double)time / 1e9);
+        cpt += 1;
     }
 
     delete[] source;
@@ -48,6 +54,18 @@ void MemoryBandwidth::run() {
 }
 
 json MemoryBandwidth::getJson() {
-    json out;
-    return out;
+    json obj;
+
+    obj["name"] = name;
+    obj["results"]["sizes"] = json::array();
+    obj["results"]["reps"] = json::array();
+    obj["results"]["time"] = json::array();
+
+    for (int i = 0; i < 20; i++) {
+        obj["results"]["sizes"].push_back(res[i][0]);
+        obj["results"]["reps"].push_back(res[i][1]);
+        obj["results"]["time"].push_back(res[i][2]);
+    }
+
+    return obj;
 }
