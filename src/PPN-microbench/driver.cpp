@@ -17,8 +17,16 @@ Driver::Driver(int argc, char **argv) {
     // benchmark group selection
     app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10));}, "Run CPU related benchmarks");
     app.add_flag_callback("--mem", [this](){this->addBench(new Memory);}, "Memory related benchmarks");
+    
+    // help message
+    app.set_help_flag("-h, --help", "Show this help message");
 
-    app.parse(argc, argv);
+    try {
+        app.parse(argc, argv);
+    } catch(const CLI::ParseError &e) {
+        app.exit(e);
+        exit(0);
+    }
 
     if (benches.size() == 0) {
         addBench(new CPUFrequency(10));
