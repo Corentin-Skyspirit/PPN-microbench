@@ -8,10 +8,10 @@ fi
 
 # build
 cmake -B build $build_tool
-cmake --build ./build
+cmake --build ./build || exit
 
 # run
-build/main/main -o report/out.json $@
+build/main/main -o report/out.json $@ || exit
 
 cd report/
 # python venv
