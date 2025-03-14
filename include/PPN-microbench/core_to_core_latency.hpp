@@ -4,15 +4,22 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 
+#include <sched.h>
+#include <stdlib.h>
+
 #include <chrono>
 #include <thread>
+#include <atomic>
 
 class CoreToCoreLatency : public Microbench {
     private:
         int nbCores;
         int nbMeasures;
-        int sumDuration = 0;
+        uint64_t sumDuration;
+        uint64_t minDuration;
         std::vector<int> results;
+
+        void pinThread(int core);
     public:
         CoreToCoreLatency(int nbMeasures);
         ~CoreToCoreLatency();
