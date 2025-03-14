@@ -1,7 +1,7 @@
-#include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/memory.hpp>
+#include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
 
 #include <CLI/CLI.hpp>
@@ -14,25 +14,25 @@ class Driver {
   private:
     Context context = Context::getInstance();
     std::vector<Microbench *> benches;
-    std::filesystem::path path = std::filesystem::weakly_canonical("../report/out.json");
+    std::filesystem::path path = std::filesystem::weakly_canonical("./out.json");
     json results;
     void start();
     void buildJson();
 
   public:
     Driver();
-    Driver(int argc, char ** argv);
+    Driver(int argc, char **argv);
 
-    Driver(Driver const & d) = delete;
-    Driver(Driver&&) = delete;
-    Driver& operator=(const Driver&) = delete;
-    Driver operator=(Driver&&) = delete;
-    
+    Driver(Driver const &d) = delete;
+    Driver(Driver &&) = delete;
+    Driver &operator=(const Driver &) = delete;
+    Driver operator=(Driver &&) = delete;
+
     ~Driver() {
-      for (Microbench *bench : benches) {
-          delete bench;
-      }
-      benches.clear();
+        for (Microbench *bench : benches) {
+            delete bench;
+        }
+        benches.clear();
     };
     Driver &addBench(Microbench *);
     Driver &setOutputFile(std::string);
