@@ -4,10 +4,13 @@ using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 using std::chrono::steady_clock;
 
+constexpr int preheat = 5;
+
 CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 100) {
     this->nbMeasures = nbMeasures;
     nbCores = context.getCpus();
-    results.reserve(nbCores * nbCores);
+    resultsMin.reserve(nbCores * nbCores);
+    resultsMean.reserve(nbCores * nbCores);
 }
 
 CoreToCoreLatency::~CoreToCoreLatency() {}
@@ -45,7 +48,8 @@ void CoreToCoreLatency::run() {
     for (int id_1 = 0; id_1 < nbCores; ++id_1) {
         for (int id_2 = 0; id_2 < nbCores; ++id_2) {
             if (id_1 == id_2) {
-                results.push_back(0);
+                resultsMin.push_back(0);
+                resultsMean.push_back(0);
             } else {
                 sumDuration = 0;
                 minDuration = INT64_MAX;
@@ -54,7 +58,8 @@ void CoreToCoreLatency::run() {
 
                 std::thread t = std::thread([&] {
                     pinThread(cpus[id_1]);
-                    for (int sample = 0; sample < nbMeasures; sample++) {
+
+                    for (int sample = -preheat; sample < nbMeasures; sample++) {
                         for (int n = 0; n < getNbIterations(); ++n) {
                             while (core1.load(std::memory_order_acquire) != n) {;}
                             core2.store(n, std::memory_order_release);
@@ -64,7 +69,7 @@ void CoreToCoreLatency::run() {
 
                 pinThread(cpus[id_2]);
 
-                for (int sample = 0; sample < nbMeasures; sample++) {
+                for (int sample = -preheat; sample < nbMeasures; sample++) {
                     core1, core2 = -1;
                     auto start = steady_clock::now();
 
@@ -76,13 +81,17 @@ void CoreToCoreLatency::run() {
                     auto stop = steady_clock::now();
 
                     uint64_t duration = duration_cast<nanoseconds>(stop - start).count();
-                    sumDuration += duration;
-                    minDuration = std::min(minDuration, duration);
+                    
+                    // To preheat 10 times before true bench
+                    if (sample >= 0) {
+                        sumDuration += duration;
+                        minDuration = std::min(minDuration, duration);
+                    }
                 }
 
                 t.join();
-                // std::cout << sumDuration / nbMeasures / 100 / 2 << " " << minDuration / 100 / 2 << std::endl;
-                results.push_back(minDuration / 100 / 2);
+                resultsMin.push_back(minDuration / 100 / 2);
+                resultsMean.push_back(sumDuration / nbMeasures / 100 / 2);
             }
             spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
         }
@@ -94,7 +103,8 @@ json CoreToCoreLatency::getJson() {
     coreToCoreJson["name"] = getName();
     for (int line = 0; line < nbCores; line++) {
         for (int col = 0; col < nbCores; col++) {
-            coreToCoreJson["results"][line] += results[line * nbCores + col];
+            coreToCoreJson["results"]["min"][line] += resultsMin[line * nbCores + col];
+            coreToCoreJson["results"]["mean"][line] += resultsMean[line * nbCores + col];
         }
     }
     return coreToCoreJson;
