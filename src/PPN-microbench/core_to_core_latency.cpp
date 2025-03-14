@@ -4,9 +4,9 @@ using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 using std::chrono::steady_clock;
 
-constexpr int preheat = 5;
+constexpr int preheat = 100;
 
-CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 100) {
+CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 900) {
     this->nbMeasures = nbMeasures;
     nbCores = context.getCpus();
     resultsMin.reserve(nbCores * nbCores);
@@ -88,10 +88,9 @@ void CoreToCoreLatency::run() {
                         minDuration = std::min(minDuration, duration);
                     }
                 }
-
                 t.join();
-                resultsMin.push_back(minDuration / 100 / 2);
-                resultsMean.push_back(sumDuration / nbMeasures / 100 / 2);
+                resultsMin.push_back(minDuration / getNbIterations() / 2);
+                resultsMean.push_back(sumDuration / nbMeasures / getNbIterations() / 2);
             }
             spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
         }
