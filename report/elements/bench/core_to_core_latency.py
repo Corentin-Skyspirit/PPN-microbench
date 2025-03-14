@@ -5,6 +5,8 @@ import matplotlib.colors as mcolors
 import numpy as np
 import os.path
 
+graphs = 1 # 1 For only min, 2 for min and mean
+
 class CoreToCoreLatency(AbstractBench):
     def __init__(self, obj, bench_obj):
         self.obj = obj
@@ -18,14 +20,18 @@ class CoreToCoreLatency(AbstractBench):
 
         minImgs = f"<img src='{wd}/out/core_to_core_latency_min.png'/>"
         minTitle = "<center><p>Core-to-core minimum latency graph in nanoseconds</p></center>"
+
+        res = header + minImgs + minTitle
         
-        meanImgs = f"<img src='{wd}/out/core_to_core_latency_mean.png'/>"
-        meanTitle = "<center><p>Core-to-core mean latency graph in nanoseconds</p></center>"
-        
-        return header + minImgs + minTitle + meanImgs + meanTitle
+        if graphs == 2 :
+            meanImgs = f"<img src='{wd}/out/core_to_core_latency_mean.png'/>"
+            meanTitle = "<center><p>Core-to-core mean latency graph in nanoseconds</p></center>"
+            res += meanImgs + meanTitle
+
+        return res
 
     def gen_images(self):
-        for m in range(2) :
+        for m in range(graphs) :
             if m == 0 :
                 mode = "min"
             elif m == 1 :
@@ -38,7 +44,7 @@ class CoreToCoreLatency(AbstractBench):
             plt.tight_layout(pad=3.5)
 
             colors = plt.cm.viridis(np.linspace(0, 1, 256))
-            colors[0] = [0.4, 0.4, 0.4, 1]
+            colors[0] = [0.3, 0.3, 0.3, 1]
             new_cmap = mcolors.ListedColormap(colors)
             cax = ax.imshow(matrix, cmap=new_cmap, interpolation="nearest", aspect='auto')
 

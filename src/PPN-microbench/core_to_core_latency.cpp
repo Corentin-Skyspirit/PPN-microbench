@@ -83,7 +83,7 @@ void CoreToCoreLatency::run() {
 
                     uint64_t duration = duration_cast<nanoseconds>(stop - start).count();
                     
-                    // To preheat 10 times before true bench
+                    // To preheat before true bench
                     if (sample >= 0) {
                         sumDuration += duration;
                         minDuration = std::min(minDuration, duration);
