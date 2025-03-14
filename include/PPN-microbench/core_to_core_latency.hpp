@@ -17,7 +17,8 @@ class CoreToCoreLatency : public Microbench {
         int nbMeasures;
         uint64_t sumDuration;
         uint64_t minDuration;
-        std::vector<int> results;
+        std::vector<int> resultsMin;
+        std::vector<int> resultsMean;
 
         void pinThread(int core);
     public:
