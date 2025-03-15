@@ -39,6 +39,7 @@ void CoreToCoreLatency::run() {
 
     // Enumerate available cores
     std::vector<int> cpus;
+    cpus.reserve(nbCores);
     for (int i = 0; i < nbCores; ++i) {
         if (CPU_ISSET(i, &cpusets)) {
             cpus.push_back(i);
