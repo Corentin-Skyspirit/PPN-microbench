@@ -18,7 +18,8 @@ class Memory(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='Memory'>Memory</h2>"
         imgs = f"<img src='{wd}/out/cache_latency.png'/>"
-        return header + imgs 
+        p = "<p>Theoritical cache sizes are taken from the CPU information provided by /proc/cpuinfo.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
+        return header + imgs + p
 
     def gen_images(self):
         # Load data
@@ -60,6 +61,8 @@ class Memory(AbstractBench):
         # Save the plot
         os.makedirs("out", exist_ok=True)
         plt.savefig("out/cache_latency.png")
+
+
 
     def get_index(self):
         return "<li><a href='#Memory'>Memory</a></li>"
