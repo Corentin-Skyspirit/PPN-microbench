@@ -102,7 +102,7 @@ void Memory::run() {
     
     memblock = static_cast<void**>(aligned_alloc(64, addr_space_sz));
     if (memblock == NULL) {
-        spdlog::warn ("Memory allocation failed\n");
+        spdlog::error ("Memory allocation failed\n");
         return;
     }
 
