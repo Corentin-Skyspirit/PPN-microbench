@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+# Memory class with the following methods:
+# - to_html: Generates the HTML content for the Memory section
+# - gen_images: Generates the cache latency plot
+# - get_index: Returns the index entry for the Memory section
 class Memory(AbstractBench):
     def __init__(self, obj, bench_obj):
         self.obj = obj
@@ -40,8 +44,10 @@ class Memory(AbstractBench):
         plt.scatter(memory_sizes_kib, latencies, label='Experimental Data', color='blue')
         
         for i, (theoretical_size, label) in enumerate(zip(theoretical_cache_sizes, ['L1 Cache', 'L2 Cache', 'L3 Cache'])):
-            plt.axvline(x=theoretical_size, color='green', linestyle='--', label=f'Theoretical {label} size: {theoretical_size:.1f} KiB')
-            plt.text(theoretical_size, plt.ylim()[1] * 0.9, f'{label}', verticalalignment='bottom', horizontalalignment='right', color='green', fontsize=12)
+            if theoretical_cache_sizes[i] != 0:
+                plt.axvline(x=theoretical_size, color='green', linestyle='--', label=f'Theoretical {label} size: {theoretical_size:.1f} KiB')
+                plt.text(theoretical_size, plt.ylim()[1] * 0.9, f'{label}', verticalalignment='bottom', horizontalalignment='right', color='green', fontsize=12)
+        
         
         plt.xscale("log", base=2)
         plt.yscale("log", base=10)
