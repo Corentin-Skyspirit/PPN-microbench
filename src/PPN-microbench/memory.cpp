@@ -84,6 +84,7 @@ void** allocate_memory(uint64_t size) {
     return memblock;
 }
 
+// Run the memory benchmark
 void Memory::run() {
 
     uint64_t addr_space_sz = 67108864; // 64 MiB
@@ -110,7 +111,7 @@ void Memory::run() {
         memblock[i] = &memblock[i];
     }
     
-
+    // Measure the cache latency for different cache sizes
     for (size_t size = 512, step = 16; size <= addr_space_sz / sizeof(void*); size += step) {
         if (size == 0) continue;
         
@@ -173,11 +174,3 @@ json Memory::getJson() {
     }
     return result;
 }
-/////// remplacer tous les cout par spdlog::info --> fait
-//////// remplacer tous les cout par spdlog::debug --> fait
-//////// remplacer tous les cout par spdlog::warn --> fait
-//////// remplacer tous les cerr par spdlog::error
-//////// remplacer les noms Memory par Cache_latency --> fait
-//////// changer destrucs dans le json??? --> demander à Miguet
-//////// changer truc dans json pour que ça marche pour ARM et x86 , car pas les même caches dans ARM 
-//////// changer le python pour trouver les bons caches expérimentaux 
