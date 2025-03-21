@@ -63,13 +63,15 @@ json MemoryBandwidth::getJson() {
     json obj;
 
     obj["name"] = name;
-    obj["runs"] = nbIterations;
+    obj["results"]["runs"] = nbIterations;
 
     for (int i = 0; i < 20; i++) {
         obj["results"]["sizes"].push_back(meta[i][0]);
         obj["results"]["reps"].push_back(meta[i][1]);
-        for (int j = 0; j < nbIterations; j++) {
-            obj["results"]["times"][j].push_back(data[j * nbIterations + i]);
+    }
+    for (int j = 0; j < nbIterations; j++) {
+        for (int i = 0; i < 20; i++) {
+            obj["results"]["times"][j].push_back(data[j * 20 + i]);
         }
     }
 
