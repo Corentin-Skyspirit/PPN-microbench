@@ -40,36 +40,42 @@ double cache_latency(uint64_t size, uint64_t iterations) {
     void* p        = pos;
     double elapsed = 0.0;
     struct timespec t1, t2;
-    do {
-        clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
-        // Random pointer chasing loop, unrolled 16 times
-        for (ssize_t i = iterations; i; --i) {
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-            p = *(void**)p;
-        }
-        clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
-        elapsed = (t2.tv_sec - t1.tv_sec) * 1e9 + (t2.tv_nsec - t1.tv_nsec);
+    double total_ns_per_it = 0.0;
 
-    } while (elapsed <= 0.0); // Repeat until we get a valid measurement
+    for (int measure = 0; measure < 5; ++measure) {
+        do {
+            clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
+            // Random pointer chasing loop, unrolled 16 times
+            for (ssize_t i = iterations; i; --i) {
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+                p = *(void**)p;
+            }
+            clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
+            elapsed = (t2.tv_sec - t1.tv_sec) * 1e9 + (t2.tv_nsec - t1.tv_nsec);
 
-    ns_per_it = elapsed / ((double)iterations * 16.0);
-    pos       = p;
+        } while (elapsed <= 0.0); // Repeat until we get a valid measurement
 
-    return ns_per_it;
+        ns_per_it = elapsed / ((double)iterations * 16.0);
+        total_ns_per_it += ns_per_it;
+    }
+
+    pos = p;
+
+    return total_ns_per_it / 5.0;
 }
 
 // Constructor
@@ -166,7 +172,7 @@ void Memory::run() {
 // Get the results in JSON format
 json Memory::getJson() {
     json result1, result2, result;
-    result["name"] = "memory";
+    result["name"] = "cache_latency";
     for (size_t i = 0; i < mem_sizes.size(); ++i) {
         result1["Memory_Size"].push_back(mem_sizes[i]*sizeof(void *));
         result2["Latency"].push_back((double)mem_times[i]);

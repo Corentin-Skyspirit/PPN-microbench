@@ -23,7 +23,7 @@ class Report(AbstractElement):
         self.mapping = {
             "OPS" : Ops,
             "CPU Frequency": CpuFrequency,
-            "memory" : Memory
+            "cache_latency" : Memory
         }
 
         self.generate()
