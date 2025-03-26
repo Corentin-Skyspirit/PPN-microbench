@@ -17,9 +17,12 @@ class MemBandwidth(AbstractBench):
 
         header = "<h2 id='MEMBandwidth'>Memory Bandwidth</h2>"
 
-        imgs = f"<img src='{wd}/out/mem_bandwidth_single.png'/>" + f"<img src='{wd}/out/mem_bandwidth_multi.png'/>"
+        imgs = ""
+        # imgs += f"<img src='{wd}/out/mem_bandwidth_single.png'/>"
+        imgs += f"<img src='{wd}/out/mem_bandwidth_multi.png'/>"
+        txt = "<p>memcpy() of increasing sizes, performed on a single core then all of them. Multi-core results are stacked. Each core has its own buffer.</p>"
         
-        return header + imgs
+        return header + imgs + txt
 
     def gen_images(self):
         self.single_core_img()
@@ -95,7 +98,7 @@ class MemBandwidth(AbstractBench):
 
         plt.figure(figsize=(10, 6))
         colors = [c for c in mpl.colormaps["Blues"](np.linspace(0.2, .8, num=4))]
-        plt.stackplot(x, y, colors=colors, labels=[f"core {i}" for i in range(len(y))])
+        plt.stackplot(x, y, colors=colors, labels=["Multi core (stacked)"])
         plt.errorbar(x, y_single, error, marker=".", ecolor="grey", color="orange", label="Single core")
 
         plt.xscale("log", base=2)
@@ -103,7 +106,7 @@ class MemBandwidth(AbstractBench):
 
         plt.xlabel("Buffer Size (KiB)")
         plt.ylabel("Bandwidth (GiB/s)")
-        plt.title("Memory Bandwidth (multi-core)")
+        plt.title("Memory Bandwidth")
         plt.grid(True, which="both", ls="--")
 
         caches = [

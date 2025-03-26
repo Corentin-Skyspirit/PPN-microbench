@@ -36,8 +36,6 @@ void MemoryBandwidth::run() {
 }
 
 void MemoryBandwidth::bench(int cpus, std::vector<uint64_t> &vec) {
-    spdlog::set_level(spdlog::level::debug);
-
     uint64_t start_reps = 100000;
     uint64_t end_reps = 100;
 
@@ -47,13 +45,13 @@ void MemoryBandwidth::bench(int cpus, std::vector<uint64_t> &vec) {
         uint64_t res_buffer[cpus];
 
         for (uint64_t size = min_size; size <= max_size; size *= 2) {
-            int reps = (1l << 33) / size + 50;
+            uint64_t reps = (1l << 33) / size + 50;
             {
                 std::jthread threads[cpus];
                 for (int j = 0; j < cpus; j++) {
                     threads[j] = std::jthread([&](int j) { 
                         auto t1 = high_resolution_clock::now();
-                        for (int k = 0; k < reps; k++) {
+                        for (uint64_t k = 0; k < reps; k++) {
                             memcpy(dest+size*j, source+size*j, size); 
                         }
                         auto t2 = high_resolution_clock::now();
@@ -63,7 +61,6 @@ void MemoryBandwidth::bench(int cpus, std::vector<uint64_t> &vec) {
                 }
             }
             // B/ns AKA GB/s
-            double bandwidth = (double)(size * reps) / (double)res_buffer[0];
 
             meta[0][cpt] = size;
             meta[1][cpt] = reps;
@@ -74,6 +71,7 @@ void MemoryBandwidth::bench(int cpus, std::vector<uint64_t> &vec) {
                 }
             }
 
+            double bandwidth = (double)(size * reps) / (double)res_buffer[0];
             spdlog::debug("{:<10}KB {:>7}reps {:.2f} GB/s {:.3f}s", size / 1024, reps, bandwidth, (double)res_buffer[0] / 1e9);
             cpt += 1;
         }

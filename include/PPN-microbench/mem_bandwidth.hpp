@@ -17,7 +17,7 @@ class MemoryBandwidth : public Microbench {
 
     cpu_set_t *cpusets;
 
-    int warmups = 0;
+    int warmups = 1;
 
     uint64_t meta[2][20];
     std::vector<uint64_t> data_singlecore;
