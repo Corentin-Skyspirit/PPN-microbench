@@ -12,11 +12,18 @@ class MemoryBandwidth : public Microbench {
     const uint64_t min_size = 1024 * 2;
     const uint64_t max_size = 1024 * 1024 * 1024;
 
-    int warmups = 1;
+    char *source;
+    char *dest;
 
-    uint64_t meta[20][2];
-    std::vector<u_int64_t> data;
+    cpu_set_t *cpusets;
 
+    int warmups = 0;
+
+    uint64_t meta[2][20];
+    std::vector<uint64_t> data_singlecore;
+    std::vector<uint64_t> data_multicore;
+
+    void bench(int cpus, std::vector<uint64_t> &vec);
 
   public:
     MemoryBandwidth();

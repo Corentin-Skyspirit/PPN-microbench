@@ -30,10 +30,11 @@ class Driver {
     Driver operator=(Driver &&) = delete;
 
     ~Driver() {
-        for (Microbench *bench : benches) {
-            delete bench;
-        }
-        benches.clear();
+      for (Microbench *bench : benches) {
+          delete bench;
+      }
+      benches.clear();
+
     };
     Driver &addBench(Microbench *);
     Driver &setOutputFile(std::string);
