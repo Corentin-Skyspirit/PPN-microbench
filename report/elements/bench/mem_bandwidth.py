@@ -1,6 +1,7 @@
 from elements.bench.base import AbstractBench
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 from matplotlib.ticker import FuncFormatter
 import numpy as np
 import os.path
@@ -91,11 +92,10 @@ class MemBandwidth(AbstractBench):
         error = np.std(_error, axis=0)
 
         plt.figure(figsize=(10, 6))
-        # plt.errorbar(x, y, error, marker=".", ecolor="grey")
-        plt.stackplot(x, y)
+        colors = [c for c in mpl.colormaps["Blues"](np.linspace(0.2, .8, num=4))]
+        plt.stackplot(x, y, colors=colors)
 
         plt.xscale("log", base=2)
-        # plt.yscale("log", base=2)
         plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda a, b: a))
 
         plt.xlabel("Buffer Size (KiB)")
