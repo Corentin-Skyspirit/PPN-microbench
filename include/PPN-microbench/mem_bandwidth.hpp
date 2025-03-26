@@ -17,6 +17,7 @@ class MemoryBandwidth : public Microbench {
 
     cpu_set_t *cpusets;
 
+    int cpus;
     int warmups = 1;
 
     uint64_t meta[2][20];
