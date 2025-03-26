@@ -48,7 +48,6 @@ class MemBandwidth(AbstractBench):
         plt.errorbar(x, y, error, marker=".", ecolor="grey")
 
         plt.xscale("log", base=2)
-        # plt.yscale("log", base=2)
         # matfloplib
         plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda a, b: a))
 
@@ -80,20 +79,24 @@ class MemBandwidth(AbstractBench):
         sizes = np.array(data["sizes"])
         reps = np.array(data["reps"])
         times = np.array(data["times"]["multi"])
+        single = np.array(data["times"]["single"])
 
         avg = np.sum(times, axis=0) / runs
+        avg_single = np.sum(single, axis=0) / runs
     
         x = sizes / 1024
         y = sizes * reps / avg
+        y_single = sizes * reps / avg_single
 
         _error = []
-        for a in times:
+        for a in single:
             _error.append(sizes * reps / a)
         error = np.std(_error, axis=0)
 
         plt.figure(figsize=(10, 6))
         colors = [c for c in mpl.colormaps["Blues"](np.linspace(0.2, .8, num=4))]
-        plt.stackplot(x, y, colors=colors)
+        plt.stackplot(x, y, colors=colors, labels=[f"core {i}" for i in range(len(y))])
+        plt.errorbar(x, y_single, error, marker=".", ecolor="grey", color="orange", label="Single core")
 
         plt.xscale("log", base=2)
         plt.gca().yaxis.set_major_formatter(FuncFormatter(lambda a, b: a))

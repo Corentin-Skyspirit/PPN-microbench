@@ -18,8 +18,9 @@ MemoryBandwidth::MemoryBandwidth() : Microbench("Memory bandwidth", 5) {
 }
 
 void MemoryBandwidth::run() {
-    source = new char[max_size];
-    dest = new char[max_size];
+    int cpus = context.getCpus();
+    source = new char[max_size * cpus];
+    dest = new char[max_size * cpus];
     
     spdlog::debug("touching data...");
     for (uint64_t i = 0; i < max_size; i++) {
@@ -53,7 +54,7 @@ void MemoryBandwidth::bench(int cpus, std::vector<uint64_t> &vec) {
                     threads[j] = std::jthread([&](int j) { 
                         auto t1 = high_resolution_clock::now();
                         for (int k = 0; k < reps; k++) {
-                            memcpy(dest, source, size); 
+                            memcpy(dest+size*j, source+size*j, size); 
                         }
                         auto t2 = high_resolution_clock::now();
                         res_buffer[j] = (t2 - t1).count();
