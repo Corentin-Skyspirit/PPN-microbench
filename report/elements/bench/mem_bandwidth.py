@@ -65,9 +65,10 @@ class MemBandwidth(AbstractBench):
             int(self.obj["meta"]["mem_info"]["l3"] / 1024)
         ]
 
-        plt.axvline(x=caches[0], color='green', linestyle='--', label=f'L1 size: {caches[0]} KiB')
-        plt.axvline(x=caches[1], color='green', linestyle='--', label=f'L2 size: {caches[1]} KiB')
-        plt.axvline(x=caches[2], color='green', linestyle='--', label=f'L3 size: {caches[2]} KiB')
+        if 0 not in caches:
+            plt.axvline(x=caches[0], color='green', linestyle='--', label=f'L1 size: {caches[0]} KiB')
+            plt.axvline(x=caches[1], color='green', linestyle='--', label=f'L2 size: {caches[1]} KiB')
+            plt.axvline(x=caches[2], color='green', linestyle='--', label=f'L3 size: {caches[2]} KiB')
 
         plt.legend()
         plt.savefig("out/mem_bandwidth_single.png")

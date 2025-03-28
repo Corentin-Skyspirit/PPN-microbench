@@ -1,5 +1,5 @@
-#ifndef PPN_MICROBENCH_OPS_HPP
-#define PPN_MICROBENCH_OPS_HPP
+#ifndef PPN_MICROBENCH_MEM_BANDWIDTH_HPP
+#define PPN_MICROBENCH_MEM_BANDWIDTH_HPP
 
 #include <PPN-microbench/microbench.hpp>
 
@@ -10,7 +10,7 @@
 class MemoryBandwidth : public Microbench {
   private:
     const uint64_t min_size = 1024 * 2;
-    const uint64_t max_size = 1024 * 1024 * 1024;
+    const uint64_t max_size = 1024 * 1024 * 256;
 
     char *source;
     char *dest;
