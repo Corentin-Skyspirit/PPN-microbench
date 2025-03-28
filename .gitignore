@@ -3,6 +3,7 @@ build/
 tmp/
 __pycache__/
 report/out/
+*.json
 
 # Python venv
 .venv

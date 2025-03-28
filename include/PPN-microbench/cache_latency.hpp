@@ -17,7 +17,7 @@
 #include <time.h>
 
 // Memory class inherits from Microbench
-class Memory : public Microbench {
+class Cache_latency : public Microbench {
   private:
     // Vectors to store memory sizes and times
     std::vector<uint64_t> mem_sizes; 
@@ -27,10 +27,10 @@ class Memory : public Microbench {
 
   public:
     // Constructor
-    Memory();
+    Cache_latency();
 
     // Destructor
-    ~Memory();
+    ~Cache_latency();
 
     // Function to run the benchmark, overrides the base class method
     void run() override;

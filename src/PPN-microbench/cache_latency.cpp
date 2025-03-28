@@ -1,4 +1,4 @@
-#include <PPN-microbench/memory.hpp>
+#include <PPN-microbench/cache_latency.hpp>
 
 
 void* pos       = NULL; // Pointer to the last accessed element
@@ -79,10 +79,10 @@ double cache_latency(uint64_t size, uint64_t iterations) {
 }
 
 // Constructor
-Memory::Memory() : Microbench("Cache Latency", 1) { srand(time(nullptr)); }
+Cache_latency::Cache_latency() : Microbench("Cache Latency", 1) { srand(time(nullptr)); }
 
 // Destructor
-Memory::~Memory() {}
+Cache_latency::~Cache_latency() {}
 
 
 void** allocate_memory(uint64_t size) {
@@ -91,7 +91,7 @@ void** allocate_memory(uint64_t size) {
 }
 
 // Run the memory benchmark
-void Memory::run() {
+void Cache_latency::run() {
 
     uint64_t addr_space_sz = 67108864; // 64 MiB
     
@@ -170,11 +170,11 @@ void Memory::run() {
 
 
 // Get the results in JSON format
-json Memory::getJson() {
+json Cache_latency::getJson() {
     json result1, result2, result;
-    result["name"] = "cache_latency";
+    result["name"] = name;
     for (size_t i = 0; i < mem_sizes.size(); ++i) {
-        result1["Memory_Size"].push_back(mem_sizes[i]*sizeof(void *));
+        result1["Buffer_Size"].push_back(mem_sizes[i]*sizeof(void *));
         result2["Latency"].push_back((double)mem_times[i]);
         result["Results"] = {result1, result2};
     }

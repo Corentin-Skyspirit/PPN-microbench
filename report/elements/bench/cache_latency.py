@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-# Memory class with the following methods:
+# Cache_Latency class with the following methods:
 # - to_html: Generates the HTML content for the Memory section
 # - gen_images: Generates the cache latency plot
 # - get_index: Returns the index entry for the Memory section
-class Memory(AbstractBench):
+class Cache_Latency(AbstractBench):
     def __init__(self, obj, bench_obj):
         self.obj = obj
         self.bench_obj = bench_obj
@@ -16,7 +16,7 @@ class Memory(AbstractBench):
     def to_html(self):
         self.gen_images()
         wd = os.getcwd()
-        header = "<h2 id='Memory'>Memory</h2>"
+        header = "<h2 id='Cache_Latency'>Cache latency</h2>"
         imgs = f"<img src='{wd}/out/cache_latency.png'/>"
         p = "<p>Theoritical cache sizes are taken from the CPU information provided by /proc/cpuinfo.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
         return header + imgs + p
@@ -24,11 +24,11 @@ class Memory(AbstractBench):
     def gen_images(self):
         # Load data
         data = self.obj
-        memory_sizes = np.array(self.bench_obj["Results"][0]["Memory_Size"])
+        buffer_sizes = np.array(self.bench_obj["Results"][0]["Buffer_Size"])
         latencies = np.array(self.bench_obj["Results"][1]["Latency"])
 
         # Convert to KiB
-        memory_sizes_kib = memory_sizes / 1024
+        buffer_sizes_kib = buffer_sizes / 1024
         
         
 
@@ -42,7 +42,7 @@ class Memory(AbstractBench):
         
         # Plot the data
         plt.figure(figsize=(10, 6))
-        plt.scatter(memory_sizes_kib, latencies, label='Experimental Data', color='blue')
+        plt.scatter(buffer_sizes_kib, latencies, label='Experimental Data', color='blue')
         
         for i, (theoretical_size, label) in enumerate(zip(theoretical_cache_sizes, ['L1 Cache', 'L2 Cache', 'L3 Cache'])):
             if theoretical_cache_sizes[i] != 0:
@@ -65,7 +65,7 @@ class Memory(AbstractBench):
 
 
     def get_index(self):
-        return "<li><a href='#Memory'>Memory</a></li>"
+        return "<li><a href='#Cache_Latency>Cache latency</a></li>"
     
     
     
