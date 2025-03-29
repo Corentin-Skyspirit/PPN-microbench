@@ -90,6 +90,4 @@ class Cache_Latency(AbstractBench):
     def get_index(self):
         return "<li><a href='#Cache_Latency>Cache latency</a></li>"
 
-# faire draw_error_band avec exemple de https://matplotlib.org/stable/gallery/lines_bars_and_markers/fill_between_demo.html
-# et l'exemple de arnaud 
-    
+
