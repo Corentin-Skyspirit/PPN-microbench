@@ -11,10 +11,10 @@ Driver::Driver(int argc, char **argv) {
     // output path
     app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path")->multi_option_policy(CLI::MultiOptionPolicy::TakeLast);
     // benchmark selection
-    app.add_flag_callback("--cpu_frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
+    app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
-    app.add_flag_callback("--memory_latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--cache-latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
     // benchmark group selection
     app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
     app.add_flag_callback("--mem", [this](){this->addBench(new Cache_latency);}, "Memory/cache related benchmarks");
