@@ -13,10 +13,10 @@ Driver::Driver(int argc, char **argv) {
     // benchmark selection
     app.add_flag_callback("--cpu_frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
-    app.add_flag_callback("--memory_latency", [this](){this->addBench(new Memory);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--memory_latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
     // benchmark group selection
     app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10));}, "Run CPU related benchmarks");
-    app.add_flag_callback("--mem", [this](){this->addBench(new Memory);}, "Memory related benchmarks");
+    app.add_flag_callback("--mem", [this](){this->addBench(new Cache_latency);}, "Memory related benchmarks");
     
     // help message
     app.set_help_flag("-h, --help", "Show this help message");
@@ -31,7 +31,7 @@ Driver::Driver(int argc, char **argv) {
     if (benches.size() == 0) {
         addBench(new CPUFrequency(10));
         addBench(new Ops(10));
-        addBench(new Memory);
+        addBench(new Cache_latency);
     }
 
     run();
