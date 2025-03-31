@@ -14,6 +14,7 @@ Bellow is a list of currently implemented benchmarks, more info in the [wiki](ht
 |---|---|
 | CPU frequency | CPU clock frequency in single and multi-core loads |
 | CPU OPS | Max. operation per seconds for 32, 64 bit and vector integers and floats |
+| Core to core latency | Latency of core to core communications |
 | Memory latency | Latency of cache and ram access |
 
 ## Running
@@ -66,8 +67,9 @@ It is possible to run individual / groups of benchmarks by passing arguments to 
 | `--output`         | `-o`  | Sets output file name and location. can be either a directory or a full file path |
 | `--cpu_frequency`  |       | Adds the CPU frequency benchmark for execution                                    |
 | `--ops`            |       | Adds the CPU OPS benchmark for execution                                          |
+| `--c2c`            |       | Adds the CPU core to core latency benchmark for execution                         |
 | `--memory_latency` |       | Adds the Memory latency benchmark for execution                                   |
-| `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Frequency, CPU OPS)             |
+| `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Frequency, CPU OPS, C2C lat.)   |
 | `--mem`            |       | Adds all memory-related benchmarks to the pool. (Memory latency)                  |
 
 If no benchmark is explicitly specified, all of them will be run.

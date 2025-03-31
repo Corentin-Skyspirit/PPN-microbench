@@ -1,6 +1,7 @@
 #include <PPN-microbench/context.hpp>
 #include <PPN-microbench/cpu_frequency.hpp>
 #include <PPN-microbench/cache_latency.hpp>
+#include <PPN-microbench/core_to_core_latency.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
 
