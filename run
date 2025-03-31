@@ -16,9 +16,9 @@ build/main/main -o report/out.json $@ || exit
 cd report/
 # python venv
 if [ ! -d "venv" ]; then
-    python3 -m venv ./venv
-    ./venv/bin/pip install -r ./requirements.txt
+    python3 -m venv ./venv || exit
+    ./venv/bin/pip install -r ./requirements.txt || exit
 fi
 
 # report
-venv/bin/python3 main.py
+venv/bin/python3 main.py || exit
