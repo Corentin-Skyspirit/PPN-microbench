@@ -49,13 +49,13 @@ extern "C" void cpu_frequency_arm_64(uint64_t iterations);
 
 #if defined(__arm__) || defined(__aarch64__)
 
-    extern "C" void ADD_ARM_i32(uint64_t);
-    extern "C" void ADD_ARM_i64(uint64_t);
-    extern "C" void ADD_ARM_f32(uint64_t);
-    extern "C" void ADD_ARM_f64(uint64_t);
+    extern "C" void ADD_ARM_i32(int64_t);
+    extern "C" void ADD_ARM_i64(int64_t);
+    extern "C" void ADD_ARM_f32(int64_t);
+    extern "C" void ADD_ARM_f64(int64_t);
 
-    extern "C" void ADD_ARM_i64_NEON(uint64_t);
-    extern "C" void ADD_ARM_f64_NEON(uint64_t);
+    extern "C" void ADD_ARM_i64_NEON(int64_t);
+    extern "C" void ADD_ARM_f64_NEON(int64_t);
 
     #define ADD_i32 ADD_ARM_i32
     #define ADD_i64 ADD_ARM_i64
