@@ -16,7 +16,7 @@
 #include <random>
 #include <time.h>
 
-// Memory class inherits from Microbench
+// Cache_latency class inherits from Microbench
 class Cache_latency : public Microbench {
   private:
     // Vectors to store memory sizes and times

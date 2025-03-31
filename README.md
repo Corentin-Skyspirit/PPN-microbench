@@ -68,9 +68,9 @@ It is possible to run individual / groups of benchmarks by passing arguments to 
 | `--cpu-frequency`  |       | Adds the CPU frequency benchmark for execution                                    |
 | `--ops`            |       | Adds the CPU OPS benchmark for execution                                          |
 | `--c2c`            |       | Adds the CPU core to core latency benchmark for execution                         |
-| `--cache-latency`  |       | Adds the Memory latency benchmark for execution                                   |
+| `--cache-latency`  |       | Adds the Cache latency benchmark for execution                                   |
 | `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Frequency, CPU OPS, C2C lat.)   |
-| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Memory latency)                  |
+| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Cache latency)                  |
 
 If no benchmark is explicitly specified, all of them will be run.
 
