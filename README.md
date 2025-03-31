@@ -2,11 +2,11 @@
 
 A portable microbenchmarking tool for compute node caracterisation.
 
-## Architecture support
+# Architecture support
 
 This tool is developed and tested for **64 bit ARM and x86**
 
-## Benchmarks
+# Benchmarks
 
 Bellow is a list of currently implemented benchmarks, more info in the [wiki](https://github.com/ppn-microbench/ppn-microbench/wiki).
 
@@ -17,9 +17,9 @@ Bellow is a list of currently implemented benchmarks, more info in the [wiki](ht
 | Core to core latency | Latency of core to core communications |
 | Memory latency | Latency of cache and ram access |
 
-## Running
+# Running
 
-### Via the run script
+## Via the run script
 
 The simplest way to run the application is from the `run` script. Upon executing it, a pdf will be output to `report/out/` containing results for all benchmarks.
 
@@ -31,9 +31,9 @@ The `run` script executes the following steps:
 
 If you have an earlier version of python, you might need to install `python<version>-venv` through your package manager.
 
-### Manually
+## Manually
 
-##### Building
+### Building
 
 In order to build the application, run the following commands:
 
@@ -45,11 +45,11 @@ cmake --build build/
 
 The executable will be located in `build/main/`.
 
-##### Running
+### Running
 
 You can now simply run the executable. Note that by default, the json will be output to `./`.
 
-##### Report generation
+### Report generation
 
 To generate the pdf report, move into `report/`. The python expects to find the json results in `report/out.json`.
 
@@ -57,7 +57,7 @@ To generate the pdf report, move into `report/`. The python expects to find the 
 
 Finally, running the python is as easy as `python3 main.py`
 
-### Arguments
+## Arguments
 
 It is possible to run individual / groups of benchmarks by passing arguments to the script or application.
 
@@ -74,7 +74,7 @@ It is possible to run individual / groups of benchmarks by passing arguments to 
 
 If no benchmark is explicitly specified, all of them will be run.
 
-## Requirements and libraries
+# Requirements and libraries
 
 The only requirement to run the tool is `cmake 3.25`. The following libraries will be downloaded and compiled at build time:
  - [nlohmann-json](https://github.com/nlohmann/json)
