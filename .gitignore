@@ -3,10 +3,12 @@ build/
 tmp/
 __pycache__/
 report/out/
+report/venv/
 *.json
 
 # Python venv
 .venv
+venv
 
 # Prerequisites
 *.d

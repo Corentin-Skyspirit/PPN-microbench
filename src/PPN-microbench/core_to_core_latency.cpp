@@ -93,7 +93,7 @@ void CoreToCoreLatency::run() {
                 resultsMin.push_back(minDuration / getNbIterations() / 2);
                 resultsMean.push_back(sumDuration / nbMeasures / getNbIterations() / 2);
             }
-            spdlog::debug("\r# {}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
+            spdlog::debug("{}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
         }
     }
 }

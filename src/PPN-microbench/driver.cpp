@@ -3,7 +3,41 @@
 Driver::Driver() {}
 
 Driver::Driver(int argc, char **argv) {
-    // TODO
+    CLI::App app("PPN-microbench");
+    argv = app.ensure_utf8(argv);
+
+    // logging level
+    app.add_flag_callback("-d,--debug", [this](){spdlog::set_level(spdlog::level::debug);}, "Sets logging level to debug");
+    // output path
+    app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path")->multi_option_policy(CLI::MultiOptionPolicy::TakeLast);
+    // benchmark selection
+    app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
+    app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
+    app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
+    app.add_flag_callback("--cache-latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
+    // benchmark group selection
+    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
+    app.add_flag_callback("--mem", [this](){this->addBench(new Cache_latency);}, "Memory/cache related benchmarks");
+    
+    // help message
+    app.set_help_flag("-h, --help", "Show this help message");
+
+    try {
+        app.parse(argc, argv);
+    } catch(const CLI::ParseError &e) {
+        app.exit(e);
+        exit(0);
+    }
+
+    if (benches.size() == 0) {
+        addBench(new CPUFrequency(10));
+        addBench(new Ops(10));
+        addBench(new CoreToCoreLatency(10));
+        addBench(new Cache_latency);
+    }
+
+    run();
+    save();
 }
 
 void Driver::start() {
@@ -32,7 +66,19 @@ Driver &Driver::addBench(Microbench *bench) {
 
 Driver &Driver::setOutputFile(std::string fname) {
     path = std::filesystem::weakly_canonical(fname);
-    spdlog::info("Output path is {}", path.string());
+
+    std::filesystem::path dirPath = path.parent_path();
+    std::filesystem::path fileName = path.filename();
+
+    if (!std::filesystem::exists(dirPath)) {
+        spdlog::warn("Directory {} does not exist!", dirPath.string());
+    } else if (std::filesystem::is_directory(path)) {
+        spdlog::warn("{} is a directory, setting output to {}/out.json.", path.string(), path.string());
+        path.append("out.json");
+    } else {
+        spdlog::info("Output path is {}", path.string());
+    }
+
     return *this;
 }
 
@@ -53,7 +99,7 @@ Driver &Driver::save() {
     if (o.is_open()) {
         spdlog::info("Saved results to {}", path.string());
     } else {
-        spdlog::warn("Failed to save results to {}, file is closed", path.string());
+        spdlog::warn("Failed to save results to {}", path.string());
     }
     o.close();
     return *this;

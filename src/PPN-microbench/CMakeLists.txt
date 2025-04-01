@@ -44,4 +44,4 @@ target_sources(PPN-microbench
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
-target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog)
+target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11)
