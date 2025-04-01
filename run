@@ -8,7 +8,7 @@ fi
 
 # build
 cmake -B build $build_tool
-cmake --build ./build || exit
+cmake --build ./build --config Release || exit
 
 # run
 build/main/main -o report/out.json $@ || exit
