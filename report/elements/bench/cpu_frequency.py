@@ -30,7 +30,7 @@ class CpuFrequency(AbstractBench):
                 div = k
                 break
 
-        fig, truc = plt.subplots(div, (len(data)//div), figsize=(10,13))
+        fig, truc = plt.subplots(div, (len(data)//div), figsize=(10,12))
         plt.subplots_adjust(hspace=0.35, wspace=0.1)
         plt.figtext(0.5, 0.01, "Frequencies of cores in GHz depending of their number", horizontalalignment = 'center', size='x-large')
 

@@ -4,33 +4,30 @@
 // Include necessary headers
 
 #include <PPN-microbench/microbench.hpp>
+
 #include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
-#include <nlohmann/json.hpp>
 #include <numeric>
-#include <vector>
 #include <algorithm>
 #include <random>
-#include <time.h>
 
 // Cache_latency class inherits from Microbench
-class Cache_latency : public Microbench {
+class CacheLatency : public Microbench {
   private:
     // Vectors to store memory sizes and times
     std::vector<uint64_t> mem_sizes; 
     std::vector<double> mem_times;
 
-    
+    double measure_ns(uint64_t size, uint64_t iterations);
 
   public:
     // Constructor
-    Cache_latency();
+    CacheLatency();
 
     // Destructor
-    ~Cache_latency();
+    ~CacheLatency();
 
     // Function to run the benchmark, overrides the base class method
     void run() override;

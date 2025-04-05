@@ -4,9 +4,10 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 
+#include <sched.h>
+
 #include <chrono>
 #include <thread>
-#include <sched.h>
 
 class CPUFrequency : public Microbench {
     private:

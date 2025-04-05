@@ -12,8 +12,8 @@ static inline uint64_t rnd(uint64_t threshold) {
     return (a ^ b ^ c ^ d) % threshold;
 }
 
-/// Using a pointer chasing benchmark to measure the cache latency in ns.
-double cache_latency(uint64_t size, uint64_t iterations) {
+// Using a pointer chasing benchmark to measure the cache latency in ns.
+double CacheLatency::measure_ns(uint64_t size, uint64_t iterations) {
     int cycle_len    = 1;
     double ns_per_it = 0.0;
 
@@ -79,10 +79,10 @@ double cache_latency(uint64_t size, uint64_t iterations) {
 }
 
 // Constructor
-Cache_latency::Cache_latency() : Microbench("Cache Latency", 1) { srand(time(nullptr)); }
+CacheLatency::CacheLatency() : Microbench("Cache Latency", 1) { srand(time(nullptr)); }
 
 // Destructor
-Cache_latency::~Cache_latency() {}
+CacheLatency::~CacheLatency() {}
 
 
 void** allocate_memory(uint64_t size) {
@@ -91,7 +91,7 @@ void** allocate_memory(uint64_t size) {
 }
 
 // Run the memory benchmark
-void Cache_latency::run() {
+void CacheLatency::run() {
 
     uint64_t addr_space_sz = 67108864; // 64 MiB
     
@@ -124,7 +124,7 @@ void Cache_latency::run() {
         // Output the current cache size    
         spdlog::debug("Current cache size: {} B ({:.3f} KiB)\r", size, static_cast<double>(size) / 1024.0);
 
-        double ns_per_it = cache_latency(size, iterations);
+        double ns_per_it = measure_ns(size, iterations);
 
         if (ns_per_it == 0.0) {
             spdlog::warn("Warning: cache latency is 0.0 for size {} B", size);
@@ -170,7 +170,7 @@ void Cache_latency::run() {
 
 
 // Get the results in JSON format
-json Cache_latency::getJson() {
+json CacheLatency::getJson() {
     json result1, result2, result;
     result["name"] = name;
     for (size_t i = 0; i < mem_sizes.size(); ++i) {
