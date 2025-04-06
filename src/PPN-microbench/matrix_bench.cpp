@@ -1,6 +1,6 @@
 #include <PPN-microbench/matrix_bench.hpp>
 
-Matrix_bench::Matrix_bench() {
+Matrix_bench::Matrix_bench() : Microbench("Matrix Multiplication", 1) {
     // Initialize the memory sizes in bytes for the benchmark
     mem_sizes = {256, 512, 1024, 2048};
 }
@@ -50,8 +50,8 @@ json Matrix_bench::getJson() {
     
     // Create a JSON object to store the summary
     json summary = {
-        {"gflops_max", max_flops},
-        {"gflops_avg", avg_flops},
+        {"gflops_max", max_gflops},
+        {"gflops_avg", avg_gflops},
         {"time_avg", avg_time}
     };
 
