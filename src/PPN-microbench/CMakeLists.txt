@@ -1,6 +1,6 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp matrix_bench.cpp)
 
 target_sources(
     PPN-microbench
@@ -15,6 +15,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cache_latency.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/matrix_bench.hpp
 )
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
@@ -45,3 +46,4 @@ target_sources(PPN-microbench
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
 target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11)
+target_link_libraries(PPN-microbench PRIVATE openblas)

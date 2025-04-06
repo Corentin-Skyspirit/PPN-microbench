@@ -4,6 +4,7 @@
 #include <PPN-microbench/core_to_core_latency.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
+#include <PPN-microbench/matrix_bench.hpp>
 
 #include <CLI/CLI.hpp>
 
