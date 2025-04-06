@@ -59,7 +59,7 @@ uint64_t Stream::wrap(F &&f) {
             uint64_t start = cpu * slice;
             uint64_t end = cpu * slice + slice;
             threads[cpu] = std::jthread([&]{ 
-                for (int i = 0; i < 100; i++) 
+                for (int i = 0; i < 1000; i++) 
                     f(start, end); 
             });
             pthread_setaffinity_np(threads[cpu].native_handle(), sizeof(cpu_set_t), &cpusets[cpu]);
@@ -72,24 +72,30 @@ uint64_t Stream::wrap(F &&f) {
 
 void Stream::run() {
 
-    a.resize(MAX_SIZE);
-    b.resize(MAX_SIZE);
-    c.resize(MAX_SIZE);
+    a.reserve(MAX_SIZE);
+    b.reserve(MAX_SIZE);
+    c.reserve(MAX_SIZE);
+    wrap( [&](uint64_t s, uint64_t e){this->init(s, e);});
+    // warmups
+    wrap( [&](uint64_t s, uint64_t e){this->triad(s, e);});
+    wrap( [&](uint64_t s, uint64_t e){this->triad(s, e);});
 
     for (int rep = 0; rep < nbIterations; rep++) {
         spdlog::debug("run {}/{}", rep+1, nbIterations);
         uint64_t size = MAX_SIZE;
         
         int i = 0;
-        wrap( [&](uint64_t s, uint64_t e){this->init(s, e);});
         while (size > MIN_SIZE) {
-            spdlog::debug("current buffer: {} doubles ({}MiB)", size, size * sizeof(double) / ( 1 << 20));
+            spdlog::debug("current buffer: {} doubles ({}KiB)", size, size * sizeof(double) / ( 1 << 10));
             results[0][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->copy(s, e);});
-            results[1][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->copy(s, e);});
-            results[2][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->copy(s, e);});
-            results[3][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->copy(s, e);});
+            results[1][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->mul(s, e);});
+            results[2][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->add(s, e);});
+            results[3][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->triad(s, e);});
             i++;
             size /= 2;
+            a.resize(size);
+            b.resize(size);
+            c.resize(size);
         }
     }
 
@@ -100,6 +106,9 @@ void Stream::run() {
 
 json Stream::getJson() {
     json obj;
+    obj["name"] = name;
+    obj["max_size"] = MAX_SIZE * sizeof(double);
+    obj["min_size"] = MIN_SIZE * sizeof(double);
 
     for (int rep = 0; rep < nbIterations; rep++) {
         for (int i = 0; i < 17; i++) {
