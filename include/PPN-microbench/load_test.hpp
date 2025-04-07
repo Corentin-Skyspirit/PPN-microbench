@@ -6,10 +6,13 @@
 
 #include <chrono>
 #include <thread>
+#include <cmath>
 
 class LoadTest : public Microbench {
     private:
         int nbMeasures;
+        int nbCores;
+        std::vector<int> measures;
         
     public:
         LoadTest(int nbMeasures);
