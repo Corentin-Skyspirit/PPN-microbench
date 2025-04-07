@@ -45,6 +45,4 @@ target_sources(PPN-microbench
 )
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
-target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11)
-target_include_directories(PPN-microbench PRIVATE ${openblas_SOURCE_DIR})
-target_link_libraries(PPN-microbench PRIVATE openblas)
+target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11 Eigen3::Eigen)

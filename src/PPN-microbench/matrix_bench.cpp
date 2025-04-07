@@ -9,17 +9,14 @@ Matrix_bench::~Matrix_bench() {}
 
 void Matrix_bench::run() {
     for (auto N : mem_sizes) {
-        std::vector<double> A(N * N, 1.0);
-        std::vector<double> B(N * N, 1.0);
-        std::vector<double> C(N * N, 0.0);
+        Eigen::MatrixXd A = Eigen::MatrixXd::Random(N, N);
+        Eigen::MatrixXd B = Eigen::MatrixXd::Random(N, N);
+        Eigen::MatrixXd C = Eigen::MatrixXd::Random(N, N);
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        // Perform matrix multiplication using cblas_dgemm
-        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans,
-                    N, N, N,
-                    1.0, A.data(), N, B.data(), N,
-                    0.0, C.data(), N);
+        // Perform matrix multiplication using Eigen
+        C = A * B;
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed = end - start;
@@ -56,6 +53,7 @@ json Matrix_bench::getJson() {
     };
 
     return {
+        {"name", name},
         {"results", j},
         {"summary", summary}
     };

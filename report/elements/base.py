@@ -24,7 +24,8 @@ class Report(AbstractElement):
             "OPS" : Ops,
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
-            "Cache Latency" : Cache_Latency
+            "Cache Latency" : Cache_Latency,
+            "Matrix Multiplication" : Matrix_Bench
         }
 
         self.generate()

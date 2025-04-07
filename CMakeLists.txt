@@ -30,12 +30,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(cli11)
 
 FetchContent_Declare(
-    openblas
-    GIT_REPOSITORY https://github.com/OpenMathLib/OpenBLAS.git
-    GIT_TAG v0.3.29
+    Eigen3
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG 3.4.0
 )
 
-FetchContent_MakeAvailable(openblas)
+FetchContent_MakeAvailable(Eigen3)
 
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
@@ -55,7 +55,7 @@ endif()
 # Debug or not debug, that is the question
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -g -lopenblas)
+    target_compile_options(PPN-microbench PRIVATE -Wall -Wextra -g)
 endif()
 
 target_compile_features(PPN-microbench PRIVATE cxx_std_20)

@@ -9,7 +9,7 @@
 #include <chrono>
 #include <cmath>
 #include <vector>
-#include <cblas.h>
+#include <Eigen/Dense>
 
 
 // Matrix class inherits from Microbench
