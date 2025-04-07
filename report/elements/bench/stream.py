@@ -14,6 +14,7 @@ class Stream(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='STREAM'>Stream</h2>"
         imgs = f"<img src='{wd}/out/stream.png'/>"
+        
         return header + imgs
 
     def gen_images(self):
@@ -46,10 +47,9 @@ class Stream(AbstractBench):
         plt.xlabel("Buffer size (B)")
         plt.ylabel("Bandwidth (GiB/s)")
         plt.xscale("log", base=2)
-        # plt.yscale("log", base=10)
         plt.legend()
         plt.grid(True)
-        # plt.tight_layout()
+        plt.tight_layout()
         plt.savefig("out/stream.png")
 
 

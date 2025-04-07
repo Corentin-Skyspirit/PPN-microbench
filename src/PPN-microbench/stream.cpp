@@ -49,15 +49,17 @@ void Stream::triad(uint64_t start, uint64_t end) {
 
 template <typename F>
 uint64_t Stream::wrap(F &&f) {
-    uint64_t slice = a.size() / cpus;
+    uint64_t slice = MAX_SIZE / cpus;
     time_point<high_resolution_clock> t1, t2;
 
     t1 = high_resolution_clock::now();
     {
         std::jthread threads[cpus];
         for (int cpu = 0; cpu < cpus; cpu++) {
+            // this slicing ensures that every core always touches the same data,
+            // even when the buffer size changes
             uint64_t start = cpu * slice;
-            uint64_t end = cpu * slice + slice;
+            uint64_t end = cpu * slice + a.size() / cpus;
             threads[cpu] = std::jthread([&]{ 
                 for (int i = 0; i < 400; i++) 
                     f(start, end); 
