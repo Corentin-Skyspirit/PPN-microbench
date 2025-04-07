@@ -12,7 +12,7 @@ class LoadTest : public Microbench {
     private:
         int nbMeasures;
         int nbCores;
-        std::vector<int> measures;
+        std::vector<double> measures;
         
     public:
         LoadTest(int nbMeasures);

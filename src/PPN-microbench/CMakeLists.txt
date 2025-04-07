@@ -1,6 +1,6 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp load_test.cpp)
 
 target_sources(
     PPN-microbench
@@ -15,6 +15,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cache_latency.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/load_test.hpp
 )
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
