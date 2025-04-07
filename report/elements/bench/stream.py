@@ -19,26 +19,28 @@ class Stream(AbstractBench):
     def gen_images(self):
         stream_data = {
             "copy": self.bench_obj["copy"],
-            "mul": self.bench_obj["mul"],
+            "multiply": self.bench_obj["mul"],
             "add": self.bench_obj["add"],
             "triad": self.bench_obj["triad"],
         }
 
+        fmts = ["-o", "-x", "-s", "-^"]
+
         sizes = np.array([2**i for i in range(27, 10, -1)])
-        print(sizes)
 
         def compute_stats(data):
-            arr = np.array(data) / sizes
+            arr = sizes / np.array(data)
             mean = np.mean(arr, axis=0)
             std = np.std(arr, axis=0)
             return mean, std
 
-
         plt.figure(figsize=(12, 6))
 
+        i = 0
         for label, data in stream_data.items():
             mean, std = compute_stats(data)
-            plt.errorbar(sizes, mean, yerr=std, label=label.capitalize(), capsize=4, fmt='-o', alpha=0.7)
+            plt.errorbar(sizes, mean, yerr=std, label=label.capitalize(), capsize=4, fmt=fmts[i], alpha=0.7)
+            i += 1
 
         plt.title("Stream bandwidth")
         plt.xlabel("Buffer size (B)")
@@ -52,6 +54,6 @@ class Stream(AbstractBench):
 
 
     def get_index(self):
-        return "<li><a href='#STREAM>Stream</a></li>"
+        return "<li><a href='#STREAM'>Stream</a></li>"
 
 

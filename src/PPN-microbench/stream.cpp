@@ -3,7 +3,7 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-Stream::Stream() : Microbench("STREAM", 2) {
+Stream::Stream() : Microbench("STREAM", 5) {
     cpus = context.getCpus();
     std::vector<size_t> mapping = context.getThreadMapping();
     cpusets.reserve(cpus);
@@ -59,7 +59,7 @@ uint64_t Stream::wrap(F &&f) {
             uint64_t start = cpu * slice;
             uint64_t end = cpu * slice + slice;
             threads[cpu] = std::jthread([&]{ 
-                for (int i = 0; i < 100; i++) 
+                for (int i = 0; i < 400; i++) 
                     f(start, end); 
             });
             pthread_setaffinity_np(threads[cpu].native_handle(), sizeof(cpu_set_t), &cpusets[cpu]);
@@ -75,6 +75,9 @@ void Stream::run() {
     a.reserve(MAX_SIZE);
     b.reserve(MAX_SIZE);
     c.reserve(MAX_SIZE);
+    a.resize(MAX_SIZE);
+    b.resize(MAX_SIZE);
+    c.resize(MAX_SIZE);
     wrap( [&](uint64_t s, uint64_t e){this->init(s, e);});
     // warmups
     wrap( [&](uint64_t s, uint64_t e){this->triad(s, e);});
@@ -112,10 +115,10 @@ json Stream::getJson() {
 
     for (int rep = 0; rep < nbIterations; rep++) {
         for (int i = 0; i < 17; i++) {
-            obj["copy"][rep][i] = results[0][rep][i] / 100;
-            obj["mul"][rep][i] = results[1][rep][i] / 100;
-            obj["add"][rep][i] = results[2][rep][i] / 100;
-            obj["triad"][rep][i] = results[3][rep][i] / 100;
+            obj["copy"][rep][i] = results[0][rep][i] / 400;
+            obj["mul"][rep][i] = results[1][rep][i] / 400;
+            obj["add"][rep][i] = results[2][rep][i] / 400;
+            obj["triad"][rep][i] = results[3][rep][i] / 400;
         }
     }
 
