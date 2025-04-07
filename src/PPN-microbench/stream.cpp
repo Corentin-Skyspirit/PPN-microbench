@@ -3,7 +3,7 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-Stream::Stream() : Microbench("STREAM", 5) {
+Stream::Stream() : Microbench("STREAM", 2) {
     cpus = context.getCpus();
     std::vector<size_t> mapping = context.getThreadMapping();
     cpusets.reserve(cpus);
@@ -59,7 +59,7 @@ uint64_t Stream::wrap(F &&f) {
             uint64_t start = cpu * slice;
             uint64_t end = cpu * slice + slice;
             threads[cpu] = std::jthread([&]{ 
-                for (int i = 0; i < 1000; i++) 
+                for (int i = 0; i < 100; i++) 
                     f(start, end); 
             });
             pthread_setaffinity_np(threads[cpu].native_handle(), sizeof(cpu_set_t), &cpusets[cpu]);
@@ -86,6 +86,9 @@ void Stream::run() {
         
         int i = 0;
         while (size > MIN_SIZE) {
+            a.resize(size);
+            b.resize(size);
+            c.resize(size);
             spdlog::debug("current buffer: {} doubles ({}KiB)", size, size * sizeof(double) / ( 1 << 10));
             results[0][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->copy(s, e);});
             results[1][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->mul(s, e);});
@@ -93,9 +96,6 @@ void Stream::run() {
             results[3][rep][i] = wrap( [&](uint64_t s, uint64_t e){this->triad(s, e);});
             i++;
             size /= 2;
-            a.resize(size);
-            b.resize(size);
-            c.resize(size);
         }
     }
 
@@ -112,10 +112,10 @@ json Stream::getJson() {
 
     for (int rep = 0; rep < nbIterations; rep++) {
         for (int i = 0; i < 17; i++) {
-            obj["copy"][rep][i] = results[0][rep][i];
-            obj["mul"][rep][i] = results[1][rep][i];
-            obj["add"][rep][i] = results[2][rep][i];
-            obj["triad"][rep][i] = results[3][rep][i];
+            obj["copy"][rep][i] = results[0][rep][i] / 100;
+            obj["mul"][rep][i] = results[1][rep][i] / 100;
+            obj["add"][rep][i] = results[2][rep][i] / 100;
+            obj["triad"][rep][i] = results[3][rep][i] / 100;
         }
     }
 

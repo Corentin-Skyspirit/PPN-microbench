@@ -14,7 +14,6 @@ class Stream(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='STREAM'>Stream</h2>"
         imgs = f"<img src='{wd}/out/stream.png'/>"
-        # p = "<p>Theoritical cache sizes are taken from the CPU information provided by /proc/cpuinfo.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
         return header + imgs
 
     def gen_images(self):
@@ -25,7 +24,7 @@ class Stream(AbstractBench):
             "triad": self.bench_obj["triad"],
         }
 
-        sizes = np.array([2**i for i in range(26, 9, -1)])
+        sizes = np.array([2**i for i in range(27, 10, -1)])
         print(sizes)
 
         def compute_stats(data):
