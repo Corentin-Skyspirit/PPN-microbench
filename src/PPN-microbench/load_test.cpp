@@ -7,7 +7,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 1000000000) {
+LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 99999) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -15,6 +15,23 @@ LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 1000000000) {
 }
 
 LoadTest::~LoadTest(){}
+
+void LoadTest::executeBench(){
+    std::set<std::string> simd = context.getSimd();
+    if (simd.find("AVX2") != simd.end()) {
+
+    }
+    if (simd.find("AVX2") != simd.end()) {
+
+    }
+    if (simd.find("AVX2") != simd.end()) {
+
+    }
+    if (simd.find("AVX2") != simd.end()) {
+
+    }
+    else {}
+}
 
 void LoadTest::run(){
     Context context = Context::getInstance();
@@ -29,13 +46,13 @@ void LoadTest::run(){
 
     std::thread threads[nbCores];
 
-    for (int k = 0; k < nbMeasures; k++) {
+    for (int maxCores = 0; maxCores < nbMeasures; maxCores++) {
         auto start = steady_clock::now();
 
-        for (int id = 0; id < nbCores; id++) {
+        for (int id = 0; id < maxCores; id++) {
             threads[id] = std::thread([this] {
                 for (double z = 0; z < nbIterations; z++) {
-                    double x = fma(x, y ,z);
+                    
                 }
             });
             pthread_setaffinity_np(threads[id].native_handle(),

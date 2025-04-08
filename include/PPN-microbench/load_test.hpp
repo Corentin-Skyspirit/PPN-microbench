@@ -13,6 +13,7 @@ class LoadTest : public Microbench {
         int nbMeasures;
         int nbCores;
         std::vector<double> measures;
+        void executeBench();
         
     public:
         LoadTest(int nbMeasures);
