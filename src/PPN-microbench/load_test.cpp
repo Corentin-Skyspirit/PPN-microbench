@@ -7,7 +7,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 100000000) {
+LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 1000000000) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();
@@ -47,7 +47,7 @@ void LoadTest::run(){
         }
 
         uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
-        double fmaPerSec = duration * 10;
+        double fmaPerSec = duration;
         measures.push_back(fmaPerSec);
     }
 }
