@@ -7,6 +7,17 @@
 #include <thread>
 #include <vector>
 
+static double alpha;
+static std::vector<double> a;
+static std::vector<double> b;
+static std::vector<double> c;
+
+void init(uint64_t start, uint64_t end);
+void copy(uint64_t start, uint64_t end);
+void mul(uint64_t start, uint64_t end);
+void add(uint64_t start, uint64_t end);
+void triad(uint64_t start, uint64_t end);
+
 class Stream : public Microbench {
   private:
     const uint64_t MAX_SIZE = (1 << 27) / sizeof(double);
@@ -14,17 +25,6 @@ class Stream : public Microbench {
 
     size_t cpus;
     std::vector<cpu_set_t> cpusets;
-
-    std::vector<double> a;
-    std::vector<double> b;
-    std::vector<double> c;
-    double alpha;
-
-    void init(uint64_t start, uint64_t end);
-    void copy(uint64_t start, uint64_t end);
-    void mul(uint64_t start, uint64_t end);
-    void add(uint64_t start, uint64_t end);
-    void triad(uint64_t start, uint64_t end);
 
     uint64_t results[4][10][17];
 
