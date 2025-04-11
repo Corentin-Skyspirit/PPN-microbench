@@ -14,8 +14,14 @@ class Stream(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='STREAM'>Stream</h2>"
         imgs = f"<img src='{wd}/out/stream.png'/>"
-        
-        return header + imgs
+        p = f"<p>Stream-like benchmark, kernels are the following:</p>"
+        ul = f"""<ul>
+            <li>Copy: <span class="code-block">c[i] = a[i]</span></li>
+            <li>Multiply: <span class="code-block">c[i] = alpha * a[i]</span></li>
+            <li>Add: <span class="code-block">c[i] = a[i] + b[i]</span></li>
+            <li>Tirad: <span class="code-block">c[i] = alpha * a[i] + b[i]</span></li>
+        </ul>"""
+        return header + imgs + p + ul
 
     def gen_images(self):
         stream_data = {
@@ -47,11 +53,11 @@ class Stream(AbstractBench):
         plt.xlabel("Buffer size (B)")
         plt.ylabel("Bandwidth (GiB/s)")
         plt.xscale("log", base=2)
+        plt.ylim(0)
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
         plt.savefig("out/stream.png")
-
 
     def get_index(self):
         return "<li><a href='#STREAM'>Stream</a></li>"
