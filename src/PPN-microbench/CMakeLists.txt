@@ -19,23 +19,16 @@ target_sources(
 )
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
-    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_arm_64.S)
+    set(ASM_FILES 
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_arm_64.S
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_arm.S
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/fma_arm.S)
 
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
-    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_x86_64.S)
-    
-endif()
-
-target_sources(PPN-microbench 
-    PRIVATE 
-    ${ASM_FILES}
-)
-
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
-    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_arm.S)
-
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
-    set(ASM_FILES ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_x86.S)
+    set(ASM_FILES 
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/cpu_frequency_x86_64.S
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/add_x86.S
+        ${PROJECT_SOURCE_DIR}/src/PPN-microbench/asm/fma_x86.S)
     
 endif()
 

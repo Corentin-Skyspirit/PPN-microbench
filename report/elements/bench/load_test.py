@@ -17,17 +17,19 @@ class LoadTest(AbstractBench):
         header = "<h2 id='LoadTest'>Load test</h2>"
 
         imgs = f"<img src='{wd}/out/load_test.png'/>"
-        title = "<center><p>Load test in number of FMA per seconds</p></center>"
+        title = "<center><p>Load test in number of FMA per seconds per Core inreasing the number of cores</p></center>"
         
         return header+ imgs  + title
 
     def gen_images(self):
         data = np.array(self.bench_obj["results"])
 
-        plt.plot(data)
+        plt.plot(range(1, len(data)+1), data)
+        plt.yscale("log")
+        plt.ylim(bottom=1)
 
-        plt.xlabel("Sample")
-        plt.ylabel("Fma per seconds")
+        plt.xlabel("Cores")
+        plt.ylabel("Fma per seconds per core")
         plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
 
         plt.savefig("out/load_test.png")

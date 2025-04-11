@@ -48,6 +48,8 @@ class Cache_Latency(AbstractBench):
                 if point == theoretical_cache_sizes[k]:
                     latency_points.append((point,latencies[j]))
                     k += 1
+                    if k == len(theoretical_cache_sizes):
+                        break
        
         
         # Plot the data
