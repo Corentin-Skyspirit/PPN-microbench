@@ -32,7 +32,7 @@ class Matrix_Bench(AbstractBench):
         plt.figure(figsize=(10, 6))
         plt.plot(sizes, gflops, marker='o', color='blue', label="GFLOPS (per size)")
         plt.ylim(0)
-    
+            
         # Add lines for max and average GFLOPS
         plt.axhline(summary["gflops_max"], color='red', linestyle='--', label=f"Max GFLOPS: {summary['gflops_max']:.1f}")
         plt.axhline(summary["gflops_avg"], color='green', linestyle='--', label=f"Average GFLOPS: {summary['gflops_avg']:.1f}")
@@ -57,7 +57,7 @@ class Matrix_Bench(AbstractBench):
         )        
 
         # Format the plot
-        plt.title("Benchmark DGEMM - Performance (GFLOPS)")
+        plt.title("Matrix Multiplication performance (GFLOPS)")
         plt.xlabel("Matrix Size (N x N)")
         plt.ylabel("GFLOPS")
         plt.grid(True)

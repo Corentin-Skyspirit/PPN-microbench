@@ -8,14 +8,20 @@ Matrix_bench::Matrix_bench() : Microbench("Matrix Multiplication", 1) {
 Matrix_bench::~Matrix_bench() {}
 
 void Matrix_bench::run() {
+    const int repeats = 5; // Number of repeats for each benchmark
     for (auto N : mem_sizes) {
+        double total_duration = 0.0;
+        double total_gflops = 0.0;
+    
+        for (int i = 0; i < repeats; ++i) {
+            
         Eigen::MatrixXd A = Eigen::MatrixXd::Random(N, N);
         Eigen::MatrixXd B = Eigen::MatrixXd::Random(N, N);
         Eigen::MatrixXd C = Eigen::MatrixXd::Random(N, N);
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        // Perform matrix multiplication using Eigen
+        // Perform Dense matrix multiplication using Eigen same as DGEMM
         C = A * B;
 
         auto end = std::chrono::high_resolution_clock::now();
@@ -25,6 +31,15 @@ void Matrix_bench::run() {
         double ops = 2.0 * N * N * N; // Number of double-precision operations
         double Gflop_rate = (ops / duration)/1e9; // Gflop/s
 
+        total_duration += duration;
+        total_gflops += Gflop_rate;
+        }
+
+        // Calculate the average results over the repetitions
+        double duration = total_duration / repeats;
+        double Gflop_rate = total_gflops / repeats;
+        
+        // Store the results
         time_seconds.push_back(duration);
         Gflops.push_back(Gflop_rate);
     }
