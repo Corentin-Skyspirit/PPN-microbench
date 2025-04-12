@@ -2,7 +2,7 @@
 
 Matrix_bench::Matrix_bench() : Microbench("Matrix Multiplication", 1) {
     // Initialize the memory sizes in bytes for the benchmark
-    mem_sizes = {256, 512, 1024, 2048};
+    mem_sizes = {256, 512, 1024, 2048, 4096, 8192};
 }
 
 Matrix_bench::~Matrix_bench() {}
