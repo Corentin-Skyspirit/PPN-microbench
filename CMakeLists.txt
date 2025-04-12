@@ -38,6 +38,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Kokkos)
 
 add_subdirectory(src/PPN-microbench)
+add_subdirectory(src/PPN-microbench/gpu)
 add_subdirectory(main)
 
 # Setup architecture for assembly
