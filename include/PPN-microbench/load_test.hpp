@@ -2,7 +2,6 @@
 #define PPN_MICROBENCH_LOAD_TEST
 
 #include <PPN-microbench/microbench.hpp>
-#include <PPN-microbench/context.hpp>
 
 #include <chrono>
 #include <thread>

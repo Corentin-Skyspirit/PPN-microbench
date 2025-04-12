@@ -25,8 +25,8 @@ class LoadTest(AbstractBench):
         data = np.array(self.bench_obj["results"])
 
         plt.plot(range(1, len(data)+1), data)
-        plt.yscale("log")
-        plt.ylim(bottom=1)
+        # plt.yscale("log")
+        # plt.ylim(bottom=1)
 
         plt.xlabel("Cores")
         plt.ylabel("Fma per seconds per core")
