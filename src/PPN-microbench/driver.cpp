@@ -15,7 +15,7 @@ Driver::Driver(int argc, char **argv) {
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
     app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
-    app.add_flag_callback("--gpu-bandwidth", [this](){this->addBench(new GPUBandwidth);}, "Run GPU bandwidth benchmark");
+    app.add_flag_callback("--gpu-bandwidth", [this](){this->addBench(new GPUBandwidth);}, "Run host to GPU memory bandwidth benchmark");
     // benchmark group selection
     app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
     app.add_flag_callback("--mem", [this](){this->addBench(new CacheLatency);}, "Memory/cache related benchmarks");

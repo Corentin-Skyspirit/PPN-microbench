@@ -47,6 +47,7 @@ void GPUBandwidth::_run() {
     }
     spdlog::debug("Done!");
 
+    GPUERR(hipSetDevice(0))
     GPUERR(hipMalloc(&buff, MAX_SIZE))
 
     spdlog::debug("Warming up...");
@@ -60,13 +61,13 @@ void GPUBandwidth::_run() {
         int cpt = 0;
         for (size_t size = 1024; size <= MAX_SIZE; size *= 2) {
             t1 = high_resolution_clock::now();
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 500; i++) {
                 GPUERR(hipMemcpy(buff, array, size, hipMemcpyHostToDevice))
                 GPUERR(hipDeviceSynchronize())
             }
             t2 = high_resolution_clock::now();
             
-            uint64_t time = (t2 - t1).count() / 1000;
+            uint64_t time = (t2 - t1).count() / 500;
             spdlog::debug("size: {}MiB, {}ms, {}GB/s", (float)size / (1<<20), time / 1e6, (float)size / time);
             meta[cpt] = size;
             data[rep][cpt] = time;

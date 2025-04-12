@@ -5,7 +5,6 @@
 #include <PPN-microbench/context.hpp>
 
 #include <hip/hip_runtime.h>
-#include <hip/hip_runtime_api.h>
 
 #include <chrono>
 #include <thread>
