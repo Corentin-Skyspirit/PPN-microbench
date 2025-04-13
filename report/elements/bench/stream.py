@@ -46,11 +46,11 @@ class Stream(AbstractBench):
         i = 0
         for label, data in stream_data.items():
             mean, std = compute_stats(data)
-            plt.errorbar(sizes, mean, yerr=std, label=label.capitalize(), capsize=4, fmt=fmts[i], alpha=0.7)
+            plt.errorbar(sizes / 1024, mean, yerr=std, label=label.capitalize(), capsize=4, fmt=fmts[i], alpha=0.7)
             i += 1
 
         plt.title("Stream bandwidth")
-        plt.xlabel("Buffer size (B)")
+        plt.xlabel("Buffer size (KiB)")
         plt.ylabel("Bandwidth (GiB/s)")
         plt.xscale("log", base=2)
         plt.ylim(0)
