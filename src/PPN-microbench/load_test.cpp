@@ -1,4 +1,5 @@
 #include <PPN-microbench/load_test.hpp>
+#include <PPN-microbench/rdtsc.hpp>
 
 using std::chrono::steady_clock;
 using std::chrono::duration_cast;
@@ -17,13 +18,14 @@ void LoadTest::run(){
 
     double nbFMA = (double)(12 * nbIterations);
 
-    for (int maxCores = 0; maxCores < nbCores; maxCores++) { // set max cores from 1 to n
+    for (int maxCores = 1; maxCores < nbCores + 1; maxCores++) {
         auto start = steady_clock::now();
+        unsigned long long start_cycle = rdtsc();
 
-        for (int id = maxCores; id >= 0; id--) { // call in reverse order
+        for (int id = 0; id < maxCores; id++) {
 
             int half = (maxCores + (maxCores % 2)) / 2;
-            // id = 2 * (id % half) + (id / half); // To "shuffle" the threads id to have better performance when hyperthreading on core (0, 1, 2, 3 become 0, 2 ,1 ,3)
+            id = 2 * (id % half) + (id / half); // To "shuffle" the threads id to have better performance when hyperthreading on core (0, 1, 2, 3 become 0, 2 ,1 ,3)
 
             spdlog::debug("id : {}, half : {}", id, half);
 
@@ -36,16 +38,21 @@ void LoadTest::run(){
                 FMA_DOUBLE(x, y, z, this->getNbIterations());
             });
         }
+        uint64_t cycles = rdtsc() - start_cycle;
 
         for (int id = 0; id < maxCores; id++) {
+
+            int half = (maxCores + (maxCores % 2)) / 2;
+            id = 2 * (id % half) + (id / half); // To "shuffle" the threads id to have better performance when hyperthreading on core (0, 1, 2, 3 become 0, 2 ,1 ,3)
+
             threads[id].join();
         }
 
         uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
 
-        double frequency = (nbFMA / duration) / nbCores;
-        spdlog::debug("Iteration {} - duration : {} / nbIterations : {} / result : {}", maxCores, duration, nbIterations, frequency);
-        measures.push_back(frequency);
+        double debit = nbFMA / cycles;
+        spdlog::debug("Iteration {} - duration : {} / nbIterations : {} / result : {}", maxCores, duration, nbIterations, debit);
+        measures.push_back(debit);
     }
 }
 
