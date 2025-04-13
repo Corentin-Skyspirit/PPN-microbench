@@ -26,7 +26,7 @@ bool GPUH2DBandwidth::gpuprep() {
         return false;
     }
 
-    spdlog::info("Number of HIP devices {}", n_devices);
+    spdlog::info("Number of HIP devices: {}", n_devices);
     int device;
     hipDeviceProp_t props;
     err = hipGetDeviceProperties(&props, 0);
