@@ -16,6 +16,7 @@ Below is a list of currently implemented benchmarks; detailed information is ava
 | CPU OPS              | Peak integer & floating-point operations per second for 32-, 64-bit and SIMD arithmetic workloads |
 | Core-to-core latency | Latency of core-to-core communications                                                            |
 | Cache latency        | Latency of different cache level accesses                                                         |
+| Stream               | Stream-like benchmark, measures memory bandwidth in multiple scenarios                            |
 
 # Running
 
@@ -69,8 +70,9 @@ It is possible to run individual/groups of benchmarks by passing arguments direc
 | `--ops`            |       | Adds the CPU OPS benchmark for execution                                          |
 | `--c2c`            |       | Adds the CPU core to core latency benchmark for execution                         |
 | `--cache-latency`  |       | Adds the Cache latency benchmark for execution                                    |
+| `--stream`         |       | Adds the Stream benchmark for execution                                           |
 | `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Frequency, CPU OPS, C2C lat.)   |
-| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Cache latency)                   |
+| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Cache latency, Stream)           |
 
 If no benchmark is explicitly specified, all of them will be run.
 
