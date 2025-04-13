@@ -29,14 +29,6 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cli11)
 
-FetchContent_Declare(
-    Kokkos
-    GIT_REPOSITORY https://github.com/kokkos/kokkos.git
-    GIT_TAG 4.6.00
-)
-
-FetchContent_MakeAvailable(Kokkos)
-
 # check for HIP
 find_program(HIPCC_PATH hipcc)
 
