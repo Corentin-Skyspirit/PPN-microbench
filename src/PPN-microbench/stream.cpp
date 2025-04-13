@@ -61,7 +61,7 @@ uint64_t Stream::wrap(F &&f) {
             uint64_t start = cpu * slice;
             uint64_t end = cpu * slice + a.size() / cpus;
             threads[cpu] = std::jthread([&]{ 
-                for (int i = 0; i < 100; i++) 
+                for (int i = 0; i < 400; i++) 
                     f(start, end); 
             });
             pthread_setaffinity_np(threads[cpu].native_handle(), sizeof(cpu_set_t), &cpusets[cpu]);
