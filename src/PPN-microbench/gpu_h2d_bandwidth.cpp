@@ -1,11 +1,12 @@
-#include <PPN-microbench/gpu_bandwidth.hpp>
+#include <PPN-microbench/gpu_h2d_bandwidth.hpp>
+#include <hip/hip_runtime_api.h>
 
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-GPUBandwidth::GPUBandwidth() : Microbench("GPU_Bandwidth", 5) {}
+GPUH2DBandwidth::GPUH2DBandwidth() : Microbench("GPU_H2D_Bandwidth", 5) {}
 
-bool GPUBandwidth::gpuerr(hipError_t err) {
+bool GPUH2DBandwidth::gpuerr(hipError_t err) {
     if (err != hipSuccess) {
         spdlog::error("hip error: {}", hipGetErrorString(err));
         spdlog::error("cancelling bench...");
@@ -15,7 +16,7 @@ bool GPUBandwidth::gpuerr(hipError_t err) {
     return false;
 }
 
-bool GPUBandwidth::gpuprep() {
+bool GPUH2DBandwidth::gpuprep() {
     int n_devices;
     hipError_t err;
     err = hipGetDeviceCount(&n_devices);
@@ -32,10 +33,14 @@ bool GPUBandwidth::gpuprep() {
     spdlog::info("Device 0 name: {}", props.name);
     spdlog::info("Device 0 memory: {} Bytes", props.totalGlobalMem);
 
+    device_info["name"] = props.name;
+    device_info["total_mem"] = props.totalGlobalMem;
+    device_info["mem_clock"] = props.memoryClockRate;
+
     return true;
 }
 
-void GPUBandwidth::_run() {
+void GPUH2DBandwidth::_run() {
     char *buff;
     char *array;
     time_point<high_resolution_clock> t1, t2;
@@ -78,14 +83,15 @@ void GPUBandwidth::_run() {
     delete[] array;
 }
 
-void GPUBandwidth::run() {
+void GPUH2DBandwidth::run() {
     if (gpuprep()) _run();
 }
 
-json GPUBandwidth::getJson() {
+json GPUH2DBandwidth::getJson() {
     json obj;
     obj["name"] = name;
     obj["info"] = bench_info;
+    obj["device_info"] = device_info;
 
     for (int rep = 0; rep < nbIterations; rep++) {
         for (int cpt = 0; cpt <= 20; cpt++) {

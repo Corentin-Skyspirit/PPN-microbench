@@ -6,7 +6,7 @@ from matplotlib.ticker import FuncFormatter
 import numpy as np
 import os.path
 
-class GPUBandwidth(AbstractBench):
+class GPUH2DBandwidth(AbstractBench):
     def __init__(self, obj, bench_obj):
         self.obj = obj
         self.bench_obj = bench_obj
@@ -15,11 +15,16 @@ class GPUBandwidth(AbstractBench):
         self.gen_images()
         wd = os.getcwd()
 
-        header = "<h2 id='GPUBandwidth'>GPU host to device bandwidth</h2>"
+        header = "<h2 id='GPUH2DBandwidth'>Host to device memory bandwidth</h2>"
 
         if (not self.bench_obj["info"]):
-            img = f"<img src='{wd}/out/gpu_bandwidth.png'/>"
-            txt = "<p>hipMemcpy() of increasing sizes. Device 0 is chosen.</p>"
+            img = f"<img src='{wd}/out/gpu_h2d_bandwidth.png'/>"
+            txt = "<p>hipMemcpy() of increasing sizes. Device 0 is chosen, with the following specs:</p>"
+            txt += f"""<table>
+            <tr><th>Device name</th><td>{self.bench_obj["device_info"]["name"]}</td></tr>
+            <tr><th>Total memory</th><td>{self.bench_obj["device_info"]["total_mem"] / (1 << 30)}GiB</td></tr>
+            <tr><th>Memory clock speed</th><td>{self.bench_obj["device_info"]["mem_clock"] / 1000}MHz</td></tr>
+            </table>"""
         else:
             img = ""
             # TODO: maybe add a cool html warning or something
@@ -44,8 +49,7 @@ class GPUBandwidth(AbstractBench):
         plt.grid(True, which="both", ls="--")
         plt.legend()
         plt.tight_layout()
-        plt.savefig("out/gpu_bandwidth.png")
-
+        plt.savefig("out/gpu_h2d_bandwidth.png")
 
     def get_index(self):
-        return "<li><a href='#GPUBandwidth'>GPU host to device bandwidth</a></li>"
+        return "<li><a href='#GPUH2DBandwidth'>Host to device memory bandwidth</a></li>"

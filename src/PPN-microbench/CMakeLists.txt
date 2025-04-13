@@ -2,8 +2,8 @@ add_library(PPN-microbench STATIC)
 
 # only include gpu related benchmarks if hip is installed
 if (HIPCC_PATH)
-    set(GPU_SOURCES gpu_bandwidth.cpp)
-    set(GPU_HEADERS ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_bandwidth.hpp)
+    set(GPU_SOURCES gpu_h2d_bandwidth.cpp)
+    set(GPU_HEADERS ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_h2d_bandwidth.hpp)
 else()
     set(GPU_SOURCES)
     set(GPU_HEADERS)
@@ -33,7 +33,6 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cache_latency.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_bandwidth.hpp
             ${GPU_HEADERS}
 )
 

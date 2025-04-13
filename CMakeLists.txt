@@ -44,6 +44,8 @@ if (HIPCC_PATH)
     set(CMAKE_C_COMPILER ${HIPCC_PATH})
     set(CMAKE_CXX_COMPILER ${HIPCC_PATH})
     message(STATUS "HIP found!")
+else()
+    message(WARNING "HIP not found, GPU benchmark skipped at compile time")
 endif()
 
 add_subdirectory(src/PPN-microbench)

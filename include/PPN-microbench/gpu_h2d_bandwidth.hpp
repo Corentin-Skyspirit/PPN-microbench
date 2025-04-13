@@ -10,7 +10,7 @@
 
 #define GPUERR(f) if (gpuerr(f)) {return;}
 
-class GPUBandwidth : public Microbench {
+class GPUH2DBandwidth : public Microbench {
     private:
         uint64_t const MAX_SIZE = 1 << 30;
 
@@ -20,12 +20,14 @@ class GPUBandwidth : public Microbench {
         // used to provide info in reports if bench execution doesn't go as planned.
         std::string bench_info = "";
 
+        json device_info;
+
         bool gpuerr(hipError_t err);
         bool gpuprep();
         void _run();
     public:
-        GPUBandwidth();
-        ~GPUBandwidth() = default;
+        GPUH2DBandwidth();
+        ~GPUH2DBandwidth() = default;
 
         void run() override;
         json getJson() override;

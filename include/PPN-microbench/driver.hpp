@@ -6,7 +6,7 @@
 #include <PPN-microbench/ops.hpp>
 
 #ifdef __HIP__
-#include <PPN-microbench/gpu_bandwidth.hpp>
+#include <PPN-microbench/gpu_h2d_bandwidth.hpp>
 #endif
 
 #include <CLI/CLI.hpp>

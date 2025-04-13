@@ -25,7 +25,7 @@ class Report(AbstractElement):
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
             "Cache Latency" : Cache_Latency,
-            "GPU_Bandwidth" : GPUBandwidth,
+            "GPU_H2D_Bandwidth" : GPUH2DBandwidth,
         }
 
         self.generate()
