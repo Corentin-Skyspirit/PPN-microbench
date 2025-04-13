@@ -15,12 +15,15 @@ Driver::Driver(int argc, char **argv) {
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
     app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
+    #ifdef __HIP__
     app.add_flag_callback("--gpu-bandwidth", [this](){this->addBench(new GPUBandwidth);}, "Run host to GPU memory bandwidth benchmark");
+    #endif
     // benchmark group selection
     app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
     app.add_flag_callback("--mem", [this](){this->addBench(new CacheLatency);}, "Memory/cache related benchmarks");
+    #ifdef __HIP__
     app.add_flag_callback("--gpu", [this](){this->addBench(new GPUBandwidth);}, "GPU related benchmarks");
-    
+    #endif
     // help message
     app.set_help_flag("-h, --help", "Show this help message");
 
@@ -36,18 +39,13 @@ Driver::Driver(int argc, char **argv) {
         addBench(new Ops(10));
         addBench(new CoreToCoreLatency(10));
         addBench(new CacheLatency);
+        #ifdef __HIP__
         addBench(new GPUBandwidth);
+        #endif
     }
-
-    Kokkos::InitializationSettings settings;
-    settings.set_device_id(1);
-    settings.set_num_threads(20);
-    Kokkos::initialize(settings);
 
     run();
     save();
-
-    Kokkos::finalize();
 }
 
 void Driver::start() {

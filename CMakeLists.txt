@@ -37,8 +37,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Kokkos)
 
+# check for HIP
+find_program(HIPCC_PATH hipcc)
+
+if (HIPCC_PATH)
+    set(CMAKE_C_COMPILER ${HIPCC_PATH})
+    set(CMAKE_CXX_COMPILER ${HIPCC_PATH})
+    message(STATUS "HIP found!")
+endif()
+
 add_subdirectory(src/PPN-microbench)
-add_subdirectory(src/PPN-microbench/gpu)
 add_subdirectory(main)
 
 # Setup architecture for assembly

@@ -1,5 +1,4 @@
 #pragma once
-#define __HIP_PLATFORM_AMD__
 
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
