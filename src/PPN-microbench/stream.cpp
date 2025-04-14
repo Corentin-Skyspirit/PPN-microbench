@@ -3,69 +3,54 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-void init(uint64_t start, uint64_t end) {
-    for (uint64_t i = start; i < end; i++) {
+void init() {
+    #pragma omp parallel for
+    for (uint64_t i = 0; i < a.size(); i++) {
         a[i] = 1;
         b[i] = 1;
         c[i] = 0;
     }
 }
 
-void copy(uint64_t start, uint64_t end) {
-    for (uint64_t i = start; i < end; i++) {
+void copy() {
+    #pragma omp parallel for
+    for (uint64_t i = 0; i < a.size(); i++) {
         c[i] = a[i];
     }
 }
 
-void mul(uint64_t start, uint64_t end) {
-    for (uint64_t i = start; i < end; i++) {
+void mul() {
+    #pragma omp parallel for
+    for (uint64_t i = 0; i < a.size(); i++) {
         c[i] = alpha * a[i];
     }
 }
 
-void add(uint64_t start, uint64_t end) {
-    for (uint64_t i = start; i < end; i++) {
+void add() {
+    #pragma omp parallel for
+    for (uint64_t i = 0; i < a.size(); i++) {
         c[i] = a[i] + b[i];
     }
 }
 
-void triad(uint64_t start, uint64_t end) {
-    for (uint64_t i = start; i < end; i++) {
+void triad() {
+    #pragma omp parallel for
+    for (uint64_t i = 0; i < a.size(); i++) {
         c[i] = alpha * a[i] + b[i];
     }
 }
 
 Stream::Stream() : Microbench("STREAM", 5) {
-    cpus = context.getCpus();
-    std::vector<size_t> mapping = context.getThreadMapping();
-    cpusets.reserve(cpus);
-    for (size_t i = 0; i < cpus; i++) {
-        CPU_ZERO(&cpusets[i]);
-        CPU_SET(mapping[i], &cpusets[i]);
-    }
-
     alpha = (double) high_resolution_clock::now().time_since_epoch().count();
 }
 
 template <typename F>
 uint64_t Stream::wrap(F &&f) {
-    uint64_t slice = MAX_SIZE / cpus;
     time_point<high_resolution_clock> t1, t2;
 
     t1 = high_resolution_clock::now();
-    {
-        std::jthread threads[cpus];
-        for (size_t cpu = 0; cpu < cpus; cpu++) {
-            // this slicing ensures that every core always touches the same data,
-            // even when the buffer size changes
-            uint64_t start = cpu * slice;
-            uint64_t end = cpu * slice + a.size() / cpus;
-            threads[cpu] = std::jthread([&]{ 
-                for (int i = 0; i < 400; i++) 
-                    f(start, end); 
-            });
-            pthread_setaffinity_np(threads[cpu].native_handle(), sizeof(cpu_set_t), &cpusets[cpu]);
-        }
+    for (int i = 0; i < 400; i++) {
+        f(); 
     }
     t2 = high_resolution_clock::now();
 
@@ -73,11 +58,10 @@ uint64_t Stream::wrap(F &&f) {
 }
 
 void Stream::run() {
-
     a.resize(MAX_SIZE);
     b.resize(MAX_SIZE);
     c.resize(MAX_SIZE);
-    wrap(init);
+    init();
     // warmups
     wrap(triad);
     wrap(triad);

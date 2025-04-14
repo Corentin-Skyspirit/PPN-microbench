@@ -3,6 +3,8 @@
 
 #include <PPN-microbench/microbench.hpp>
 
+#include <omp.h>
+
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -12,11 +14,11 @@ static std::vector<double> a;
 static std::vector<double> b;
 static std::vector<double> c;
 
-void init(uint64_t start, uint64_t end);
-void copy(uint64_t start, uint64_t end);
-void mul(uint64_t start, uint64_t end);
-void add(uint64_t start, uint64_t end);
-void triad(uint64_t start, uint64_t end);
+void init();
+void copy();
+void mul();
+void add();
+void triad();
 
 class Stream : public Microbench {
   private:
