@@ -1,4 +1,5 @@
 .global FMA_ARM_f64_NEON
+.global FMA_ARM_f64_SVE
 
 FMA_ARM_f64_NEON:
     dup.2d  v0, d0 
@@ -57,5 +58,44 @@ FMA_ARM_f64_NEON_loop:
 
     subs    x0, x0, #1
     bne     FMA_ARM_f64_NEON_loop
+
+    ret
+
+FMA_ARM_f64_SVE:
+    dup z0.d, d0   
+    dup z1.d, d1  
+    dup z2.d, d2    
+
+    ptrue   p0.d
+
+    mov     z3.d,  z2.d
+    mov     z4.d,  z2.d
+    mov     z5.d,  z2.d
+    mov     z6.d,  z2.d
+    mov     z7.d,  z2.d
+    mov     z8.d,  z2.d
+    mov     z9.d,  z2.d
+    mov     z10.d, z2.d
+    mov     z11.d, z2.d
+    mov     z12.d, z2.d
+    mov     z13.d, z2.d
+    mov     z14.d, z2.d
+
+FMA_ARM_f64_SVE_loop:
+    fmla    z3.d,  p0/m, z0.d, z1.d
+    fmla    z4.d,  p0/m, z0.d, z1.d
+    fmla    z5.d,  p0/m, z0.d, z1.d
+    fmla    z6.d,  p0/m, z0.d, z1.d
+    fmla    z7.d,  p0/m, z0.d, z1.d
+    fmla    z8.d,  p0/m, z0.d, z1.d
+    fmla    z9.d,  p0/m, z0.d, z1.d
+    fmla    z10.d, p0/m, z0.d, z1.d
+    fmla    z11.d, p0/m, z0.d, z1.d
+    fmla    z12.d, p0/m, z0.d, z1.d
+    fmla    z13.d, p0/m, z0.d, z1.d
+    fmla    z14.d, p0/m, z0.d, z1.d
+
+    subs    x0, x0, #1
+    bne     FMA_ARM_f64_SVE_loop
 
     ret

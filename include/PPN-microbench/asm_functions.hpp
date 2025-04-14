@@ -62,6 +62,7 @@
     extern "C" void cpu_frequency_arm_64(uint64_t iterations);
     
     extern "C" void FMA_ARM_f64_NEON(double x, double y, double z, int64_t iterations);
+    extern "C" void FMA_ARM_f64_SVE(double x, double y, double z, int64_t iterations);
 
     extern "C" void ADD_ARM_i32(int64_t);
     extern "C" void ADD_ARM_i64(int64_t);
@@ -80,12 +81,14 @@
     #if defined(__ARM_NEON)
         #define SIMD_INT_MAX_FN ADD_ARM_i64_NEON
         #define SIMD_FLOAT_MAX_FN ADD_ARM_f64_NEON
-        
+        #undef FMA_DOUBLE
+        #define FMA_DOUBLE FMA_ARM_f64_NEON
+    #elif defined(__ARM_FEATURE_SVE)
+        #undef FMA_DOUBLE
+        #define FMA_DOUBLE FMA_ARM_f64_SVE
     #else
         #define SIMD_INT_MAX_FN ADD_ARM_i64
         #define SIMD_FLOAT_MAX_FN ADD_ARM_f64
-        #undef FMA_DOUBLE
-        #define FMA_DOUBLE FMA_ARM_f64_NEON
     #endif
 #endif
 

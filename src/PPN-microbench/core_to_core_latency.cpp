@@ -61,7 +61,7 @@ void CoreToCoreLatency::run() {
                     pinThread(cpus[id_1]);
 
                     for (int sample = -preheat; sample < nbMeasures; sample++) {
-                        for (int n = 0; n < getNbIterations(); ++n) {
+                        for (uint64_t n = 0; n < getNbIterations(); ++n) {
                             while (core1.load(std::memory_order_acquire) != n) {;}
                             core2.store(n, std::memory_order_release);
                         }
@@ -74,7 +74,7 @@ void CoreToCoreLatency::run() {
                     core1, core2 = -1;
                     auto start = steady_clock::now();
 
-                    for (int n = 0; n < getNbIterations(); ++n) {
+                    for (uint64_t n = 0; n < getNbIterations(); ++n) {
                         core1.store(n, std::memory_order_release);
                         while (core2.load(std::memory_order_acquire) != n) {;}
                     }
