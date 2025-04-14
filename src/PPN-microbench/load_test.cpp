@@ -1,11 +1,10 @@
 #include <PPN-microbench/load_test.hpp>
-#include <PPN-microbench/rdtsc.hpp>
 
 using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-LoadTest::LoadTest() : Microbench("Load Test", 999999) {
+LoadTest::LoadTest() : Microbench("Load Test", 9999999) {
     nbCores = std::thread::hardware_concurrency();
     measures.reserve(nbMeasures);
 }
@@ -20,7 +19,6 @@ void LoadTest::run(){
 
     for (int maxCores = 1; maxCores < nbCores + 1; maxCores++) {
         auto start = steady_clock::now();
-        unsigned long long start_cycle = rdtsc();
 
         for (int id = 0; id < maxCores; id++) {
 
@@ -38,7 +36,6 @@ void LoadTest::run(){
                 FMA_DOUBLE(x, y, z, this->getNbIterations());
             });
         }
-        uint64_t cycles = rdtsc() - start_cycle;
 
         for (int id = 0; id < maxCores; id++) {
 
@@ -50,7 +47,7 @@ void LoadTest::run(){
 
         uint64_t duration = duration_cast<nanoseconds>(steady_clock::now() - start).count();
 
-        double debit = nbFMA / cycles;
+        double debit = (nbFMA / duration) / 2; // divide per 2 because of ~2 fma per cycle
         spdlog::debug("Iteration {} - duration : {} / nbIterations : {} / result : {}", maxCores, duration, nbIterations, debit);
         measures.push_back(debit);
     }
