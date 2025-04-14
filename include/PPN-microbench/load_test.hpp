@@ -11,6 +11,7 @@ class LoadTest : public Microbench {
     private:
         int nbMeasures;
         int nbCores;
+        int nbTestingCores;
         std::vector<double> measures;
         
     public:
