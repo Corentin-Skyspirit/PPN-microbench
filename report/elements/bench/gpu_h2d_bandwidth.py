@@ -23,7 +23,6 @@ class GPUH2DBandwidth(AbstractBench):
             txt += f"""<table>
             <tr><th>Device name</th><td>{self.bench_obj["device_info"]["name"]}</td></tr>
             <tr><th>Total memory</th><td>{self.bench_obj["device_info"]["total_mem"] / (1 << 30)}GiB</td></tr>
-            <tr><th>Memory clock speed</th><td>{self.bench_obj["device_info"]["mem_clock"] / 1000}MHz</td></tr>
             </table>"""
         else:
             img = ""
