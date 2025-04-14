@@ -76,7 +76,7 @@
     #define ADD_i64 ADD_ARM_i64
     #define ADD_f32 ADD_ARM_f32
     #define ADD_f64 ADD_ARM_f64
-    #define FMA_DOUBLE
+    #define FMA_DOUBLE FMA_ARM_f64_NEON
     #define HAVE_SVE 0
 
     #if defined(__ARM_NEON)
