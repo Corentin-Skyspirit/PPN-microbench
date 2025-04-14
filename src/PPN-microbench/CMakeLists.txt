@@ -1,14 +1,5 @@
 add_library(PPN-microbench STATIC)
 
-# only include gpu related benchmarks if hip is installed
-# if (HIPCC_PATH)
-#     set(GPU_SOURCES gpu_h2d_bandwidth.cpp)
-#     set(GPU_HEADERS ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_h2d_bandwidth.hpp)
-# else()
-#     set(GPU_SOURCES)
-#     set(GPU_HEADERS)
-# endif()
-
 target_sources(PPN-microbench PRIVATE 
     microbench.cpp 
     context.cpp 

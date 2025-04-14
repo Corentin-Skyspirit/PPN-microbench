@@ -63,8 +63,6 @@ void GPUH2DBandwidth::_run() {
 
     spdlog::debug("Warming up...");
     for (int i = 0; i < 500; i++) {
-        // GPUERR(hipMemcpy(buff, array, MAX_SIZE, hipMemcpyHostToDevice))
-        // GPUERR(hipDeviceSynchronize())
         queue.enqueueWriteBuffer(buffer_d, CL_TRUE, 0, MAX_SIZE, buffer);
     }
 
@@ -74,10 +72,7 @@ void GPUH2DBandwidth::_run() {
         for (size_t size = 1024; size <= MAX_SIZE; size *= 2) {
             t1 = high_resolution_clock::now();
             for (int i = 0; i < 500; i++) {
-                // GPUERR(hipMemcpy(buffer_d, buffer, size, hipMemcpyHostToDevice))
-                // GPUERR(hipDeviceSynchronize())
                 queue.enqueueWriteBuffer(buffer_d, CL_TRUE, 0, size, buffer);
-
             }
             t2 = high_resolution_clock::now();
             

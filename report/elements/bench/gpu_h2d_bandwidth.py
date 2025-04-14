@@ -42,7 +42,7 @@ class GPUH2DBandwidth(AbstractBench):
 
         plt.xscale('log', base=2)
 
-        plt.xlabel('Buffer Size KiB')
+        plt.xlabel('Buffer Size (KiB)')
         plt.ylabel('Bandwidth (GiB/sec)')
         plt.title('GPU host to device bandwidth')
         plt.grid(True, which="both", ls="--")
