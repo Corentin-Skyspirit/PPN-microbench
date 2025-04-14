@@ -77,6 +77,7 @@
     #define ADD_f32 ADD_ARM_f32
     #define ADD_f64 ADD_ARM_f64
     #define FMA_DOUBLE
+    #define HAVE_SVE 0
 
     #if defined(__ARM_NEON)
         #define SIMD_INT_MAX_FN ADD_ARM_i64_NEON
@@ -84,6 +85,8 @@
         #undef FMA_DOUBLE
         #define FMA_DOUBLE FMA_ARM_f64_NEON
     #elif defined(__ARM_FEATURE_SVE)
+        #undef HAVE_SVE
+        #define HAVE_SVE 1
         #undef FMA_DOUBLE
         #define FMA_DOUBLE FMA_ARM_f64_SVE
     #else

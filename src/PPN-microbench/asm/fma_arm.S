@@ -1,5 +1,4 @@
 .global FMA_ARM_f64_NEON
-.global FMA_ARM_f64_SVE
 
 FMA_ARM_f64_NEON:
     dup.2d  v0, d0 
@@ -61,6 +60,10 @@ FMA_ARM_f64_NEON_loop:
 
     ret
 
+
+#ifdef HAVE_SVE
+.global FMA_ARM_f64_SVE
+
 FMA_ARM_f64_SVE:
     dup z0.d, d0   
     dup z1.d, d1  
@@ -99,3 +102,4 @@ FMA_ARM_f64_SVE_loop:
     bne     FMA_ARM_f64_SVE_loop
 
     ret
+#endif
