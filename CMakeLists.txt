@@ -36,7 +36,7 @@ add_subdirectory(main)
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm|aarch64)")
     message(STATUS "Configuring for ARM")
-    target_compile_options(PPN-microbench PRIVATE -mcpu=native -march=armv8-a+simd)
+    target_compile_options(PPN-microbench PRIVATE -mcpu=native)
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|i[3-6]86)")
     message(STATUS "Configuring for x86")
     target_compile_options(PPN-microbench PRIVATE -march=native -masm=intel)

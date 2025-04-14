@@ -1,9 +1,9 @@
 .global FMA_ARM_f64_NEON
 
 FMA_ARM_f64_NEON:
-    dup.2d  v0, d0 
-    dup.2d  v1, d1 
-    dup.2d  v2, d2    
+    dup v0.2d, d0
+    dup v1.2d, d1
+    dup v2.2d, d2 
 
     mov     v3.16b, v2.16b
     mov     v4.16b, v2.16b
