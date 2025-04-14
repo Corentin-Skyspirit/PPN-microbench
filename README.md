@@ -5,7 +5,7 @@ A portable microbenchmarking tool for compute node caracterisation.
 This tool is (currently) developed and tested for **64-bit Arm and x86 architectures.**
 
 ## GPUs
-Also being aimed at GPUs, the tool with execute benchmarks using [HIP](https://github.com/ROCm/HIP). If it is not available on the host, all GPU related benchmarks will be entirely skipped during compilation.
+GPU targeted benchmark are run with [OpenCL](https://github.com/KhronosGroup/OpenCL-SDK). If no OpenCL device is present on the host, they will get skipped.
 
 # Benchmarks
 Below is a list of currently implemented benchmarks; detailed information is available in the [wiki](https://github.com/ppn-microbench/ppn-microbench/wiki).
@@ -77,4 +77,4 @@ The only requirement to run the tool is `cmake 3.25`. The following libraries wi
  - [nlohmann-json](https://github.com/nlohmann/json)
  - [spdlog](https://github.com/gabime/spdlog)
  - [CLI11](https://github.com/CLIUtils/CLI11)
- - [HIP](https://github.com/ROCm/HIP) (if available)
+ - [OpenCL](https://github.com/KhronosGroup/OpenCL-SDK)

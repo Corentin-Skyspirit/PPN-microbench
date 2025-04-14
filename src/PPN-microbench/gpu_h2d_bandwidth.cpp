@@ -3,17 +3,7 @@
 using std::chrono::high_resolution_clock;
 using std::chrono::time_point;
 
-GPUH2DBandwidth::GPUH2DBandwidth() : Microbench("GPU_H2D_Bandwidth", 2) {}
-
-// bool GPUH2DBandwidth::gpuerr(hipError_t err) {
-//     if (err != hipSuccess) {
-//         spdlog::error("hip error: {}", hipGetErrorString(err));
-//         spdlog::error("cancelling bench...");
-//         bench_info = "Bench returned the following HIP error: " + std::string(hipGetErrorString(err));
-//         return true;
-//     }
-//     return false;
-// }
+GPUH2DBandwidth::GPUH2DBandwidth() : Microbench("GPU_H2D_Bandwidth", 5) {}
 
 void GPUH2DBandwidth::gpuprep() {
     std::vector<cl::Device> tmp_devices;
@@ -28,7 +18,7 @@ void GPUH2DBandwidth::gpuprep() {
     }
 
     if (devices.size() == 0) {
-        spdlog::warn("No hip capable device, skipping !");
+        spdlog::warn("No OpenCL device, skipping !");
         bench_info = "Could not find any OpenCL device, benchmark is skipped.";
         return;
     }
