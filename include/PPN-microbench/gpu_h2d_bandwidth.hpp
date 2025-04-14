@@ -3,7 +3,7 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/context.hpp>
 
-#include <hip/hip_runtime.h>
+#include <CL/opencl.hpp>
 
 #include <chrono>
 #include <thread>
@@ -20,11 +20,9 @@ class GPUH2DBandwidth : public Microbench {
         // used to provide info in reports if bench execution doesn't go as planned.
         std::string bench_info = "";
 
-        json device_info;
-
-        bool gpuerr(hipError_t err);
-        bool gpuprep();
-        void _run();
+        // bool gpuerr(hipError_t err);
+        void gpuprep();
+        // void _run();
     public:
         GPUH2DBandwidth();
         ~GPUH2DBandwidth() = default;

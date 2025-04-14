@@ -29,16 +29,39 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cli11)
 
-# check for HIP
-find_program(HIPCC_PATH hipcc)
+FetchContent_Declare(
+    OpenCL-Headers
+    GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-Headers.git
+    GIT_TAG         main
+)
 
-if (HIPCC_PATH)
-    set(CMAKE_C_COMPILER ${HIPCC_PATH})
-    set(CMAKE_CXX_COMPILER ${HIPCC_PATH})
-    message(STATUS "HIP found!")
-else()
-    message(WARNING "HIP not found, GPU benchmark skipped at compile time")
-endif()
+FetchContent_MakeAvailable(OpenCL-Headers)
+# FetchContent_GetProperties(OpenCL-Headers SOURCE_DIR OpenCL_INCLUDE_DIR)
+
+FetchContent_Declare(OpenCL-ICD-Loader
+GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-ICD-Loader.git
+GIT_TAG         main
+)
+
+FetchContent_MakeAvailable(OpenCL-ICD-Loader)
+
+FetchContent_Declare(
+    OpenCL-Headers-Cpp
+    GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-CLHPP.git
+    GIT_TAG         main
+    )
+FetchContent_MakeAvailable(OpenCL-Headers-Cpp)
+    
+# check for HIP
+# find_program(HIPCC_PATH hipcc)
+
+# if (HIPCC_PATH)
+#     set(CMAKE_C_COMPILER ${HIPCC_PATH})
+#     set(CMAKE_CXX_COMPILER ${HIPCC_PATH})
+#     message(STATUS "HIP found!")
+# else()
+#     message(WARNING "HIP not found, GPU benchmark skipped at compile time")
+# endif()
 
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)

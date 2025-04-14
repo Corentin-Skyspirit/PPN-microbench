@@ -4,10 +4,7 @@
 #include <PPN-microbench/core_to_core_latency.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
-
-#ifdef __HIP__
 #include <PPN-microbench/gpu_h2d_bandwidth.hpp>
-#endif
 
 #include <CLI/CLI.hpp>
 
