@@ -15,7 +15,7 @@ class LoadTest : public Microbench {
         std::vector<double> measures;
         
     public:
-        LoadTest();
+        LoadTest(int nbMeasures);
         ~LoadTest();
 
         void run() override;

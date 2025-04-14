@@ -17,16 +17,20 @@ class LoadTest(AbstractBench):
         header = "<h2 id='LoadTest'>Load test</h2>"
 
         imgs = f"<img src='{wd}/out/load_test.png'/>"
-        title = "<center><p>Load test in frequency per core by inreasing thier number</p></center>"
+        title = "<center><p>Load test in frequency per core</p></center>"
         
         return header+ imgs  + title
 
     def gen_images(self):
-        data = np.array(self.bench_obj["results"])
+        data = self.bench_obj["results"]
 
-        plt.plot(range(1, len(data)+1), data)
-        # plt.yscale("log")
-        plt.ylim(bottom=1)
+        plotList = []
+
+        for coresList in data:
+            plotList.append(np.mean(coresList))
+
+        plt.plot(range(1, len(plotList)+1), plotList)
+        plt.ylim(bottom=0)
 
         plt.xlabel("Cores")
         plt.ylabel("Frequency")
