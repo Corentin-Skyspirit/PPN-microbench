@@ -4,7 +4,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 999'999) {
+LoadTest::LoadTest(int nbMeasures) : Microbench("Load Test", 9'999'999) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();

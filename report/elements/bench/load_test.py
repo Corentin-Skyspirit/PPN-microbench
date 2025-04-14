@@ -25,11 +25,15 @@ class LoadTest(AbstractBench):
         data = self.bench_obj["results"]
 
         plotList = []
+        stdList = []
 
         for coresList in data:
             plotList.append(np.mean(coresList))
+            stdList.append(np.std(coresList))
 
-        plt.plot(range(1, len(plotList)+1), plotList)
+
+        plt.plot(range(1, len(plotList)+1), plotList, color='blue')
+        plt.errorbar(range(1, len(plotList) + 1), plotList, yerr=stdList, marker=".", label='Fequency', capsize=5, capthick=1, ecolor='gray')
         plt.ylim(bottom=0)
 
         plt.xlabel("Cores")
