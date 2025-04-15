@@ -17,16 +17,6 @@ class GPUH2DBandwidth : public Microbench {
 
         // used to provide info in reports if bench execution doesn't go as planned.
         std::string bench_info = "";
-
-        std::vector<cl::Device> devices;
-        cl::Device device;
-        cl::CommandQueue queue;
-        cl::Context context;
-
-        json device_info;
-
-        void gpuprep();
-        void _run();
     public:
         GPUH2DBandwidth();
         ~GPUH2DBandwidth() = default;

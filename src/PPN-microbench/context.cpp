@@ -3,6 +3,7 @@
 Context::Context() {
     cpuInfo();
     memoryInfo();
+    gpuInfo();
 }
 
 Context::~Context() {}
@@ -153,6 +154,46 @@ void Context::memoryInfo() {
     l3 = sysconf(_SC_LEVEL3_CACHE_SIZE);
 }
 
+void Context::gpuInfo() {
+    std::vector<cl::Device> tmp_devices;
+    std::vector<cl::Platform> platforms;
+    cl::Platform::get(&platforms);
+
+    // gather a list of all devices. The "main" device will be 
+    // the one with the highest compute unit count.
+    for (int i = 0; i < platforms.size(); i++) {
+        platforms[i].getDevices(CL_DEVICE_TYPE_ALL, &tmp_devices);
+        for (auto d : tmp_devices) {
+            std::string device_name = d.getInfo<CL_DEVICE_BOARD_NAME_AMD>() == "" ? d.getInfo<CL_DEVICE_NAME>() : d.getInfo<CL_DEVICE_BOARD_NAME_AMD>();
+            spdlog::debug("found CL device: {}", device_name);
+            devices.push_back(d);
+
+            // chose main device
+            if (devices.size() == 1) mainDevice = devices[0];
+            if (d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>() > mainDevice.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>()) {
+                mainDevice = d;
+                mainDeviceIndex = devices.size() - 1;
+            }
+        }
+    }
+
+    if (devices.size() == 0) {
+        spdlog::warn("No OpenCL device found");
+        return;
+    }
+
+    // setup a main device and ways to access it
+    mainDeviceContext = cl::Context({mainDevice});
+    mainDeviceQueue = cl::CommandQueue(mainDeviceContext, mainDevice);
+
+    spdlog::info("Number of OpenCL devices: {}", devices.size());
+    // AMD cards are weird names =(
+    std::string device_name = mainDevice.getInfo<CL_DEVICE_BOARD_NAME_AMD>() == "" ? mainDevice.getInfo<CL_DEVICE_NAME>() :  mainDevice.getInfo<CL_DEVICE_BOARD_NAME_AMD>();
+    spdlog::info("Main device name: {}", device_name);
+    spdlog::info("Main device memory: {} Bytes", mainDevice.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>());
+    spdlog::info("Main device compute units: {}", mainDevice.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>());
+}
+
 json Context::getJson() {
     json obj;
 
@@ -172,8 +213,22 @@ json Context::getJson() {
     mem_info["l2"] = l2;
     mem_info["l3"] = l3;
 
+    json gpu_info;
+    gpu_info["main_device_index"] = mainDeviceIndex;
+    size_t i;
+    for (auto d : devices) {
+        json o;
+        o["name"] = d.getInfo<CL_DEVICE_BOARD_NAME_AMD>() == "" ? d.getInfo<CL_DEVICE_NAME>() :  d.getInfo<CL_DEVICE_BOARD_NAME_AMD>();
+        o["total_memory"] = d.getInfo<CL_DEVICE_GLOBAL_MEM_SIZE>();
+        o["max_freq"] = d.getInfo<CL_DEVICE_MAX_CLOCK_FREQUENCY>();
+        o["compute_units"] = d.getInfo<CL_DEVICE_MAX_COMPUTE_UNITS>();
+        gpu_info["devices"][i] = o;
+        i++;
+    }
+
     obj["cpu_info"] = cpu_info;
     obj["mem_info"] = mem_info;
+    obj["gpu_info"] = gpu_info;
 
     return obj;
 }

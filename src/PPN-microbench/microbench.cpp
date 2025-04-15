@@ -3,6 +3,10 @@
 Microbench::Microbench(std::string name, uint64_t nbIterations) {
     this->name = name;
     this->nbIterations = nbIterations;
+    
+    mainDevice = context.getMainDevice();
+    mainDeviceContext = context.getMainDeviceContext();
+    mainDeviceQueue = context.getMainDeviceQueue();
 }
 
 Microbench::~Microbench() {}
