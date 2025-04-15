@@ -115,8 +115,15 @@ class SysInfo(AbstractElement):
             mem_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
         mem_info = f"<table>{mem_info}</table>"
 
+        gpu_info = "<tr><th colspan='2'>OpenCL Devices & GPUs</th></tr>"
+        for d in obj["meta"]["gpu_info"]["devices"]:
+                gpu_info += f"<tr><th colspan='2'>{d['name']}</th></tr>"
+                gpu_info += f"<tr><th>Total memory</th><td>{d['total_memory'] / 1e9}GB</td></tr>"
+                gpu_info += f"<tr><th>Max clock speed</th><td>{d['max_freq']}MHz</td></tr>"
+                gpu_info += f"<tr><th>Compute units</th><td>{d['compute_units']}</td></tr>"
+        gpu_info = f"<table>{gpu_info}</table>"
 
-        return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + "<br/>" + mem_info
+        return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + mem_info + gpu_info
     
     def get_index(self):
         return f"<li><a href='#SysInfo'>System information</a></li>"
