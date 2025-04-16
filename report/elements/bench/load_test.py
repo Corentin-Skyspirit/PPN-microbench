@@ -19,7 +19,7 @@ class LoadTest(AbstractBench):
         # img = f"<img src='{wd}/out/load_test.png'/>"
         # title = "<center><p>Load test in frequency per core</p></center>"
 
-        img = f"<img src='{wd}/out/load_test_boxplot.png'/>"
+        img = f"<img src='{wd}/out/load_test.png'/>"
         title = "<center><p>Frequency variation of load test with FMA</p></center>"
         
         return header+ img + title
@@ -28,35 +28,22 @@ class LoadTest(AbstractBench):
         data = self.bench_obj["results"]
 
         plotList = []
-        # stdList = []
 
-        # for coresList in data:
-        #     plotList.append(np.mean(coresList))
-        #     stdList.append(np.std(coresList))
+        for coreList in data:
+            coreList = np.array(coreList)
 
+            minimum = np.min(coreList)
+            q1 = np.percentile(coreList, 25)
+            median = np.median(coreList)
+            q3 = np.percentile(coreList, 75)
+            maximum = np.max(coreList)
 
-        # plt.plot(range(1, len(plotList)+1), plotList, color='orange')
-        # plt.errorbar(range(1, len(plotList) + 1), plotList, yerr=stdList, marker=".", label='Fequency', capsize=5, capthick=1, ecolor='gray')
-        # plt.ylim(bottom=0)
+            plotList.append(coreList)
 
-        # plt.xlabel("Cores")
-        # plt.ylabel("Frequency")
-        # plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
-
-        # plt.savefig("out/load_test.png")
-        # plt.clf()
-
-        np.array(plotList)
-
-        minimum = np.min(data)
-        q1 = np.percentile(data, 25)
-        median = np.median(data)
-        q3 = np.percentile(data, 75)
-        maximum = np.max(data)
-
-        plt.boxplot(data)
+        plt.boxplot(plotList)
         plt.xlabel('Cores')
-        plt.ylabel('Frequency')
+        plt.ylabel('Frequency (GHz)')
+        plt.ylim(bottom=0)
         plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
 
         plt.savefig("out/load_test.png")
