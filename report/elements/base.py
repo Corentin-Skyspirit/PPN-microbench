@@ -107,12 +107,14 @@ class SysInfo(AbstractElement):
         obj = AbstractElement.obj
         cpu_info = "<tr><th colspan='2'>CPU informations</th></tr>"
         for key, info in obj["meta"]["cpu_info"].items():
-            cpu_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
+            cpu_info += f"<tr><th>{str(key)}</th><td>{self.format_info(info)}</td></tr>"
         cpu_info = f"<table>{cpu_info}</table>"
 
         mem_info = "<tr><th colspan='2'>Cache / Memory informations</th></tr>"
+        mem_info += f"<tr><th>Total memory</th><td>{round(obj["meta"]["mem_info"]["total_mem"] / (1 << 30), 3)}GiB</td></tr>"
+        del obj["meta"]["mem_info"]["total_mem"]
         for key, info in obj["meta"]["mem_info"].items():
-            mem_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
+            mem_info += f"<tr><th>{str(key)}</th><td>{info / 1024}KiB</td></tr>"
         mem_info = f"<table>{mem_info}</table>"
 
         gpu_info = "<tr><th colspan='2'>OpenCL Devices & GPUs</th></tr>"
@@ -124,6 +126,11 @@ class SysInfo(AbstractElement):
         gpu_info = f"<table>{gpu_info}</table>"
 
         return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + mem_info + gpu_info
+    
+    def format_info(self, info):
+        if isinstance(info, list):
+            return ", ".join(map(str, info))
+        return info
     
     def get_index(self):
         return f"<li><a href='#SysInfo'>System information</a></li>"
