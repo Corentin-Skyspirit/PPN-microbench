@@ -20,9 +20,9 @@ class LoadTest(AbstractBench):
         # title = "<center><p>Load test in frequency per core</p></center>"
 
         img = f"<img src='{wd}/out/load_test.png'/>"
-        title = "<center><p>Frequency variation of load test with FMA</p></center>"
+        # title = "<center><p>Frequency variation of load test with FMA</p></center>"
         
-        return header+ img + title
+        return header+ img # + title
 
     def gen_images(self):
         data = self.bench_obj["results"]
@@ -45,6 +45,7 @@ class LoadTest(AbstractBench):
         plt.ylabel('Frequency (GHz)')
         plt.ylim(bottom=0)
         plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
+        plt.figtext(0.5, 0.93, "Frequency variation of load test with FMA", horizontalalignment = 'center', size='large')
 
         plt.savefig("out/load_test.png")
         plt.clf()

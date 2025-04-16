@@ -17,9 +17,9 @@ class CpuFrequency(AbstractBench):
         header = "<h2 id='CPUFrequency'>CPU Frequency</h2>"
 
         imgs = f"<img src='{wd}/out/cpu_frequency_multiplot.png'/>"
-        title = "<center><p>Frequencies of cores in GHz depending of their number</p></center>"
+        # title = "<center><p>Frequencies of cores in GHz depending of their number</p></center>"
         
-        return header+ imgs + title
+        return header + imgs # + title
 
     def gen_images(self):
         data = self.bench_obj["results"]
@@ -32,7 +32,7 @@ class CpuFrequency(AbstractBench):
 
         fig, truc = plt.subplots(div, (len(data)//div), figsize=(10,12))
         plt.subplots_adjust(hspace=0.35, wspace=0.1)
-        # plt.figtext(0.5, 0.01, "Frequencies of cores in GHz depending of their number", horizontalalignment = 'center', size='x-large')
+        plt.figtext(0.5, 0.02, "Frequencies of cores in GHz depending of their number", horizontalalignment = 'center', size='x-large')
 
         # max_val = 0
         # min_val = 100
@@ -100,9 +100,7 @@ class CpuFrequency(AbstractBench):
         # else :
         #     plt.figtext(0.5, 0.035, "Standard deviation is : {:.2f}%".format(np.std(all_vals) / np.mean(all_vals) * 100), horizontalalignment = 'center')
 
-        
-
-        plt.tight_layout(pad=3.5)
+        plt.tight_layout(pad=3)
 
         plt.savefig("out/cpu_frequency_multiplot.png")
         plt.clf()
