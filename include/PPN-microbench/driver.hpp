@@ -5,6 +5,7 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
 #include <PPN-microbench/stream.hpp>
+#include <PPN-microbench/load_test.hpp>
 
 #include <CLI/CLI.hpp>
 

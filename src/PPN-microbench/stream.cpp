@@ -49,7 +49,7 @@ uint64_t Stream::wrap(F &&f) {
     time_point<high_resolution_clock> t1, t2;
 
     t1 = high_resolution_clock::now();
-    for (int i = 0; i < 400; i++) {
+    for (int i = 0; i < 200; i++) {
         f(); 
     }
     t2 = high_resolution_clock::now();
@@ -98,10 +98,10 @@ json Stream::getJson() {
 
     for (uint64_t rep = 0; rep < nbIterations; rep++) {
         for (int i = 0; i < 17; i++) {
-            obj["copy"][rep][i] = results[0][rep][i] / 400;
-            obj["mul"][rep][i] = results[1][rep][i] / 400;
-            obj["add"][rep][i] = results[2][rep][i] / 400;
-            obj["triad"][rep][i] = results[3][rep][i] / 400;
+            obj["copy"][rep][i] = results[0][rep][i] / 200;
+            obj["mul"][rep][i] = results[1][rep][i] / 200;
+            obj["add"][rep][i] = results[2][rep][i] / 200;
+            obj["triad"][rep][i] = results[3][rep][i] / 200;
         }
     }
 
