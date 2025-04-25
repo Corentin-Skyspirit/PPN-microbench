@@ -15,7 +15,9 @@ Below is a list of currently implemented benchmarks; detailed information is ava
 | CPU frequency        | CPU clock frequency in single- and multi-core light workloads                                     |
 | CPU OPS              | Peak integer & floating-point operations per second for 32-, 64-bit and SIMD arithmetic workloads |
 | Core-to-core latency | Latency of core-to-core communications                                                            |
+| Load test            | CPU cock frequency in single- and multi-core heavy workloads                                      |
 | Cache latency        | Latency of different cache level accesses                                                         |
+| Memory bandwidth     | Single- and multi-core memory latency with `memcpy`                                               |
 | Stream               | Stream-like benchmark, measures memory bandwidth in multiple scenarios                            |
 
 # Running
@@ -62,17 +64,19 @@ Finally, running the Python script is as easy as `python3 main.py`
 
 It is possible to run individual/groups of benchmarks by passing arguments directly to the Python script or C++ application:
 
-| argument           | alias | description                                                                       |
-| ------------------ | ----- | --------------------------------------------------------------------------------- |
-| `--debug`          | `-d`  | Sets logging level to debug, showing extra information on screen                  |
-| `--output`         | `-o`  | Sets output file name and location. can be either a directory or a full file path |
-| `--cpu-frequency`  |       | Adds the CPU frequency benchmark for execution                                    |
-| `--ops`            |       | Adds the CPU OPS benchmark for execution                                          |
-| `--c2c`            |       | Adds the CPU core to core latency benchmark for execution                         |
-| `--cache-latency`  |       | Adds the Cache latency benchmark for execution                                    |
-| `--stream`         |       | Adds the Stream benchmark for execution                                           |
-| `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Frequency, CPU OPS, C2C lat.)   |
-| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Cache latency, Stream)           |
+| argument           | alias | description                                                                              |
+| ------------------ | ----- | ---------------------------------------------------------------------------------------- |
+| `--debug`          | `-d`  | Sets logging level to debug, showing extra information on screen                         |
+| `--output`         | `-o`  | Sets output file name and location. can be either a directory or a full file path        |
+| `--cpu-frequency`  |       | Adds the CPU frequency benchmark for execution                                           |
+| `--ops`            |       | Adds the CPU OPS benchmark for execution                                                 |
+| `--c2c`            |       | Adds the CPU core to core latency benchmark for execution                                |
+| `--load-test`      |       | Adds the CPU load test benchmark for execution                                           |
+| `--cache-latency`  |       | Adds the Cache latency benchmark for execution                                           |
+| `--mem-bandwidth`  |       | Adds the memcpy bandwidth benchmark for execution                                        |
+| `--stream`         |       | Adds the Stream benchmark for execution                                                  |
+| `--cpu`            |       | Adds all cpu-related benchmarks to the pool. (CPU Freq. CPU OPS, C2C lat., Load freq.)   |
+| `--mem`            |       | Adds all memory-related benchmarks to the pool. (Cache latency, Stream)                  |
 
 If no benchmark is explicitly specified, all of them will be run.
 
