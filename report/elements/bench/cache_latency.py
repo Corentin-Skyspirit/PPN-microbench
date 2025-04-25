@@ -102,6 +102,6 @@ class Cache_Latency(AbstractBench):
 
 
     def get_index(self):
-        return "<li><a href='#Cache_Latency>Cache latency</a></li>"
+        return "<li><a href='#Cache_Latency'>Cache latency</a></li>"
 
 
