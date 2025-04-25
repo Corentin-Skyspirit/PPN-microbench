@@ -123,7 +123,7 @@ class SysInfo(AbstractElement):
         gpu_info = "<tr><th colspan='2'>OpenCL Devices & GPUs</th></tr>"
         for d in obj["meta"]["gpu_info"]["devices"]:
                 gpu_info += f"<tr><th colspan='2'>{d['name']}</th></tr>"
-                gpu_info += f"<tr><th>Total memory</th><td>{d['total_memory'] / 1e9}GB</td></tr>"
+                gpu_info += f"<tr><th>Total memory</th><td>{round(d['total_memory'] / 1e9, 3)}GB</td></tr>"
                 gpu_info += f"<tr><th>Max clock speed</th><td>{d['max_freq']}MHz</td></tr>"
                 gpu_info += f"<tr><th>Compute units</th><td>{d['compute_units']}</td></tr>"
         gpu_info = f"<table>{gpu_info}</table>"

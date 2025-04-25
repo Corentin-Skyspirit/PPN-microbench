@@ -13,8 +13,6 @@ void GPUH2DBandwidth::run() {
         return;
     }
 
-    spdlog::info("{}", mainDevice.getInfo<CL_DEVICE_BOARD_NAME_AMD>());
-
     char *buffer;
     cl::Buffer buffer_d;
     time_point<high_resolution_clock> t1, t2;
