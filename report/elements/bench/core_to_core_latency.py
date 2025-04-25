@@ -19,14 +19,14 @@ class CoreToCoreLatency(AbstractBench):
         header = "<h2 id='CoreToCoreLatency'>Core-To-Core Latency</h2>"
 
         minImgs = f"<img src='{wd}/out/core_to_core_latency_min.png'/>"
-        minTitle = "<center><p>Core-to-core minimum latency graph in nanoseconds</p></center>"
+        # minTitle = "<center><p>Core-to-core minimum latency graph in nanoseconds</p></center>"
 
-        res = header + minImgs + minTitle
+        res = header + minImgs # + minTitle
         
         if graphs == 2 :
             meanImgs = f"<img src='{wd}/out/core_to_core_latency_mean.png'/>"
-            meanTitle = "<center><p>Core-to-core mean latency graph in nanoseconds</p></center>"
-            res += meanImgs + meanTitle
+            # meanTitle = "<center><p>Core-to-core mean latency graph in nanoseconds</p></center>"
+            res += meanImgs # + meanTitle
 
         return res
 
@@ -48,7 +48,7 @@ class CoreToCoreLatency(AbstractBench):
             new_cmap = mcolors.ListedColormap(colors)
             cax = ax.imshow(matrix, cmap=new_cmap, interpolation="nearest", aspect='auto')
 
-            # ax.figtext(0.5, 0.05, "Core-to-core latency", horizontalalignment = 'center', size='x-large')
+            plt.figtext(0.5, 0.02, "Core-to-core latency", horizontalalignment = 'center', size='x-large')
 
             # Show values
             for i in range(matrix.shape[0]):
@@ -63,6 +63,8 @@ class CoreToCoreLatency(AbstractBench):
             ax.tick_params(axis='x', labeltop=True, labelbottom=False)
 
             fig.colorbar(cax, fraction=0.03, pad=0.04)
+
+            plt.tight_layout(pad=4)
 
             plt.savefig("out/core_to_core_latency_" + mode + ".png")
             plt.clf()
