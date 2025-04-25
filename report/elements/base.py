@@ -24,7 +24,10 @@ class Report(AbstractElement):
             "OPS" : Ops,
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
+            "Load Test" : LoadTest,
             "Cache Latency" : Cache_Latency,
+            "Memory bandwidth" : MemBandwidth,
+            "STREAM" : Stream,
             "GPU_H2D_Bandwidth" : GPUH2DBandwidth,
         }
 

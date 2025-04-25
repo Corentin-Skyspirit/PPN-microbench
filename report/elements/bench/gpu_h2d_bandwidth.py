@@ -19,7 +19,7 @@ class GPUH2DBandwidth(AbstractBench):
 
         if (not self.bench_obj["info"]):
             img = f"<img src='{wd}/out/gpu_h2d_bandwidth.png'/>"
-            txt = "<p>cl::enqueueWriteBuffer() of increasing sizes. Device 0 is chosen, with the following specs:</p>"
+            txt = "<p><span class='code-block'>cl::enqueueWriteBuffer()</span> of increasing sizes. Device 0 is chosen, with the following specs:</p>"
             txt += f"""<table>
             <tr><th>Device name</th><td>{self.bench_obj["device_info"]["name"]}</td></tr>
             <tr><th>Total memory</th><td>{self.bench_obj["device_info"]["total_mem"] / (1 << 30)}GiB</td></tr>
