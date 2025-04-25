@@ -4,6 +4,7 @@
 #include <PPN-microbench/core_to_core_latency.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
+#include <PPN-microbench/mem_bandwidth.hpp>
 #include <PPN-microbench/stream.hpp>
 #include <PPN-microbench/load_test.hpp>
 
@@ -32,10 +33,11 @@ class Driver {
     Driver operator=(Driver &&) = delete;
 
     ~Driver() {
-        for (Microbench *bench : benches) {
-            delete bench;
-        }
-        benches.clear();
+      for (Microbench *bench : benches) {
+          delete bench;
+      }
+      benches.clear();
+
     };
     Driver &addBench(Microbench *);
     Driver &setOutputFile(std::string);

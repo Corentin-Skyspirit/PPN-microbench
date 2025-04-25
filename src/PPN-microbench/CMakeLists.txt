@@ -1,7 +1,6 @@
 add_library(PPN-microbench STATIC)
 
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp stream.cpp)
-target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp load_test.cpp)
+target_sources(PPN-microbench PRIVATE microbench.cpp context.cpp driver.cpp ops.cpp cpu_frequency.cpp cache_latency.cpp core_to_core_latency.cpp mem_bandwidth.cpp stream.cpp load_test.cpp)
 
 target_sources(
     PPN-microbench
@@ -14,6 +13,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/driver.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/ops.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/cache_latency.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/mem_bandwidth.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/stream.hpp

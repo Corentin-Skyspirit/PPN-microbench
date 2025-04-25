@@ -19,7 +19,7 @@ class Cache_Latency(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='Cache_Latency'>Cache latency</h2>"
         imgs = f"<img src='{wd}/out/cache_latency.png'/>"
-        p = "<p>Theoritical cache sizes are taken from the CPU information provided by /proc/cpuinfo.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
+        p = "<p>Theoritical cache sizes are taken from the CPU information provided by <span class='code-block'>/proc/cpuinfo</span>.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
         return header + imgs + p
 
     def gen_images(self):
