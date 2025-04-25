@@ -24,10 +24,11 @@ class Report(AbstractElement):
             "OPS" : Ops,
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
+            "Load Test" : LoadTest,
             "Cache Latency" : Cache_Latency,
             "Memory bandwidth" : MemBandwidth,
             "STREAM" : Stream,
-            "Load Test" : LoadTest
+            "GPU_H2D_Bandwidth" : GPUH2DBandwidth,
         }
 
         self.generate()

@@ -10,7 +10,6 @@ FetchContent_Declare(
     URL 
     https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
 )
-
 FetchContent_MakeAvailable(json)
 
 FetchContent_Declare(
@@ -18,7 +17,6 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
     GIT_TAG v1.15.1
 )
-
 FetchContent_MakeAvailable(spdlog)
 
 FetchContent_Declare(
@@ -26,9 +24,29 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/CLIUtils/CLI11.git
     GIT_TAG v2.5.0
 )
-
 FetchContent_MakeAvailable(cli11)
 
+FetchContent_Declare(
+    OpenCL-Headers
+    GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-Headers.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(OpenCL-Headers)
+
+FetchContent_Declare(
+    OpenCL-ICD-Loader
+    GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-ICD-Loader.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(OpenCL-ICD-Loader)
+
+FetchContent_Declare(
+    OpenCL-Headers-Cpp
+    GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-CLHPP.git
+    GIT_TAG         main
+)
+FetchContent_MakeAvailable(OpenCL-Headers-Cpp)
+    
 find_package(OpenMP REQUIRED)
 
 add_subdirectory(src/PPN-microbench)
