@@ -111,7 +111,7 @@ class SysInfo(AbstractElement):
         cpu_info = f"<table>{cpu_info}</table>"
 
         mem_info = "<tr><th colspan='2'>Cache / Memory informations</th></tr>"
-        mem_info += f"<tr><th>Total memory</th><td>{round(obj["meta"]["mem_info"]["total_mem"] / (1 << 30), 3)}GiB</td></tr>"
+        mem_info += f"""<tr><th>Total memory</th><td>{round(obj["meta"]["mem_info"]["total_mem"] / (1 << 30), 3)}GiB</td></tr>"""
         del obj["meta"]["mem_info"]["total_mem"]
         for key, info in obj["meta"]["mem_info"].items():
             mem_info += f"<tr><th>{str(key)}</th><td>{info / 1024}KiB</td></tr>"
