@@ -14,8 +14,8 @@ Driver::Driver(int argc, char **argv) {
     app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
-    app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
     app.add_flag_callback("--load-test", [this](){this->addBench(new LoadTest(11));}, "Run load/stress test benchmark");
+    app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
     app.add_flag_callback("--mem-bandwidth", [this](){this->addBench(new MemoryBandwidth);}, "Run cpu ram/cache latency benchmark");
     app.add_flag_callback("--stream", [this](){this->addBench(new Stream);}, "Run stream benchmark");
     // benchmark group selection
