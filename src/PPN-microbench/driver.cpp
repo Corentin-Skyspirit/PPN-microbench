@@ -14,11 +14,13 @@ Driver::Driver(int argc, char **argv) {
     app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
     app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
     app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
-    app.add_flag_callback("--cache-latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--load-test", [this](){this->addBench(new LoadTest(11));}, "Run load/stress test benchmark");
     app.add_flag_callback("--mem-bandwidth", [this](){this->addBench(new MemoryBandwidth);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--stream", [this](){this->addBench(new Stream);}, "Run stream benchmark");
     // benchmark group selection
-    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
-    app.add_flag_callback("--mem", [this](){this->addBench(new Cache_latency).addBench(new MemoryBandwidth);}, "Memory/cache related benchmarks");
+    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10)).addBench(new LoadTest(11));}, "CPU related benchmarks");
+    app.add_flag_callback("--mem", [this](){this->addBench(new CacheLatency).addBench(new MemoryBandwidth).addBench(new Stream);}, "Memory/cache related benchmarks");
     
     // help message
     app.set_help_flag("-h, --help", "Show this help message");
@@ -31,11 +33,13 @@ Driver::Driver(int argc, char **argv) {
     }
 
     if (benches.size() == 0) {
-        addBench(new CPUFrequency(10));
-        addBench(new Ops(10));
-        addBench(new CoreToCoreLatency(10));
-        addBench(new Cache_latency);
+        addBench(new CPUFrequency(11));
+        addBench(new Ops(11));
+        addBench(new CoreToCoreLatency(11));
+        addBench(new LoadTest(11));
+        addBench(new CacheLatency());
         addBench(new MemoryBandwidth);
+        addBench(new Stream);
     }
 
     run();

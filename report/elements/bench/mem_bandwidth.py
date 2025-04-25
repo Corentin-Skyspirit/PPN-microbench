@@ -20,7 +20,7 @@ class MemBandwidth(AbstractBench):
         imgs = ""
         # imgs += f"<img src='{wd}/out/mem_bandwidth_single.png'/>"
         imgs += f"<img src='{wd}/out/mem_bandwidth_multi.png'/>"
-        txt = "<p>memcpy() of increasing sizes, performed on a single core then all of them. Multi-core results are stacked. Each core has its own buffer.</p>"
+        txt = "<p><span class='code-block'>memcpy()</span> of increasing sizes, performed on a single core then all of them. Multi-core results are stacked. Each core has its own buffer.</p>"
         
         return header + imgs + txt
 

@@ -29,6 +29,8 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(cli11)
 
+find_package(OpenMP REQUIRED)
+
 add_subdirectory(src/PPN-microbench)
 add_subdirectory(main)
 

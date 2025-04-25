@@ -4,7 +4,7 @@ using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 using std::chrono::nanoseconds;
 
-CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999999) {
+CPUFrequency::CPUFrequency(int nbMeasures) : Microbench("CPU Frequency", 999'999) {
     this->nbMeasures = nbMeasures;
     Context context = Context::getInstance();
     nbCores = context.getCpus();

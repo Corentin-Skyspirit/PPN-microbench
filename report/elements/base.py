@@ -25,7 +25,9 @@ class Report(AbstractElement):
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
             "Cache Latency" : Cache_Latency,
-            "Memory bandwidth" : MemBandwidth
+            "Memory bandwidth" : MemBandwidth,
+            "STREAM" : Stream,
+            "Load Test" : LoadTest
         }
 
         self.generate()

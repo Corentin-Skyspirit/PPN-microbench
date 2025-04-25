@@ -19,7 +19,7 @@ class Cache_Latency(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='Cache_Latency'>Cache latency</h2>"
         imgs = f"<img src='{wd}/out/cache_latency.png'/>"
-        p = "<p>Theoritical cache sizes are taken from the CPU information provided by /proc/cpuinfo.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
+        p = "<p>Theoritical cache sizes are taken from the CPU information provided by <span class='code-block'>/proc/cpuinfo</span>.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
         return header + imgs + p
 
     def gen_images(self):
@@ -39,6 +39,17 @@ class Cache_Latency(AbstractBench):
             data["meta"]["mem_info"]["l2"] / 1024,
             data["meta"]["mem_info"]["l3"] / 1024
         ]
+
+        if theoretical_cache_sizes[0] != 0:
+            # Adding values on curb
+            latency_points = []
+            k = 0
+            for j,point in enumerate(buffer_sizes_kib):
+                if point == theoretical_cache_sizes[k]:
+                    latency_points.append((point,latencies[j]))
+                    k += 1
+                    if k == len(theoretical_cache_sizes):
+                        break
        
         
         # Plot the data
@@ -52,6 +63,9 @@ class Cache_Latency(AbstractBench):
 
         # Plot experimental data
         plt.scatter(buffer_sizes_kib, latencies, label='Experimental Data', color='blue', s=10)
+        if theoretical_cache_sizes[0] != 0:
+            for (xi, yi) in latency_points:
+                plt.annotate(f"{yi:.2f}", (xi, yi), fontsize=9, fontweight='bold', color='black', bbox=dict(boxstyle="round,pad=0.3", fc="gray", ec="black", alpha=0.5), textcoords="offset points", xytext=(5, -15))
 
 
         # Plot error band with
@@ -88,6 +102,6 @@ class Cache_Latency(AbstractBench):
 
 
     def get_index(self):
-        return "<li><a href='#Cache_Latency>Cache latency</a></li>"
+        return "<li><a href='#Cache_Latency'>Cache latency</a></li>"
 
 
