@@ -46,16 +46,26 @@ class Matrix_Bench(AbstractBench):
         sizes = [entry["size"] for entry in results]
         gflops = [entry["Gflops"] for entry in results]
 
+        # define y axis superior limit
+
+        rpeak, _, _, _ = self.compute_rpeak()
+
+        if rpeak != 0:
+            y_max = max(rpeak, summary["gflops_max"]) * 1.1
+        else:
+            y_max = summary["gflops_max"] * 1.1
+
         # Create the plot
         plt.figure(figsize=(10, 6))
         plt.plot(sizes, gflops, marker='o', color='blue', label="GFLOPS (per size)")
-        plt.ylim(0, self.compute_rpeak()[0] * 1.1)
-        plt.axhline(summary["gflops_max"], color='red', linestyle='--', label=f"RMax : {summary['gflops_max']:.1f} GFLOPS")
-        plt.axhline(self.compute_rpeak()[0], color='orange', linestyle='--', label=f"Rpeak: {self.compute_rpeak()[0]:.1f} GFLOPS")
+        plt.ylim(0, y_max)
+        plt.axhline(summary["gflops_max"], color='red', linestyle='--', label=f"RMax : {summary['gflops_max']:.2f} GFLOPS")
+        if rpeak != 0:
+            plt.axhline(self.compute_rpeak()[0], color='orange', linestyle='--', label=f"Rpeak: {self.compute_rpeak()[0]:.2f} GFLOPS")
 
         error_Gflops = self.bench_obj["summary"].get("error_Gflops", [0.05 * g for g in gflops])
         for x, y, e in zip(sizes, gflops, error_Gflops):
-            plt.text(x, y + e + 0.5, f"{y:.1f}", ha='center', fontsize=9)
+            plt.text(x, y + e + 0.5, f"{y:.2f}", ha='center', fontsize=9)
 
         plt.fill_between(
             sizes,
