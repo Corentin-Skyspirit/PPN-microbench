@@ -16,7 +16,7 @@
 class Matrix_bench : public Microbench {
   private:
     
-    std::vector<uint64_t> mem_sizes; // Vector to store memory sizes
+    std::vector<uint64_t> N_sizes; // Vector to store memory sizes
     std::vector<double> time_seconds; // Vector to store time in seconds
     std::vector<double> Gflops; // Vector to store floating point operations
     

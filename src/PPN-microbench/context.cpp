@@ -69,6 +69,69 @@ void Context::cpuInfo() {
         #endif
     #endif
 
+    
+    double max_mhz = 0.0;
+    system("lscpu > /tmp/lscpu_out.txt");
+    std::ifstream f_re("/tmp/lscpu_out.txt");
+
+
+    if (!f_re.is_open()) {
+        spdlog::warn("Error opening /tmp/lscpu_out.txt");
+        return ;
+    }
+
+    std::string re_line;
+    bool found = false;
+
+    while (std::getline(f_re, re_line)) {
+        if (re_line.find("Vitesse maximale du processeur en MHz") != std::string::npos) {
+            // Found the correct line
+            std::size_t pos = re_line.find(":");
+            if (pos != std::string::npos) {
+                std::string value_str = re_line.substr(pos + 1);
+                
+                // Clean the string (remove spaces)
+                value_str.erase(0, value_str.find_first_not_of(" \t"));
+                value_str.erase(value_str.find_last_not_of(" \t")+1);
+
+                // Replace comma with a dot for correct conversion
+                for (auto& c : value_str) {
+                    if (c == ',') c = '.';
+                }
+
+                // Convert to double
+                std::istringstream iss(value_str);
+                iss >> max_mhz;
+            }
+            found = true;
+            break; // No need to continue after finding the correct line
+        } else if (re_line.find("CPU max MHz") != std::string::npos) {
+            // Found an alternative line
+            std::size_t pos = re_line.find(":");
+            if (pos != std::string::npos) {
+                std::string value_str = re_line.substr(pos + 1);
+                
+                // Clean the string (remove spaces)
+                value_str.erase(0, value_str.find_first_not_of(" \t"));
+                value_str.erase(value_str.find_last_not_of(" \t")+1);
+
+                // Convert to double
+                std::istringstream iss(value_str);
+                iss >> max_mhz;
+            }
+            found = true;
+            break; // No need to continue after finding the correct line
+        }
+    }
+
+    if (!found) {
+        spdlog::warn("No CPU frequency information found in lscpu output.");
+    }
+
+    f_re.close();
+
+    this->max_mhz = max_mhz;
+
     ///////////////
     // Word Size //
     ///////////////
@@ -163,7 +226,9 @@ json Context::getJson() {
     cpu_info["cpus"] = cpus;
     cpu_info["threads"] = threads;
     cpu_info["mapping"] = threadMapping;
+    cpu_info["max_mhz"] = max_mhz; 
     cpu_info["simd"] = json(simd);
+
 
     json mem_info;
     mem_info["total_mem"] = memory;

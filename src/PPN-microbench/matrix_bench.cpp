@@ -1,15 +1,24 @@
 #include <PPN-microbench/matrix_bench.hpp>
 
 Matrix_bench::Matrix_bench() : Microbench("Matrix Multiplication", 1) {
-    // Initialize the memory sizes in bytes for the benchmark
-    mem_sizes = {256, 512, 1024, 2048, 4096, 8192};
+    // Determine the number of iterations based on the number of physical cores
+        int num_cores;
+        num_cores = context.getCpus(); 
+        std::cout << "Number of physical cores " << num_cores << std::endl;
+        int max_iterations = num_cores;
+
+    // Initialize the N size for N*N matrix for the benchmark
+    for (int i = 1; i <= max_iterations; ++i) {
+        N_sizes.push_back(512 * i);
+    }
 }
+
 
 Matrix_bench::~Matrix_bench() {}
 
 void Matrix_bench::run() {
     const int repeats = 5; // Number of repeats for each benchmark
-    for (auto N : mem_sizes) {
+    for (auto N : N_sizes) {
         double total_duration = 0.0;
         double total_gflops = 0.0;
     
@@ -47,9 +56,9 @@ void Matrix_bench::run() {
 
 json Matrix_bench::getJson() {
     json j;
-    for (size_t i = 0; i < mem_sizes.size(); ++i) {
+    for (size_t i = 0; i < N_sizes.size(); ++i) {
         j.push_back({
-            {"size", mem_sizes[i]},
+            {"size", N_sizes[i]},
             {"time_seconds", time_seconds[i]},
             {"Gflops", Gflops[i]}
         });
