@@ -4,7 +4,6 @@ Matrix_bench::Matrix_bench() : Microbench("Matrix Multiplication", 1) {
     // Determine the number of iterations based on the number of physical cores
         int num_cores;
         num_cores = context.getCpus(); 
-        std::cout << "Number of physical cores " << num_cores << std::endl;
         int max_iterations = num_cores;
 
     // Initialize the N size for N*N matrix for the benchmark
@@ -24,33 +23,42 @@ void Matrix_bench::run() {
     
         for (int i = 0; i < repeats; ++i) {
             
-        Eigen::MatrixXd A = Eigen::MatrixXd::Random(N, N);
-        Eigen::MatrixXd B = Eigen::MatrixXd::Random(N, N);
-        Eigen::MatrixXd C = Eigen::MatrixXd::Random(N, N);
+            Eigen::MatrixXd A = Eigen::MatrixXd::Random(N, N);
+            Eigen::MatrixXd B = Eigen::MatrixXd::Random(N, N);
+            Eigen::MatrixXd C = Eigen::MatrixXd::Random(N, N);
 
-        auto start = std::chrono::high_resolution_clock::now();
+            auto start = std::chrono::high_resolution_clock::now();
 
-        // Perform Dense matrix multiplication using Eigen same as DGEMM
-        C = A * B;
+            // Perform Dense matrix multiplication using Eigen same as DGEMM
+            C = A * B;
 
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = end - start;
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
 
-        double duration = elapsed.count();
-        double ops = 2.0 * N * N * N; // Number of double-precision operations
-        double Gflop_rate = (ops / duration)/1e9; // Gflop/s
+            double duration = elapsed.count();
+            double ops = 2.0 * N * N * N; // Number of double-precision operations
+            double Gflop_rate = (ops / duration) / 1e9; // Gflop/s
 
-        total_duration += duration;
-        total_gflops += Gflop_rate;
+            total_duration += duration;
+            total_gflops += Gflop_rate;
+            gflops_per_run.push_back(Gflop_rate); // Store Gflops for this run
         }
 
         // Calculate the average results over the repetitions
         double duration = total_duration / repeats;
         double Gflop_rate = total_gflops / repeats;
         
+        // Calculate the standard deviation of Gflops
+        double sum_squared_diff = 0.0;
+        for (double gflops : gflops_per_run) {
+            sum_squared_diff += (gflops - Gflop_rate) * (gflops - Gflop_rate);
+        }
+        double stddev_gflops = std::sqrt(sum_squared_diff / repeats);
+
         // Store the results
         time_seconds.push_back(duration);
         Gflops.push_back(Gflop_rate);
+        error_Gflops.push_back(stddev_gflops); // Store the error (standard deviation)
     }
 }
 
@@ -60,20 +68,16 @@ json Matrix_bench::getJson() {
         j.push_back({
             {"size", N_sizes[i]},
             {"time_seconds", time_seconds[i]},
-            {"Gflops", Gflops[i]}
+            {"Gflops", Gflops[i]},
+            {"error_Gflops", error_Gflops[i]} // Include the error in the JSON
         });
     }
     // Calculate the maximum Gflops to get the highest performance peak
-    // Calculate the average Gflops and time to get the typical performance
     double max_gflops = *std::max_element(Gflops.begin(), Gflops.end());
-    double avg_gflops = std::accumulate(Gflops.begin(), Gflops.end(), 0.0) / Gflops.size();
-    double avg_time = std::accumulate(time_seconds.begin(), time_seconds.end(), 0.0) / time_seconds.size();
     
     // Create a JSON object to store the summary
     json summary = {
-        {"gflops_max", max_gflops},
-        {"gflops_avg", avg_gflops},
-        {"time_avg", avg_time}
+        {"gflops_max", max_gflops}
     };
 
     return {

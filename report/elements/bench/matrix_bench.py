@@ -22,8 +22,8 @@ class Matrix_Bench(AbstractBench):
         rpeak, flops_unit, cores, freq = self.compute_rpeak()
         gflops_max = self.bench_obj["summary"]["gflops_max"]
 
-        
-
+        # Calculate efficiency
+        efficiency = self.efficiency()
        
 
         # Generate HTML table comparing theoretical and experimental
@@ -32,10 +32,8 @@ class Matrix_Bench(AbstractBench):
         <table border='1' style='border-collapse: collapse; text-align: center;'>
             <tr><th>Metric</th><th>Value</th></tr>
             <tr><td>Theoretical Rpeak</td><td>{rpeak:.2f} GFLOPS</td></tr>
-            <tr><td>Experimental Max GFLOPS</td><td>{gflops_max:.2f}</td></tr>
-            <tr><td>FLOPs/cycle/core</td><td>{flops_unit}</td></tr>
-            <tr><td>Cores</td><td>{cores}</td></tr>
-            <tr><td>Clock Frequency</td><td>{freq:.2f} GHz</td></tr>
+            <tr><td>Experimental RMax</td><td>{gflops_max:.2f} GFLOPS</td></tr>
+            <tr><td>Efficiency</td><td>{efficiency:.2f} %</td></tr>
         </table>
         """
 
@@ -51,21 +49,21 @@ class Matrix_Bench(AbstractBench):
         # Create the plot
         plt.figure(figsize=(10, 6))
         plt.plot(sizes, gflops, marker='o', color='blue', label="GFLOPS (per size)")
-        plt.ylim(0)
-        plt.axhline(summary["gflops_max"], color='red', linestyle='--', label=f"Max GFLOPS: {summary['gflops_max']:.1f}")
-        plt.axhline(summary["gflops_avg"], color='green', linestyle='--', label=f"Average GFLOPS: {summary['gflops_avg']:.1f}")
+        plt.ylim(0, self.compute_rpeak()[0] * 1.1)
+        plt.axhline(summary["gflops_max"], color='red', linestyle='--', label=f"RMax : {summary['gflops_max']:.1f} GFLOPS")
+        plt.axhline(self.compute_rpeak()[0], color='orange', linestyle='--', label=f"Rpeak: {self.compute_rpeak()[0]:.1f} GFLOPS")
 
-        for x, y in zip(sizes, gflops):
-            plt.text(x, y + 0.5, f"{y:.1f}", ha='center', fontsize=9)
+        error_Gflops = self.bench_obj["summary"].get("error_Gflops", [0.05 * g for g in gflops])
+        for x, y, e in zip(sizes, gflops, error_Gflops):
+            plt.text(x, y + e + 0.5, f"{y:.1f}", ha='center', fontsize=9)
 
-        error = [0.05 * g for g in gflops]
         plt.fill_between(
             sizes,
-            [g - e for g, e in zip(gflops, error)],
-            [g + e for g, e in zip(gflops, error)],
+            [g - e for g, e in zip(gflops, error_Gflops)],
+            [g + e for g, e in zip(gflops, error_Gflops)],
             color='cyan',
             alpha=0.2,
-            label='Error Band (±5%)',
+            label='Error Band',
             edgecolor='blue',
             linewidth=2,
         )
@@ -107,15 +105,21 @@ class Matrix_Bench(AbstractBench):
 
         rpeak = num_cores * clock_ghz * flops_per_cycle_per_core
 
-        print(f"max MHz: {max_mhz:.2f} MHz")
-        print(f"Max clock rate: {clock_ghz:.2f} GHz")
-        print(f"Number of cores: {num_cores}")  
-        print(f"Number of cores per socket: {cores_per_socket}")
-        print(f"rpeak: {rpeak:.2f} GFLOPS")
-
-
         return rpeak, flops_per_cycle_per_core, num_cores, clock_ghz
 
+    def efficiency(self):
+        data = self.obj
+        gflops_max = self.bench_obj["summary"]["gflops_max"]
+        rpeak, _, _, _ = self.compute_rpeak()
+
+        if rpeak == 0:
+            return 0
+        
+        efficiency = gflops_max / rpeak * 100
+
+        return efficiency
+
+        
     def get_index(self):
         return "<li><a href='#Matrix_Bench'>Matrix Multiplication DGEMM</a></li>"
 
@@ -127,3 +131,4 @@ class Matrix_Bench(AbstractBench):
 # est-ce que sysconfig fonctionne sur ARM comme sur X86_64 ?
 
 # le pb c'est qu'il ne détecte pas le max MHz dans sysconf, il met 0 
+# mettre des if pour dire que ça ne fonctionne pas si pas de rpeak
