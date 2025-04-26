@@ -16,7 +16,10 @@ class Matrix_Bench(AbstractBench):
         wd = os.getcwd()
         header = "<h2 id='Matrix_Bench'>Matrix Multiplication DGEMM</h2>"
         imgs = f"<img src='{wd}/out/matrix_benchmark_plot.png'/>"
-        p = "<p>This benchmark evaluates the performance of dense matrix multiplication using Eigen. Below is the GFLOPS achieved for various matrix sizes.</p>"
+        p = """
+        <p>This benchmark evaluates the performance of dense matrix multiplication using Eigen. Below is the GFLOPS achieved for various matrix sizes.</p>
+        <p>Note: For the calculation of Rpeak, we arbitrarily assume 2 threads per core. If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
+        """
 
         # Compute Rpeak and get summary
         rpeak, flops_unit, cores, freq = self.compute_rpeak()
@@ -89,19 +92,21 @@ class Matrix_Bench(AbstractBench):
         plt.close()
 
     def compute_rpeak(self):
-        
         data = self.obj
-        
+
         cores_per_socket = data["meta"]["cpu_info"]["cpus"]
         sockets = data["meta"]["cpu_info"]["sockets"]
 
         num_cores = cores_per_socket * sockets
 
-        max_mhz = data["meta"]["cpu_info"]["max_mhz"] 
+        max_mhz = data["meta"]["cpu_info"].get("max_mhz")
+        if max_mhz is None:
+            print("Warning: Unable to calculate Rpeak: 'max_mhz' not found in lscpu output.")
+            return 0, 0, 0, 0
+
         clock_ghz = max_mhz / 1000
 
-
-        flags = sysconfig.get_config_var("CFLAGS") #prenddre les flages du json plutot
+        flags = data["meta"]["cpu_info"].get("flags", "")
         flags = flags.split() if flags else []
 
         if "avx512f" in flags:
@@ -114,6 +119,11 @@ class Matrix_Bench(AbstractBench):
             flops_per_cycle_per_core = 4
 
         rpeak = num_cores * clock_ghz * flops_per_cycle_per_core
+
+        # Check if Rpeak is lower than Rmax
+        gflops_max = self.bench_obj["summary"]["gflops_max"]
+        if rpeak < gflops_max:
+            print(f"Warning: Rpeak ({rpeak:.2f} GFLOPS) is lower than Rmax ({gflops_max:.2f} GFLOPS). This result is unusual.")
 
         return rpeak, flops_per_cycle_per_core, num_cores, clock_ghz
 
@@ -135,10 +145,3 @@ class Matrix_Bench(AbstractBench):
 
 
 # faire la perf crête théorique : Rpeak = # of FP64 units (per core) * # of cores * max clock rate
-#mettre des warnings que le rpeak sur chaque architecture est arbitraire pour 2 threads par coeur
-#mettre un deuxieme warning pour dire que si le rpeak est plus petit que le expérimentale alors c'est pas bon
-
-# est-ce que sysconfig fonctionne sur ARM comme sur X86_64 ?
-
-# le pb c'est qu'il ne détecte pas le max MHz dans sysconf, il met 0 
-# mettre des if pour dire que ça ne fonctionne pas si pas de rpeak
