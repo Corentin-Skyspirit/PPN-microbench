@@ -2,10 +2,8 @@ from elements.bench.base import AbstractBench
 
 import matplotlib.pyplot as plt
 import os
-import subprocess
-import sysconfig
 
-class Matrix_Bench(AbstractBench):
+class MatrixBench(AbstractBench):
     def __init__(self, obj, bench_obj):
         self.obj = obj  # The complete JSON object
         self.bench_obj = bench_obj  # The specific benchmark object
@@ -129,6 +127,7 @@ class Matrix_Bench(AbstractBench):
 
         return rpeak, flops_per_cycle_per_core, num_cores, clock_ghz
 
+    
     def efficiency(self):
         data = self.obj
         gflops_max = self.bench_obj["summary"]["gflops_max"]
@@ -146,4 +145,4 @@ class Matrix_Bench(AbstractBench):
         return "<li><a href='#Matrix_Bench'>Matrix Multiplication DGEMM</a></li>"
 
 
-# faire la perf crête théorique : Rpeak = # of FP64 units (per core) * # of cores * max clock rate
+
