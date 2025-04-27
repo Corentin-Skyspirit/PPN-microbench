@@ -18,7 +18,7 @@ class Matrix_Bench(AbstractBench):
         imgs = f"<img src='{wd}/out/matrix_benchmark_plot.png'/>"
         p = """
         <p>This benchmark evaluates the performance of dense matrix multiplication using Eigen. Below is the GFLOPS achieved for various matrix sizes.</p>
-        <p>Note: For the calculation of Rpeak, we arbitrarily assume 2 threads per core. If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
+        <p>Note: For the calculation of Rpeak, we assume 2 SIMD_ISA_NAME instructions/cycle/core, i.e. FLOP/cycle/core. If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
         """
 
         # Compute Rpeak and get summary
@@ -109,6 +109,8 @@ class Matrix_Bench(AbstractBench):
         flags = data["meta"]["cpu_info"].get("flags", "")
         flags = flags.split() if flags else []
 
+        # Determine the number of FLOPS per cycle per core based on CPU flags
+        # assuming 2 <SIMD_ISA_NAME> instructions/cycle/core, i.e. <FLOP/cycle/core> 
         if "avx512f" in flags:
             flops_per_cycle_per_core = 32
         elif "avx2" in flags:
