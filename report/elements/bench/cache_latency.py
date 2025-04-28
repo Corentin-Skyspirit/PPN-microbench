@@ -62,7 +62,7 @@ class Cache_Latency(AbstractBench):
             color='cyan',
             alpha=0.2, # Adjust transparency
             edgecolor='blue',
-            label='Error Band (±1 std dev)',
+            label='Error Band (std dev)',
             linewidth=2  # Increase line thickness
         )
 
