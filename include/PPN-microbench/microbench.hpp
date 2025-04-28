@@ -7,10 +7,9 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
-#include <iostream>
-#include <vector>
 #include <threads.h>
-#include <unistd.h> // sleep
+
+#include <vector>
 
 using json = nlohmann::ordered_json;
 

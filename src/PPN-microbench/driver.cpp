@@ -11,16 +11,19 @@ Driver::Driver(int argc, char **argv) {
     // output path
     app.add_option_function<std::string>("-o,--output", [this](const std::string &fname){this->setOutputFile(fname);}, "JSON output file path")->multi_option_policy(CLI::MultiOptionPolicy::TakeLast);
     // benchmark selection
-    app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(10));}, "Run frequency benchmark");
-    app.add_flag_callback("--ops", [this](){this->addBench(new Ops(10));}, "Run operations/second benchmark");
-    app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(10));}, "Run core to core latency benchmark");
-    app.add_flag_callback("--cache-latency", [this](){this->addBench(new Cache_latency);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--cpu-frequency", [this](){this->addBench(new CPUFrequency(11));}, "Run frequency benchmark");
+    app.add_flag_callback("--ops", [this](){this->addBench(new Ops(11));}, "Run operations/second benchmark");
     app.add_flag_callback("--matrix-mult", [this](){this->addBench(new Matrix_bench);}, "Run matrix multiplication benchmark");
+    app.add_flag_callback("--load-test", [this](){this->addBench(new LoadTest(11));}, "Run load/stress test benchmark");
+    app.add_flag_callback("--c2c", [this](){this->addBench(new CoreToCoreLatency(11));}, "Run core to core latency benchmark");
+    app.add_flag_callback("--cache-latency", [this](){this->addBench(new CacheLatency);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--mem-bandwidth", [this](){this->addBench(new MemoryBandwidth);}, "Run cpu ram/cache latency benchmark");
+    app.add_flag_callback("--stream", [this](){this->addBench(new Stream);}, "Run stream benchmark");
+    app.add_flag_callback("--gpu-h2d-bandwidth", [this](){this->addBench(new GPUH2DBandwidth);}, "Run host to GPU memory bandwidth benchmark");
     // benchmark group selection
-    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(10)).addBench(new Ops(10)).addBench(new CoreToCoreLatency(10));}, "CPU related benchmarks");
-    app.add_flag_callback("--mem", [this](){this->addBench(new Cache_latency);}, "Memory/cache related benchmarks");
-
-    
+    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(11)).addBench(new Ops(11)).addBench(new Matrix_bench).addBench(new LoadTest).addBench(new CoreToCoreLatency(11));}, "CPU related benchmarks");
+    app.add_flag_callback("--mem", [this](){this->addBench(new CacheLatency).addBench(new MemoryBandwidth).addBench(new Stream);}, "Memory/cache related benchmarks");
+    app.add_flag_callback("--gpu", [this](){this->addBench(new GPUH2DBandwidth);}, "GPU related benchmarks");
     // help message
     app.set_help_flag("-h, --help", "Show this help message");
 
@@ -32,11 +35,15 @@ Driver::Driver(int argc, char **argv) {
     }
 
     if (benches.size() == 0) {
-        addBench(new CPUFrequency(10));
-        addBench(new Ops(10));
-        addBench(new CoreToCoreLatency(10));
-        addBench(new Cache_latency);
+        addBench(new CPUFrequency(11));
+        addBench(new Ops(11));
         addBench(new Matrix_bench);
+        addBench(new LoadTest(11));
+        addBench(new CoreToCoreLatency(11));
+        addBench(new CacheLatency());
+        addBench(new MemoryBandwidth);
+        addBench(new Stream);
+        addBench(new GPUH2DBandwidth);
     }
 
     run();

@@ -5,6 +5,10 @@
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
 #include <PPN-microbench/matrix_bench.hpp>
+#include <PPN-microbench/gpu_h2d_bandwidth.hpp>
+#include <PPN-microbench/mem_bandwidth.hpp>
+#include <PPN-microbench/stream.hpp>
+#include <PPN-microbench/load_test.hpp>
 
 #include <CLI/CLI.hpp>
 
@@ -31,10 +35,11 @@ class Driver {
     Driver operator=(Driver &&) = delete;
 
     ~Driver() {
-        for (Microbench *bench : benches) {
-            delete bench;
-        }
-        benches.clear();
+      for (Microbench *bench : benches) {
+          delete bench;
+      }
+      benches.clear();
+
     };
     Driver &addBench(Microbench *);
     Driver &setOutputFile(std::string);

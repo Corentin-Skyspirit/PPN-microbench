@@ -25,7 +25,11 @@ class Report(AbstractElement):
             "CPU Frequency": CpuFrequency,
             "Core To Core Latency": CoreToCoreLatency,
             "Cache Latency" : Cache_Latency,
-            "Matrix Multiplication" : MatrixBench
+            "Matrix Multiplication" : MatrixBench,
+            "Load Test" : LoadTest,
+            "Memory bandwidth" : MemBandwidth,
+            "STREAM" : Stream,
+            "GPU_H2D_Bandwidth" : GPUH2DBandwidth,
         }
 
         self.generate()
