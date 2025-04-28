@@ -33,6 +33,8 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(Eigen3)
+
+FetchContent_Declare(
     OpenCL-Headers
     GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-Headers.git
     GIT_TAG         main

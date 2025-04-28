@@ -21,7 +21,7 @@ Driver::Driver(int argc, char **argv) {
     app.add_flag_callback("--stream", [this](){this->addBench(new Stream);}, "Run stream benchmark");
     app.add_flag_callback("--gpu-h2d-bandwidth", [this](){this->addBench(new GPUH2DBandwidth);}, "Run host to GPU memory bandwidth benchmark");
     // benchmark group selection
-    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(11)).addBench(new Ops(11)).addBench(new Matrix_bench).addBench(new LoadTest).addBench(new CoreToCoreLatency(11));}, "CPU related benchmarks");
+    app.add_flag_callback("--cpu", [this](){this->addBench(new CPUFrequency(11)).addBench(new Ops(11)).addBench(new Matrix_bench).addBench(new LoadTest(11)).addBench(new CoreToCoreLatency(11));}, "CPU related benchmarks");
     app.add_flag_callback("--mem", [this](){this->addBench(new CacheLatency).addBench(new MemoryBandwidth).addBench(new Stream);}, "Memory/cache related benchmarks");
     app.add_flag_callback("--gpu", [this](){this->addBench(new GPUH2DBandwidth);}, "GPU related benchmarks");
     // help message
