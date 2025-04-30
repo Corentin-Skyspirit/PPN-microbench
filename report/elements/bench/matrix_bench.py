@@ -104,21 +104,21 @@ class MatrixBench(AbstractBench):
 
         clock_ghz = max_mhz / 1000
 
-        flags = data["meta"]["cpu_info"].get("flags", "")
-        flags = flags.split() if flags else []
+        flags = data["meta"]["cpu_info"]["simd"]
 
         # Determine the number of FLOPS per cycle per core based on CPU flags
         # assuming 2 <SIMD_ISA_NAME> instructions/cycle/core, i.e. <FLOP/cycle/core> 
-        if "avx512f" in flags:
-            flops_per_cycle_per_core = 32
-        elif "avx2" in flags:
+        if "AVX512" in flags:
             flops_per_cycle_per_core = 16
-        elif "avx" in flags:
+        elif "AVX" in flags:
+            flops_per_cycle_per_core = 8
+        elif "SSE" in flags:
             flops_per_cycle_per_core = 8
         else:
             flops_per_cycle_per_core = 4
 
         rpeak = num_cores * clock_ghz * flops_per_cycle_per_core
+        print("flops_per_cycle_per_core", flops_per_cycle_per_core)
 
         # Check if Rpeak is lower than Rmax
         gflops_max = self.bench_obj["summary"]["gflops_max"]
@@ -126,7 +126,7 @@ class MatrixBench(AbstractBench):
             print(f"Warning: Rpeak ({rpeak:.2f} GFLOPS) is lower than Rmax ({gflops_max:.2f} GFLOPS). This result is unusual.")
 
         return rpeak, flops_per_cycle_per_core, num_cores, clock_ghz
-
+    
     
     def efficiency(self):
         data = self.obj
