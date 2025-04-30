@@ -106,20 +106,24 @@ class MatrixBench(AbstractBench):
 
         flags = data["meta"]["cpu_info"]["simd"]
 
-        # Determine the number of FLOPS per cycle per core based on CPU flags
-        # assuming 2 <SIMD_ISA_NAME> instructions/cycle/core, i.e. <FLOP/cycle/core> 
+       # Determine the number of FLOPS per cycle per core based on CPU flags
         if "AVX512" in flags:
-            flops_per_cycle_per_core = 16
+            nsimd_fp_eu = 2 # Assuming 2 AVX-512 FP execution units
+            n64b_lane_per_simd_reg = 8 # 512 bits / 64 bits
         elif "AVX" in flags:
-            flops_per_cycle_per_core = 8
-        elif "SSE" in flags:
-            flops_per_cycle_per_core = 8
+            nsimd_fp_eu = 2
+            n64b_lane_per_simd_reg = 4 # 256 bits / 64 bits
+        elif "SSE" in flags or "NEON" in flags:
+            nsimd_fp_eu = 4
+            n64b_lane_per_simd_reg = 2 # 128 bits / 64 bits
         else:
-            flops_per_cycle_per_core = 4
+            nsimd_fp_eu = 4
+            n64b_lane_per_simd_reg = 1 # 64 bits / 64 bits
+        # Calculate the number of FLOPS per cycle per core
+        flops_per_cycle_per_core = nsimd_fp_eu * n64b_lane_per_simd_reg
 
         rpeak = num_cores * clock_ghz * flops_per_cycle_per_core
-        print("flops_per_cycle_per_core", flops_per_cycle_per_core)
-
+        
         # Check if Rpeak is lower than Rmax
         gflops_max = self.bench_obj["summary"]["gflops_max"]
         if rpeak < gflops_max:
