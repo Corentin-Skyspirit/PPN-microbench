@@ -16,7 +16,7 @@ class MatrixBench(AbstractBench):
         imgs = f"<img src='{wd}/out/matrix_benchmark_plot.png'/>"
         p = """
         <p>This benchmark evaluates the performance of dense matrix multiplication using Eigen. Below is the GFLOPS achieved for various matrix sizes.</p>
-        <p>Note: For the calculation of Rpeak, we assume 2 SIMD_ISA_NAME instructions/cycle/core, i.e. FLOP/cycle/core. If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
+        <p>Note: If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
         """
 
         # Compute Rpeak and get summary
