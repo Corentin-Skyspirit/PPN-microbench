@@ -27,6 +27,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(cli11)
 
 FetchContent_Declare(
+    Eigen3
+    GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+    GIT_TAG 3.4.0
+)
+
+FetchContent_MakeAvailable(Eigen3)
+
+FetchContent_Declare(
     OpenCL-Headers
     GIT_REPOSITORY  https://github.com/KhronosGroup/OpenCL-Headers.git
     GIT_TAG         main

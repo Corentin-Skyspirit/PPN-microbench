@@ -12,6 +12,7 @@ target_sources(PPN-microbench PRIVATE
     mem_bandwidth.cpp
     stream.cpp
     gpu_h2d_bandwidth.cpp
+    matrix_bench.cpp
 )
 
 target_sources(
@@ -28,6 +29,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/mem_bandwidth.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/matrix_bench.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_h2d_bandwidth.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/stream.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/load_test.hpp
@@ -51,4 +53,4 @@ endif()
 target_sources(PPN-microbench PRIVATE ${ASM_FILES})
 
 set_target_properties(PPN-microbench PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
-target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11 OpenMP::OpenMP_CXX OpenCL::OpenCL OpenCL::HeadersCpp)
+target_link_libraries(PPN-microbench PRIVATE nlohmann_json::nlohmann_json spdlog::spdlog CLI11::CLI11 Eigen3::Eigen OpenMP::OpenMP_CXX OpenCL::OpenCL OpenCL::HeadersCpp)

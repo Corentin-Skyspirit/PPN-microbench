@@ -15,6 +15,10 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <spdlog/spdlog.h>
+#include <stdlib.h>
+#include <iostream>
+#include <sstream>
 
 using json = nlohmann::ordered_json;
 
@@ -22,16 +26,19 @@ class Context {
   private:
     std::string cpuArchi;
     size_t wordSize;
-    // Socket count
+    // Amount of sockets on the node
     size_t sockets;
-    // Physical core count
+    // Amount of physical cores on the node
     size_t cpus;
-    // Thread count
+    // Amount of virtural core on the node
     size_t threads;
     // Mapping of the virtual cores to the physical ones
     std::vector<size_t> threadMapping;
+    //Max cpu frequency
+    size_t max_mhz;
     std::set<std::string> simd;
     size_t memory;
+    
     // cache size is PER CORE
     size_t l1d;
     size_t l1i;
@@ -64,6 +71,7 @@ class Context {
     const size_t &getCpus() const { return cpus; }
     const size_t &getThreads() const { return threads; }
     const std::vector<size_t> getThreadMapping() const { return threadMapping; }
+    const size_t &getMax_mhz() const {return max_mhz; }
     const std::set<std::string> &getSIMD() const { return simd; }
     
     const size_t &getMemory() const { return memory; }
