@@ -1,3 +1,30 @@
+#include <PPN-microbench/matmul_bench.hpp>
+
+#include <chrono>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
+
+#include <Eigen/Dense>
+#include <spdlog/spdlog.h>
+
+MatMulBench::MatMulBench(int reps) : Microbench("Matrix Multiplication", reps) {
+    // Determine the number of iterations based on the number of physical cores
+    const int num_cores = context.getCpus();
+
+    // Initialize the N size for N*N matrix for the benchmark, starting at size 512x512
+    for (int i = 1; i <= num_cores; ++i) {
+        sizes_.push_back(512 * i);
+    }
+
+    const auto n_sizes = sizes_.size();
+    avg_times_.reserve(n_sizes);
+    avg_perfs_.reserve(n_sizes);
+    err_perfs_.reserve(n_sizes);
+}
+
+void MatMulBench::run() {
     // Number of benchmark warmups
     constexpr int N_WARMUPS = 1;
     // Number of benchmark repetitions
@@ -8,7 +35,7 @@
         const double N_fp = static_cast<double>(N);
         // Number of double-precision floating-point operations
         const double N_GFLOP = (2.0 * N_fp * N_fp * N_fp) / 1.0e9;
-        
+
         // Initialize matrices
         const Eigen::MatrixXd A = Eigen::MatrixXd::Random(N, N);
         const Eigen::MatrixXd B = Eigen::MatrixXd::Random(N, N);
@@ -51,3 +78,29 @@
         avg_perfs_.push_back(avg_gflop_per_s);
         err_perfs_.push_back(stddev_gflop_per_s);
     }
+}
+
+json MatMulBench::getJson() {
+    json j;
+    for (size_t i = 0; i < sizes_.size(); ++i) {
+        j.push_back({
+            {"size", sizes_[i]},
+            {"time_seconds", avg_times_[i]},
+            {"Gflops", avg_perfs_[i]},
+            {"error_Gflops", err_perfs_[i]} // Include the error in the JSON
+        });
+    }
+    // Calculate the maximum Gflops to get the highest performance peak
+    double max_gflops = *std::max_element(avg_perfs_.begin(), avg_perfs_.end());
+    
+    // Create a JSON object to store the summary
+    json summary = {
+        {"gflops_max", max_gflops}
+    };
+
+    return {
+        {"name", name},
+        {"results", j},
+        {"summary", summary}
+    };
+}
