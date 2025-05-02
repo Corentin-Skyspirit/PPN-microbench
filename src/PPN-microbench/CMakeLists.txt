@@ -12,7 +12,7 @@ target_sources(PPN-microbench PRIVATE
     mem_bandwidth.cpp
     stream.cpp
     gpu_h2d_bandwidth.cpp
-    matrix_bench.cpp
+    matmul_bench.cpp
 )
 
 target_sources(
@@ -29,7 +29,7 @@ target_sources(
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/mem_bandwidth.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/asm_functions.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/core_to_core_latency.hpp
-            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/matrix_bench.hpp
+            ${PROJECT_SOURCE_DIR}/include/PPN-microbench/matmul_bench.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/gpu_h2d_bandwidth.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/stream.hpp
             ${PROJECT_SOURCE_DIR}/include/PPN-microbench/load_test.hpp
