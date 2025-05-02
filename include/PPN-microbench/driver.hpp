@@ -4,7 +4,7 @@
 #include <PPN-microbench/core_to_core_latency.hpp>
 #include <PPN-microbench/microbench.hpp>
 #include <PPN-microbench/ops.hpp>
-#include <PPN-microbench/matrix_bench.hpp>
+#include <PPN-microbench/matmul_bench.hpp>
 #include <PPN-microbench/gpu_h2d_bandwidth.hpp>
 #include <PPN-microbench/mem_bandwidth.hpp>
 #include <PPN-microbench/stream.hpp>
