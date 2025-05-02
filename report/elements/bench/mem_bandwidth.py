@@ -18,8 +18,8 @@ class MemBandwidth(AbstractBench):
         header = "<h2 id='MEMBandwidth'>Memory Bandwidth</h2>"
 
         imgs = ""
-        # imgs += f"<img src='{wd}/out/mem_bandwidth_single.png'/>"
-        imgs += f"<img src='{wd}/out/mem_bandwidth_multi.png'/>"
+        # imgs += f"<img src='{wd}/out/mem_bandwidth_single.svg'/>"
+        imgs += f"<img src='{wd}/out/mem_bandwidth_multi.svg'/>"
         txt = "<p><span class='code-block'>memcpy()</span> of increasing sizes, performed on a single core then all of them. Multi-core results are stacked. Each core has its own buffer.</p>"
         
         return header + imgs + txt
@@ -71,7 +71,7 @@ class MemBandwidth(AbstractBench):
             plt.axvline(x=caches[2], color='green', linestyle='--', label=f'L3 size: {caches[2]} KiB')
 
         plt.legend()
-        plt.savefig("out/mem_bandwidth_single.png")
+        plt.savefig("out/mem_bandwidth_single.svg")
         plt.clf()
 
     def multi_core_img(self):
@@ -122,7 +122,7 @@ class MemBandwidth(AbstractBench):
             plt.axvline(x=caches[2], color='green', linestyle='--', label=f'L3 size: {caches[2]} KiB')
 
         plt.legend()
-        plt.savefig("out/mem_bandwidth_multi.png")
+        plt.savefig("out/mem_bandwidth_multi.svg")
         plt.clf()
 
     def get_index(self):

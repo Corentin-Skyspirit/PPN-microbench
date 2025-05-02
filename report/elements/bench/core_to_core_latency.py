@@ -18,13 +18,13 @@ class CoreToCoreLatency(AbstractBench):
 
         header = "<h2 id='CoreToCoreLatency'>Core-To-Core Latency</h2>"
 
-        minImgs = f"<img src='{wd}/out/core_to_core_latency_min.png'/>"
+        minImgs = f"<img src='{wd}/out/core_to_core_latency_min.svg'/>"
         # minTitle = "<center><p>Core-to-core minimum latency graph in nanoseconds</p></center>"
 
         res = header + minImgs # + minTitle
         
         if graphs == 2 :
-            meanImgs = f"<img src='{wd}/out/core_to_core_latency_mean.png'/>"
+            meanImgs = f"<img src='{wd}/out/core_to_core_latency_mean.svg'/>"
             # meanTitle = "<center><p>Core-to-core mean latency graph in nanoseconds</p></center>"
             res += meanImgs # + meanTitle
 
@@ -66,7 +66,7 @@ class CoreToCoreLatency(AbstractBench):
 
             plt.tight_layout(pad=4)
 
-            plt.savefig("out/core_to_core_latency_" + mode + ".png")
+            plt.savefig("out/core_to_core_latency_" + mode + ".svg")
             plt.clf()
             plt.close()
 

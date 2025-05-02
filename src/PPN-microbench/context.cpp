@@ -280,6 +280,7 @@ json Context::getJson() {
 
     json gpu_info;
     gpu_info["main_device_index"] = mainDeviceIndex;
+    gpu_info["devices"] = json::array();
     size_t i;
     for (auto d : devices) {
         json o;

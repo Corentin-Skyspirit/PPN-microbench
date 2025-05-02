@@ -13,7 +13,7 @@ class Stream(AbstractBench):
         self.gen_images()
         wd = os.getcwd()
         header = "<h2 id='STREAM'>Stream</h2>"
-        imgs = f"<img src='{wd}/out/stream.png'/>"
+        imgs = f"<img src='{wd}/out/stream.svg'/>"
         p = f"<p>Stream-like benchmark, kernels are the following:</p>"
         ul = f"""<ul>
             <li>Copy: <span class="code-block">c[i] = a[i]</span></li>
@@ -57,7 +57,7 @@ class Stream(AbstractBench):
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
-        plt.savefig("out/stream.png")
+        plt.savefig("out/stream.svg")
 
     def get_index(self):
         return "<li><a href='#STREAM'>Stream</a></li>"

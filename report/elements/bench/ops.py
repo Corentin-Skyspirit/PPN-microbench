@@ -48,7 +48,7 @@ class Ops(AbstractBench):
         table += "<tr><th>f64 SIMD</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[5][0], t[5][1], t[5][2])
         table = f"<table>{table}</table>"
 
-        imgs = f"<img src='{wd}/out/ops_scalar.png'/></br><img src='{wd}/out/ops_simd.png'/>"
+        imgs = f"<img src='{wd}/out/ops_scalar.svg'/></br><img src='{wd}/out/ops_simd.svg'/>"
         
         return header + p1 + table
 
@@ -64,7 +64,7 @@ class Ops(AbstractBench):
         plt.plot(x, self.data[2] / 1e9)
         plt.plot(x, self.data[3] / 1e9)
 
-        plt.savefig("out/ops_scalar.png")
+        plt.savefig("out/ops_scalar.svg")
         plt.clf()
 
         # SIMD BENCH
@@ -74,7 +74,7 @@ class Ops(AbstractBench):
         plt.plot(x, self.data[4] / 1e9)
         plt.plot(x, self.data[5] / 1e9)
 
-        plt.savefig("out/ops_simd.png")
+        plt.savefig("out/ops_simd.svg")
         plt.clf()
         plt.close()
 

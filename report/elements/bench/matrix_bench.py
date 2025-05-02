@@ -13,7 +13,7 @@ class MatrixBench(AbstractBench):
         self.gen_images()
         wd = os.getcwd()
         header = "<h2 id='Matrix_Bench'>Matrix Multiplication DGEMM</h2>"
-        imgs = f"<img src='{wd}/out/matrix_benchmark_plot.png'/>"
+        imgs = f"<img src='{wd}/out/matrix_benchmark_plot.svg'/>"
         p = """
         <p>This benchmark evaluates the performance of dense matrix multiplication using Eigen. Below is the GFLOPS achieved for various matrix sizes.</p>
         <p>Note: If neither Rpeak nor efficiency is available, it indicates that the 'max MHz' value necessary to calculate the Rpeak is missing in the lscpu output of the machine.</p>
@@ -86,7 +86,7 @@ class MatrixBench(AbstractBench):
         plt.legend()
         plt.tight_layout()
         os.makedirs("out", exist_ok=True)
-        plt.savefig("out/matrix_benchmark_plot.png", dpi=300)
+        plt.savefig("out/matrix_benchmark_plot.svg", dpi=300)
         plt.close()
 
     def compute_rpeak(self):

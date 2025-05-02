@@ -16,10 +16,10 @@ class LoadTest(AbstractBench):
 
         header = "<h2 id='LoadTest'>Load test</h2>"
 
-        # img = f"<img src='{wd}/out/load_test.png'/>"
+        # img = f"<img src='{wd}/out/load_test.svg'/>"
         # title = "<center><p>Load test in frequency per core</p></center>"
 
-        img = f"<img src='{wd}/out/load_test.png'/>"
+        img = f"<img src='{wd}/out/load_test.svg'/>"
         # title = "<center><p>Frequency variation of load test with FMA</p></center>"
         
         return header+ img # + title
@@ -47,7 +47,7 @@ class LoadTest(AbstractBench):
         plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
         plt.figtext(0.5, 0.93, "Frequency variation of load test with FMA", horizontalalignment = 'center', size='large')
 
-        plt.savefig("out/load_test.png")
+        plt.savefig("out/load_test.svg")
         plt.clf()
         plt.close()
 
