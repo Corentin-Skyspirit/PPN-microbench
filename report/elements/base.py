@@ -111,16 +111,30 @@ class SysInfo(AbstractElement):
         obj = AbstractElement.obj
         cpu_info = "<tr><th colspan='2'>CPU informations</th></tr>"
         for key, info in obj["meta"]["cpu_info"].items():
-            cpu_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
+            cpu_info += f"<tr><th>{str(key)}</th><td>{self.format_info(info)}</td></tr>"
         cpu_info = f"<table>{cpu_info}</table>"
 
         mem_info = "<tr><th colspan='2'>Cache / Memory informations</th></tr>"
+        mem_info += f"""<tr><th>Total memory</th><td>{round(obj["meta"]["mem_info"]["total_mem"] / (1 << 30), 3)}GiB</td></tr>"""
+        del obj["meta"]["mem_info"]["total_mem"]
         for key, info in obj["meta"]["mem_info"].items():
-            mem_info += f"<tr><th>{str(key)}</th><td>{str(info)}</td></tr>"
+            mem_info += f"<tr><th>{str(key)}</th><td>{info / 1024}KiB</td></tr>"
         mem_info = f"<table>{mem_info}</table>"
 
+        gpu_info = "<tr><th colspan='2'>OpenCL Devices & GPUs</th></tr>"
+        for d in obj["meta"]["gpu_info"]["devices"]:
+                gpu_info += f"<tr><th colspan='2'>{d['name']}</th></tr>"
+                gpu_info += f"<tr><th>Total memory</th><td>{round(d['total_memory'] / 1e9, 3)}GB</td></tr>"
+                gpu_info += f"<tr><th>Max clock speed</th><td>{d['max_freq']}MHz</td></tr>"
+                gpu_info += f"<tr><th>Compute units</th><td>{d['compute_units']}</td></tr>"
+        gpu_info = f"<table>{gpu_info}</table>"
 
-        return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + "<br/>" + mem_info
+        return f"<h2 id='SysInfo'>System information</h2>" + cpu_info + mem_info + gpu_info
+    
+    def format_info(self, info):
+        if isinstance(info, list):
+            return ", ".join(map(str, info))
+        return info
     
     def get_index(self):
         return f"<li><a href='#SysInfo'>System information</a></li>"

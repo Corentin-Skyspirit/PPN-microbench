@@ -18,6 +18,11 @@ class Microbench {
     std::string name;
     uint64_t nbIterations;
 
+    // easier OpenCL managment, those are gathered from context.
+    cl::Device mainDevice;
+    cl::Context mainDeviceContext;
+    cl::CommandQueue mainDeviceQueue;
+
   public:
     Context context = Context::getInstance();
 
