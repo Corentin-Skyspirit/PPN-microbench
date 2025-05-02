@@ -18,7 +18,7 @@ class Cache_Latency(AbstractBench):
         self.gen_images()
         wd = os.getcwd()
         header = "<h2 id='Cache_Latency'>Cache latency</h2>"
-        imgs = f"<img src='{wd}/out/cache_latency.png'/>"
+        imgs = f"<img src='{wd}/out/cache_latency.svg'/>"
         p = "<p>Theoritical cache sizes are taken from the CPU information provided by <span class='code-block'>/proc/cpuinfo</span>.</br> Sometimes, some architectures do not provide their Theoritical cache sizes correctly.  </p>"
         return header + imgs + p
 
@@ -97,7 +97,7 @@ class Cache_Latency(AbstractBench):
 
         # Save the plot
         os.makedirs("out", exist_ok=True)
-        plt.savefig("out/cache_latency.png")
+        plt.savefig("out/cache_latency.svg")
 
 
 

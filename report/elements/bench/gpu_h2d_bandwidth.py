@@ -18,7 +18,7 @@ class GPUH2DBandwidth(AbstractBench):
         header = "<h2 id='GPUH2DBandwidth'>Host to device memory bandwidth</h2>"
 
         if (not self.bench_obj["info"]):
-            img = f"<img src='{wd}/out/gpu_h2d_bandwidth.png'/>"
+            img = f"<img src='{wd}/out/gpu_h2d_bandwidth.svg'/>"
             i = self.obj["meta"]["gpu_info"]["main_device_index"]
             txt = f"<p><span class='code-block'>cl::enqueueWriteBuffer()</span> of increasing sizes. Device {i} is chosen, with the following specs:</p>"
             txt += f"""<table>
@@ -49,7 +49,7 @@ class GPUH2DBandwidth(AbstractBench):
         plt.grid(True, which="both", ls="--")
         plt.legend()
         plt.tight_layout()
-        plt.savefig("out/gpu_h2d_bandwidth.png")
+        plt.savefig("out/gpu_h2d_bandwidth.svg")
 
     def get_index(self):
         return "<li><a href='#GPUH2DBandwidth'>Host to device memory bandwidth</a></li>"

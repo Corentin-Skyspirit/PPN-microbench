@@ -16,7 +16,7 @@ class CpuFrequency(AbstractBench):
 
         header = "<h2 id='CPUFrequency'>CPU Frequency</h2>"
 
-        imgs = f"<img src='{wd}/out/cpu_frequency_multiplot.png'/>"
+        imgs = f"<img src='{wd}/out/cpu_frequency_multiplot.svg'/>"
         # title = "<center><p>Frequencies of cores in GHz depending of their number</p></center>"
         
         return header + imgs # + title
@@ -102,7 +102,7 @@ class CpuFrequency(AbstractBench):
 
         plt.tight_layout(pad=3)
 
-        plt.savefig("out/cpu_frequency_multiplot.png")
+        plt.savefig("out/cpu_frequency_multiplot.svg")
         plt.clf()
         plt.close()
 
