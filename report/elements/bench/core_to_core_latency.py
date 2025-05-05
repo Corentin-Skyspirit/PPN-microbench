@@ -43,7 +43,7 @@ class CoreToCoreLatency(AbstractBench):
             fig, ax = plt.subplots(figsize=(10, 10))
             plt.tight_layout(pad=3.5)
 
-            colors = plt.cm.viridis(np.linspace(0, 1, 256))
+            colors = plt.cm.plasma(np.linspace(0, 1, 256))
             colors[0] = [0.3, 0.3, 0.3, 1]
             new_cmap = mcolors.ListedColormap(colors)
             cax = ax.imshow(matrix, cmap=new_cmap, interpolation="nearest", aspect='auto')
@@ -53,7 +53,7 @@ class CoreToCoreLatency(AbstractBench):
             # Show values
             for i in range(matrix.shape[0]):
                 for j in range(matrix.shape[1]):
-                    ax.text(j, i, str(matrix[i, j] if matrix[i, j] != 0 else ""), ha='center', va='center', color='white')
+                    ax.text(j, i, str(matrix[i, j] if matrix[i, j] != 0 else ""), ha='center', va='center', color='black')
 
             # Axis options
             ax.set_xticks(range(matrix.shape[1]))
