@@ -41,9 +41,11 @@ class LoadTest(AbstractBench):
             plotList.append(coreList)
 
         plt.boxplot(plotList)
-        plt.xlabel('Cores')
+        plt.xlabel('Cores (/ 2, tmp hotfix)')
         plt.ylabel('Frequency (GHz)')
-        plt.ylim(bottom=0)
+        plt.ylim(bottom=0, top=6)
+        plt.hlines(self.obj["meta"]["cpu_info"]["max_mhz"] / 1000, 0.5, len(data) + 0.5, colors="grey", linestyles="--", label="max frequency")
+        plt.legend()
         plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
         plt.figtext(0.5, 0.93, "Frequency variation of load test with FMA", horizontalalignment = 'center', size='large')
 

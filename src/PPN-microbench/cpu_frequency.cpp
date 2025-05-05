@@ -32,7 +32,7 @@ void CPUFrequency::executeBench() {
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
     cpuSpeedJson["name"] = getName();
-    for (int id = 1; id <= nbTestingCores; id++) {
+    for (int id = 2; id <= nbTestingCores; id+=2) {
         for (int i = 0; i < nbMeasures * id; i++) {
             cpuSpeedJson["results"]["Cores" + std::to_string(id)][i/nbMeasures] += measures[id * nbCores + i];
         }
@@ -55,7 +55,7 @@ void CPUFrequency::run() {
 
     nbTestingCores = threadMapping.size();
 
-    for (int coresToExecute = 1; coresToExecute <= nbTestingCores; coresToExecute++) { // Main for, equivalent to a graph
+    for (int coresToExecute = 2; coresToExecute <= nbTestingCores; coresToExecute+=2) { // Main for, equivalent to a graph
         for (int coresExecuted = 1; coresExecuted <= coresToExecute; coresExecuted++) { // For every core count, equivalent to a point in a graph
             for (int sample = -10; sample < nbMeasures; sample++) { // 10 Warmup runs and samples to average tests (in python, later)
                 // Execute on 1 Core, then 2 Cores, 3 Cores, etc...
