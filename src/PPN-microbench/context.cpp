@@ -74,7 +74,9 @@ void Context::cpuInfo() {
     double max_mhz = 0.0;
     system("lscpu > /tmp/lscpu_out.txt");
     std::ifstream f_re("/tmp/lscpu_out.txt");
+    // std::ifstream f_re("lscpu");
 
+    
 
     if (!f_re.is_open()) {
         spdlog::warn("Error opening /tmp/lscpu_out.txt");
@@ -85,6 +87,18 @@ void Context::cpuInfo() {
     bool found = false;
 
     while (std::getline(f_re, re_line)) {
+        if (re_line.find("Thread(s) per core:") != std::string::npos) {
+            threadsPerCore = getFirstInt(re_line);
+        }
+
+        if (re_line.find("Core(s) per socket:") != std::string::npos) {
+            cpusPerSocket = getFirstInt(re_line);
+        }
+
+        if (re_line.find("Socket(s):") != std::string::npos) {
+            sockets = getFirstInt(re_line);
+        }
+
         if (re_line.find("Vitesse maximale du processeur en MHz") != std::string::npos) {
             // Found the correct line
             std::size_t pos = re_line.find(":");
@@ -145,48 +159,56 @@ void Context::cpuInfo() {
     //////////
 
     std::ifstream f("/proc/cpuinfo");
+    // std::ifstream f("cpuinfo");
     std::string line;
 
     size_t currProc = 0;
-    std::set<size_t> mappedCores;
+    size_t currCore = 0;
+    size_t socket = 0;
+    int64_t topo[sockets][cpusPerSocket][threadsPerCore];
+
+    for (size_t s = 0; s < sockets; s++) {
+        for (size_t c = 0; c < cpusPerSocket; c++) {
+            for (size_t t = 0; t < threadsPerCore; t++) {
+                topo[s][c][t] = -1;
+            }
+        }
+    }
 
     while (std::getline(f, line)) {
         if (line.find("processor") != std::string::npos) {
             currProc = getFirstInt(line);
-            threads += 1;
+            currCore = currProc;
         }
 
         if (line.find("core id") != std::string::npos) {
-            size_t proc = getFirstInt(line);
-
-            // only add the current core to the mapping if it hasn't appeared
-            // before.
-            if (mappedCores.find(proc) == mappedCores.end()) {
-                threadMapping.push_back(currProc);
-                mappedCores.emplace(proc);
-            }
+            currCore = getFirstInt(line);
         }
 
         if (line.find("physical id") != std::string::npos) {
-            size_t sockCout = getFirstInt(line) + 1;
-            if (sockets != sockCout) {
-                // new socket, we need to clear the mapping set
-                mappedCores.clear();
-                sockets = sockCout;
+            socket = getFirstInt(line);
+        }
+
+        if (line == "") {
+            int64_t i = 0;
+            while (topo[socket][currCore][i] > -1) {
+                i++;
             }
+            topo[socket][currCore][i] = currProc;
+            spdlog::info("{} {} {}", socket, currCore, currProc);
         }
     }
 
-    // ARM /proc/cpuinfo has way less information about cpu cores
-    // we have to manuall set the mapping
-    if (cpuArchi == "ARM") {
-        cpus = threads;
-        for (size_t i = 0; i < cpus; i++) {
-            threadMapping.push_back(i);
+    for (int soc = 0; soc < sockets; soc++) {
+        spdlog::warn("haha");
+        for (int cor = 0; cor < cpusPerSocket; cor++) {
+            threadMapping.push_back(topo[soc][cor][0]);
+            spdlog::warn("{} {} {}", soc, cor, threadMapping[threadMapping.size()-1]);
         }
     }
 
-    cpus = threadMapping.size();
+    cpus = sockets * cpusPerSocket;
+    threads = sockets * cpusPerSocket * threadsPerCore;
     f.close();
 }
 

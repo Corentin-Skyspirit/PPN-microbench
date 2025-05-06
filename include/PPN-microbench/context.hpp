@@ -30,8 +30,10 @@ class Context {
     size_t sockets;
     // Amount of physical cores on the node
     size_t cpus;
+    size_t cpusPerSocket;
     // Amount of virtural core on the node
     size_t threads;
+    size_t threadsPerCore;
     // Mapping of the virtual cores to the physical ones
     std::vector<size_t> threadMapping;
     //Max cpu frequency
