@@ -10,7 +10,7 @@
 
 ADD_ARM_i32:
 loop1:
-    add w0, w0, w0
+    add w9, w9, w9
     add w1, w1, w1
     add w2, w2, w2
     add w3, w3, w3
@@ -18,7 +18,7 @@ loop1:
     add w5, w5, w5
     add w6, w6, w6
     add w7, w7, w7
-    add w0, w0, w0
+    add w9, w9, w9
     add w1, w1, w1
     add w2, w2, w2
     add w3, w3, w3
@@ -33,7 +33,7 @@ loop1:
 
 ADD_ARM_i64:
 loop2:
-    add x0, x0, x0
+    add x9, x9, x9
     add x1, x1, x1
     add x2, x2, x2
     add x3, x3, x3
@@ -41,7 +41,7 @@ loop2:
     add x5, x5, x5
     add x6, x6, x6
     add x7, x7, x7
-    add x0, x0, x0
+    add x9, x9, x9
     add x1, x1, x1
     add x2, x2, x2
     add x3, x3, x3
