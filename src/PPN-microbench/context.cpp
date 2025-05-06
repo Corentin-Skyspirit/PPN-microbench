@@ -74,9 +74,6 @@ void Context::cpuInfo() {
     double max_mhz = 0.0;
     system("lscpu > /tmp/lscpu_out.txt");
     std::ifstream f_re("/tmp/lscpu_out.txt");
-    // std::ifstream f_re("lscpu");
-
-    
 
     if (!f_re.is_open()) {
         spdlog::warn("Error opening /tmp/lscpu_out.txt");
@@ -159,7 +156,6 @@ void Context::cpuInfo() {
     //////////
 
     std::ifstream f("/proc/cpuinfo");
-    // std::ifstream f("cpuinfo");
     std::string line;
 
     int64_t coreIds = 0;

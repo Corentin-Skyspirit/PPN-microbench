@@ -35,15 +35,15 @@ Driver::Driver(int argc, char **argv) {
     }
 
     if (benches.size() == 0) {
-        // addBench(new Ops(11));
-        // addBench(new CPUFrequency(11));
-        // addBench(new LoadTest(11));
-        // addBench(new CoreToCoreLatency(11));
-        // addBench(new CacheLatency());
-        // addBench(new MemoryBandwidth);
-        // addBench(new Stream);
-        // addBench(new GPUH2DBandwidth);
-        // addBench(new MatMulBench(11));
+        addBench(new Ops(11));
+        addBench(new CPUFrequency(11));
+        addBench(new LoadTest(11));
+        addBench(new CoreToCoreLatency(11));
+        addBench(new CacheLatency());
+        addBench(new MemoryBandwidth);
+        addBench(new Stream);
+        addBench(new GPUH2DBandwidth);
+        addBench(new MatMulBench(11));
     }
 
     run();
