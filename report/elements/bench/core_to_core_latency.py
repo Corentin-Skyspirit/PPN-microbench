@@ -51,14 +51,20 @@ class CoreToCoreLatency(AbstractBench):
             plt.figtext(0.5, 0.02, "Core-to-core latency", horizontalalignment = 'center', size='x-large')
 
             # Show values
-            for i in range(matrix.shape[0]):
-                for j in range(matrix.shape[1]):
-                    ax.text(j, i, str(matrix[i, j] if matrix[i, j] != 0 else ""), ha='center', va='center', color='black')
+            if (matrix.shape[0] <= 32) :
+                for i in range(matrix.shape[0]):
+                    for j in range(matrix.shape[1]):
+                        ax.text(j, i, str(matrix[i, j] if matrix[i, j] != 0 else ""), ha='center', va='center', color='black')
 
             # Axis options
-            ax.set_xticks(range(matrix.shape[1]))
-            ax.set_yticks(range(matrix.shape[0]))
-            ax.set_yticklabels(f"Core {j}" for j in range(matrix.shape[0]))
+            fig_width, _ = fig.get_size_inches() * fig.dpi
+
+            # 1 tick every 100 pixels
+            tick_spacing = int(matrix.shape[0] / (fig_width / 100))
+            tick_indices = np.arange(0, matrix.shape[0], tick_spacing)
+            tick_indices = np.arange(0, matrix.shape[1], tick_spacing)
+
+            # ax.set_yticklabels(f"Core {j}" for j in range(matrix.shape[0]))
             ax.xaxis.set_ticks_position('top')
             ax.tick_params(axis='x', labeltop=True, labelbottom=False)
 
