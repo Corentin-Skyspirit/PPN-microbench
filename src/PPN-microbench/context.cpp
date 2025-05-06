@@ -174,6 +174,11 @@ void Context::cpuInfo() {
     f.seekg(0);
     coreIds++;
 
+    // Arm cpus usually don't report core id in /proc/cpuinfo
+    if (coreIds == 1) {
+        coreIds = sockets * threadsPerCore * cpusPerSocket;
+    }
+
     size_t currProc = 0;
     size_t currCore = 0;
     size_t socket = 0;
