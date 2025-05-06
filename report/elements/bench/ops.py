@@ -48,9 +48,9 @@ class Ops(AbstractBench):
         table += "<tr><th>f64 SIMD</th><td>{:10.4f}</td><td>{:10.4f}</td><td>{:10.4f}</td></tr>".format(t[5][0], t[5][1], t[5][2])
         table = f"<table>{table}</table>"
 
-        imgs = f"<img src='{wd}/out/ops_scalar.svg'/></br><img src='{wd}/out/ops_simd.svg'/>"
+        txt = f"Operations are performed in assembly on (at least) 8 different registers, with no dependencies."
         
-        return header + p1 + table
+        return header + p1 + table + txt
 
     def gen_images(self):
         x = [i for i in range(len(self.data[0]))]
