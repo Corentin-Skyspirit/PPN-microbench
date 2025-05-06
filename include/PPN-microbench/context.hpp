@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 using json = nlohmann::ordered_json;
 

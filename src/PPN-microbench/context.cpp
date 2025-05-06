@@ -162,19 +162,32 @@ void Context::cpuInfo() {
     // std::ifstream f("cpuinfo");
     std::string line;
 
+    int64_t coreIds = 0;
+    // Parse /proc/cpuinfo the first time to get the max cpuid.
+    // intel 13th gen+ likes to create ghost cpu ids
+    while (std::getline(f, line)) {
+        if (line.find("core id") != std::string::npos) {
+            coreIds = std::max(coreIds, getFirstInt(line));
+        }
+    }
+    f.clear();
+    f.seekg(0);
+    coreIds++;
+
     size_t currProc = 0;
     size_t currCore = 0;
     size_t socket = 0;
-    int64_t topo[sockets][cpusPerSocket][threadsPerCore];
+    int64_t topo[sockets][coreIds][threadsPerCore];
 
     for (size_t s = 0; s < sockets; s++) {
-        for (size_t c = 0; c < cpusPerSocket; c++) {
+        for (size_t c = 0; c < coreIds; c++) {
             for (size_t t = 0; t < threadsPerCore; t++) {
                 topo[s][c][t] = -1;
             }
         }
     }
 
+    // Parse again and fill in thread infos
     while (std::getline(f, line)) {
         if (line.find("processor") != std::string::npos) {
             currProc = getFirstInt(line);
@@ -201,9 +214,10 @@ void Context::cpuInfo() {
 
     for (int soc = 0; soc < sockets; soc++) {
         spdlog::warn("haha");
-        for (int cor = 0; cor < cpusPerSocket; cor++) {
-            threadMapping.push_back(topo[soc][cor][0]);
-            spdlog::warn("{} {} {}", soc, cor, threadMapping[threadMapping.size()-1]);
+        for (int cor = 0; cor < coreIds; cor++) {
+            int64_t proc = topo[soc][cor][0];
+            spdlog::warn("{} {} {}", soc, cor, proc);
+            if (proc > -1) threadMapping.push_back(proc);
         }
     }
 
