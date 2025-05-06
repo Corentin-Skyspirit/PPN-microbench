@@ -72,7 +72,7 @@ void Context::cpuInfo() {
 
     
     double max_mhz = 0.0;
-    system("lscpu > /tmp/lscpu_out.txt");
+    int _ =system("lscpu > /tmp/lscpu_out.txt");
     std::ifstream f_re("/tmp/lscpu_out.txt");
 
     if (!f_re.is_open()) {
@@ -209,15 +209,13 @@ void Context::cpuInfo() {
                 i++;
             }
             topo[socket][currCore][i] = currProc;
-            spdlog::info("{} {} {}", socket, currCore, currProc);
+            spdlog::debug("sock:{} core:{} thread:{}", socket, currCore, currProc);
         }
     }
 
     for (int soc = 0; soc < sockets; soc++) {
-        spdlog::warn("haha");
         for (int cor = 0; cor < coreIds; cor++) {
             int64_t proc = topo[soc][cor][0];
-            spdlog::warn("{} {} {}", soc, cor, proc);
             if (proc > -1) threadMapping.push_back(proc);
         }
     }
