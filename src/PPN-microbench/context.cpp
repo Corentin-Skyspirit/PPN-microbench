@@ -178,6 +178,7 @@ void Context::cpuInfo() {
     size_t currProc = 0;
     size_t currCore = 0;
     size_t socket = 0;
+    threads = 0;
     int64_t topo[sockets][coreIds][threadsPerCore];
 
     for (size_t s = 0; s < sockets; s++) {
@@ -193,6 +194,7 @@ void Context::cpuInfo() {
         if (line.find("processor") != std::string::npos) {
             currProc = getFirstInt(line);
             currCore = currProc;
+            threads += 1;
         }
 
         if (line.find("core id") != std::string::npos) {
@@ -221,7 +223,6 @@ void Context::cpuInfo() {
     }
 
     cpus = sockets * cpusPerSocket;
-    threads = sockets * cpusPerSocket * threadsPerCore;
     f.close();
 }
 
