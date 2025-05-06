@@ -50,10 +50,10 @@ void Ops::run() {
         results[0][i] = wrap(ADD_i32);
 
         // i64
-        results[1][i] = wrap(ADD_f32);
+        results[1][i] = wrap(ADD_i64);
 
         // f32
-        results[2][i] = wrap(ADD_i64);
+        results[2][i] = wrap(ADD_f32);
 
         // f64
         results[3][i] = wrap(ADD_f64);
