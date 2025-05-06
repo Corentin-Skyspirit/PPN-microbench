@@ -55,38 +55,28 @@ class Cache_Latency(AbstractBench):
         # Plot the data
         plt.figure(figsize=(10, 6))
         
-        # Calculate the local standard deviation for the error band
-        window_size = max(1, len(latencies) // 20)  # Ajust window error band size based on data size
-        std_latencies = np.array([np.std(latencies[max(0, i - window_size): min(len(latencies), i + window_size)])
-                          for i in range(len(latencies))])
-
 
         # Plot experimental data
         plt.scatter(buffer_sizes_kib, latencies, label='Experimental Data', color='blue', s=10)
         if theoretical_cache_sizes[0] != 0:
             for (xi, yi) in latency_points:
-                plt.annotate(f"{yi:.2f}", (xi, yi), fontsize=9, fontweight='bold', color='black', bbox=dict(boxstyle="round,pad=0.3", fc="gray", ec="black", alpha=0.5), textcoords="offset points", xytext=(5, -15))
+                plt.annotate(f"{yi:.2f} ns", (xi, yi), fontsize=9, fontweight='bold', color='black', bbox=dict(boxstyle="round,pad=0.3", fc="gray", ec="black", alpha=0.5), textcoords="offset points", xytext=(5, -15))
+        
+        # Annotate the last point
+        last_x, last_y = buffer_sizes_kib[-1], latencies[-1]
+        plt.annotate(f"{last_y:.2f} ns", (last_x, last_y), fontsize=9, fontweight='bold', color='black', bbox=dict(boxstyle="round,pad=0.3", fc="gray", ec="black", alpha=0.5), textcoords="offset points", xytext=(-10, -15))
 
-
-        # Plot error band with
-        plt.fill_between(
-            buffer_sizes_kib,
-            latencies - std_latencies,
-            latencies + std_latencies,
-            color='cyan',
-            alpha=0.2, # Adjust transparency
-            edgecolor='blue',
-            label='Error Band (std dev)',
-            linewidth=2  # Increase line thickness
-        )
 
         # Plot theoretical cache sizes
         for i, (theoretical_size, label) in enumerate(zip(theoretical_cache_sizes, ['L1 Cache', 'L2 Cache', 'L3 Cache'])):
             if theoretical_cache_sizes[i] != 0:
-                plt.axvline(x=theoretical_size, color='green', linestyle='--', label=f'Theoretical {label} size: {theoretical_size:.1f} KiB')
-                plt.text(theoretical_size, plt.ylim()[1] * 0.9, f'{label}', verticalalignment='bottom', horizontalalignment='right', color='green', fontsize=12)
+                plt.axvline(x=theoretical_size, color='green', linestyle='--')
+                plt.text(theoretical_size - theoretical_size * 0.1, plt.ylim()[1] - plt.ylim()[1] * 0.9,
+                          f'{label}: {theoretical_size:.1f} KiB', verticalalignment='bottom', horizontalalignment='right',
+                            color='green', fontsize=12, fontweight='bold', rotation=90, bbox=dict(boxstyle="round,pad=0.3", fc="white",
+                             ec="black", alpha=0.8))
         
-        #plot the graph
+        # Plot the graph
         plt.xscale("log", base=2)
         plt.yscale("log", base=10)
         plt.xlabel("Buffer Size (KiB)")
@@ -103,5 +93,3 @@ class Cache_Latency(AbstractBench):
 
     def get_index(self):
         return "<li><a href='#Cache_Latency'>Cache latency</a></li>"
-
-

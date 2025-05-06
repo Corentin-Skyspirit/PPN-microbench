@@ -55,6 +55,8 @@ void Driver::start() {
     for (Microbench *bench : benches) {
         spdlog::info("Running bench: {}", bench->getName());
         bench->run();
+        buildJson();
+        save();
     }
 }
 
