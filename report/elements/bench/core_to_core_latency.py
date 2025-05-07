@@ -59,14 +59,15 @@ class CoreToCoreLatency(AbstractBench):
             # Axis options
             fig_width, _ = fig.get_size_inches() * fig.dpi
 
-            # 1 tick every 100 pixels
-            tick_spacing = int(matrix.shape[0] / (fig_width / 100))
+            # 1 tick every 10 pixels
+            tick_spacing = int(matrix.shape[0] / (fig_width / 10) + 1)
             tick_indices = np.arange(0, matrix.shape[0], tick_spacing)
             tick_indices = np.arange(0, matrix.shape[1], tick_spacing)
 
             # ax.set_yticklabels(f"Core {j}" for j in range(matrix.shape[0]))
             ax.xaxis.set_ticks_position('top')
             ax.tick_params(axis='x', labeltop=True, labelbottom=False)
+            ax.set_aspect('equal')
 
             fig.colorbar(cax, fraction=0.03, pad=0.04)
 

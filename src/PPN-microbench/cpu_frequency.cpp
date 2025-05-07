@@ -34,7 +34,7 @@ json CPUFrequency::getJson() {
     cpuSpeedJson["name"] = getName();
     for (int id = 2; id <= nbTestingCores; id+=2) {
         for (int i = 0; i < nbMeasures * id; i++) {
-            cpuSpeedJson["results"]["Cores" + std::to_string(id)][i/nbMeasures] += measures[id * nbCores + i];
+            cpuSpeedJson["results"][(id/2)-1][i/nbMeasures] += measures[id * nbCores + i];
         }
     }
     return cpuSpeedJson;
