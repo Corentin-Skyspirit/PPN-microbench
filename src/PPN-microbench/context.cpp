@@ -84,15 +84,19 @@ void Context::cpuInfo() {
     bool found = false;
 
     while (std::getline(f_re, re_line)) {
-        if (re_line.find("Thread(s) per core:") != std::string::npos) {
+        if ((re_line.find("Thread(s) per core:") != std::string::npos) ||
+            (re_line.find("Thread(s) par cœur") != std::string::npos)
+    ) {
             threadsPerCore = getFirstInt(re_line);
         }
 
-        if (re_line.find("Core(s) per socket:") != std::string::npos) {
+        if ((re_line.find("Core(s) per socket:") != std::string::npos) ||
+            (re_line.find("Cœur(s) par socket") != std::string::npos)
+        ) {
             cpusPerSocket = getFirstInt(re_line);
         }
 
-        if (re_line.find("Socket(s):") != std::string::npos) {
+        if (re_line.find("Socket(s)") != std::string::npos) {
             sockets = getFirstInt(re_line);
         }
 
