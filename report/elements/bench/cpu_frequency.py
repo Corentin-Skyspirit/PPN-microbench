@@ -32,16 +32,16 @@ class CpuFrequency(AbstractBench):
 
             # Lignes
             lin = 1
-            if len(data) == 2 :
+            if len(data) in [2, 4] :
                 lin = 2
-            elif len(data) in [3,5,6] :
+            elif len(data) in [3, 5, 6] :
                 lin = 3
-            elif len(data) in [4,7, 8] :
+            elif len(data) in [7, 8] :
                 lin = 4
 
             # Colonnes
             col = 1
-            if len(data) > 4 :
+            if len(data) >= 4 :
                 col = 2
 
             fig, truc = plt.subplots(lin, col, figsize=(10,12))
@@ -80,7 +80,7 @@ class CpuFrequency(AbstractBench):
                 cadre.boxplot(values)
                 cadre.set_xlabel('Cores')
                 cadre.set_ylabel('Frequency (GHz)')
-                cadre.set_ylim(bottom=0)
+                cadre.set_ylim(bottom=min(min(values))*0.9, top=max(max(values))*1.1)
                 cadre.grid(True, which='major', axis='both', linestyle='--', alpha=0.7)
                 
                 # Axis options
