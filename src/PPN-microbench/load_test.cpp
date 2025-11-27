@@ -30,7 +30,7 @@ void LoadTest::run(){
 
     double nbFMA = (double)(12 * nbIterations);
 
-    for (int maxCores = 1; maxCores < nbTestingCores + 1; maxCores+=2) {
+    for (int maxCores = 1; maxCores < nbTestingCores + 1; maxCores++) {
 
         for (int k = 0; k < nbMeasures; k ++) {
             auto start = steady_clock::now();
@@ -70,7 +70,7 @@ void LoadTest::run(){
 json LoadTest::getJson(){
     json loadTestJson = json::object();
     loadTestJson["name"] = getName();
-    for (int i = 0; i < nbCores / 2; i++) {
+    for (int i = 0; i < nbCores; i++) {
         for (int k = 0; k < nbMeasures; k++) {
             loadTestJson["results"][i] += measures[i * nbMeasures + k];
         }

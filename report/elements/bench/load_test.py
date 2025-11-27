@@ -51,7 +51,7 @@ class LoadTest(AbstractBench):
         tick_spacing = int(len(plotList) / (fig_width / 10) + 1)
         tick_indices = np.arange(0, len(plotList), tick_spacing)
 
-        truc.set_xlabel('Cores (/ 2, tmp hotfix)')
+        truc.set_xlabel('Cores')
         truc.set_ylabel('Frequency (GHz)')
         truc.set_ylim(bottom=0, top=6)
         truc.hlines(self.obj["meta"]["cpu_info"]["max_mhz"] / 1000, 0.5, len(data) + 0.5, colors="grey", linestyles="--", label="max frequency")

@@ -72,7 +72,7 @@ class CpuFrequency(AbstractBench):
 
                     values.append(temp)
 
-                if lin < 4 :
+                if len(data) < 4 :
                     cadre = truc[nb]
                 else :
                     cadre = truc[nb // 2, nb % 2] 
@@ -80,7 +80,7 @@ class CpuFrequency(AbstractBench):
                 cadre.boxplot(values)
                 cadre.set_xlabel('Cores')
                 cadre.set_ylabel('Frequency (GHz)')
-                cadre.set_ylim(bottom=0, top=6)
+                cadre.set_ylim(bottom=0)
                 cadre.grid(True, which='major', axis='both', linestyle='--', alpha=0.7)
                 
                 # Axis options
