@@ -32,11 +32,13 @@ void CPUFrequency::executeBench() {
 json CPUFrequency::getJson() {
     json cpuSpeedJson = json::object();
     cpuSpeedJson["name"] = getName();
-    for (int id = 2; id <= nbTestingCores; id+=2) {
+    for (int id = 1; id <= nbTestingCores; id++) {
         for (int i = 0; i < nbMeasures * id; i++) {
-            cpuSpeedJson["results"]["Cores" + std::to_string(id)][i/nbMeasures] += measures[id * nbCores + i];
+            spdlog::debug("Json export: Core - {} Measure - {}", id, i/nbMeasures);
+            cpuSpeedJson["results"][id-1][i/nbMeasures] += measures[id * nbCores + i];
         }
     }
+    spdlog::debug("JSON cpu frequency exported");
     return cpuSpeedJson;
 }
 
@@ -51,11 +53,13 @@ void CPUFrequency::run() {
         CPU_SET(threadMapping[i], &cpusets[i]);
     }
 
-    std::thread threads[nbCores];
+    std::thread threads[nbCores]; // List of threads
 
     nbTestingCores = threadMapping.size();
+    spdlog::debug("nbCores: {} / nbTestingCores: {}", nbCores, nbTestingCores);
 
-    for (int coresToExecute = 2; coresToExecute <= nbTestingCores; coresToExecute+=2) { // Main for, equivalent to a graph
+    for (int coresToExecute = 1; coresToExecute <= nbTestingCores; coresToExecute++) { // Main for, equivalent to a graph
+        spdlog::debug("Run with {} cores", coresToExecute);
         for (int coresExecuted = 1; coresExecuted <= coresToExecute; coresExecuted++) { // For every core count, equivalent to a point in a graph
             for (int sample = -10; sample < nbMeasures; sample++) { // 10 Warmup runs and samples to average tests (in python, later)
                 // Execute on 1 Core, then 2 Cores, 3 Cores, etc...

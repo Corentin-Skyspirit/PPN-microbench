@@ -27,6 +27,8 @@ class LoadTest(AbstractBench):
     def gen_images(self):
         data = self.bench_obj["results"]
 
+        fig, truc = plt.subplots(1, 1, figsize=(12, 8))
+
         plotList = []
 
         for coreList in data:
@@ -40,13 +42,21 @@ class LoadTest(AbstractBench):
 
             plotList.append(coreList)
 
-        plt.boxplot(plotList)
-        plt.xlabel('Cores (/ 2, tmp hotfix)')
-        plt.ylabel('Frequency (GHz)')
-        plt.ylim(bottom=0, top=6)
-        plt.hlines(self.obj["meta"]["cpu_info"]["max_mhz"] / 1000, 0.5, len(data) + 0.5, colors="grey", linestyles="--", label="max frequency")
-        plt.legend()
-        plt.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
+        truc.boxplot(plotList)
+
+        # Axis options
+        fig_width, _ = fig.get_size_inches() * fig.dpi
+
+        # 1 tick every 10 pixels
+        tick_spacing = int(len(plotList) / (fig_width / 10) + 1)
+        tick_indices = np.arange(0, len(plotList), tick_spacing)
+
+        truc.set_xlabel('Cores')
+        truc.set_ylabel('Frequency (GHz)')
+        truc.set_ylim(bottom=0, top=6)
+        truc.hlines(self.obj["meta"]["cpu_info"]["max_mhz"] / 1000, 0.5, len(data) + 0.5, colors="grey", linestyles="--", label="max frequency")
+        truc.legend()
+        truc.grid(True, which='major', axis='y', linestyle='--', alpha=0.7)
         plt.figtext(0.5, 0.93, "Frequency variation of load test with FMA", horizontalalignment = 'center', size='large')
 
         plt.savefig("out/load_test.svg")
