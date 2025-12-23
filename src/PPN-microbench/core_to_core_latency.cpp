@@ -5,12 +5,20 @@ using std::chrono::nanoseconds;
 using std::chrono::steady_clock;
 
 constexpr int preheat = 100;
+constexpr int maxNbCores = 32;
 
 CoreToCoreLatency::CoreToCoreLatency(int nbMeasures) : Microbench("Core To Core Latency", 900) {
     this->nbMeasures = nbMeasures;
     nbCores = context.getCpus();
-    resultsMin.reserve(nbCores * nbCores);
-    resultsMean.reserve(nbCores * nbCores);
+    step = 1;
+    nbTestCores = nbCores;
+    while (nbTestCores > maxNbCores) {
+        step++;
+        nbTestCores = floor(nbCores / step);
+    }
+    spdlog::debug("Step -> {} / NbCoresTested -> {}", step, nbTestCores);
+    resultsMin.reserve(nbTestCores * nbTestCores);
+    resultsMean.reserve(nbTestCores * nbTestCores);
 }
 
 CoreToCoreLatency::~CoreToCoreLatency() {}
@@ -46,8 +54,10 @@ void CoreToCoreLatency::run() {
         }
     }
 
-    for (int id_1 = 0; id_1 < nbCores; ++id_1) {
-        for (int id_2 = 0; id_2 < nbCores; ++id_2) {
+    int cpt = 1;
+    for (int id_1 = 0; id_1 < nbCores; id_1 += step) {
+        idCores.push_back(id_1);
+        for (int id_2 = 0; id_2 < nbCores; id_2 += step) {
             if (id_1 == id_2) {
                 resultsMin.push_back(0);
                 resultsMean.push_back(0);
@@ -93,7 +103,7 @@ void CoreToCoreLatency::run() {
                 resultsMin.push_back(minDuration / getNbIterations() / 2);
                 resultsMean.push_back(sumDuration / nbMeasures / getNbIterations() / 2);
             }
-            spdlog::debug("{}: run {} / {}", name, id_1 * nbCores + (id_2 + 1), nbCores * nbCores);
+            spdlog::debug("{}: run {} / {}", name, cpt++, nbTestCores * nbTestCores);
         }
     }
 }
@@ -101,10 +111,11 @@ void CoreToCoreLatency::run() {
 json CoreToCoreLatency::getJson() { 
     json coreToCoreJson = json::object();
     coreToCoreJson["name"] = getName();
-    for (int line = 0; line < nbCores; line++) {
-        for (int col = 0; col < nbCores; col++) {
-            coreToCoreJson["results"]["min"][line] += resultsMin[line * nbCores + col];
-            coreToCoreJson["results"]["mean"][line] += resultsMean[line * nbCores + col];
+    coreToCoreJson["testedCores"] = idCores;
+    for (int line = 0; line < nbTestCores; line++) {
+        for (int col = 0; col < nbTestCores; col++) {
+            coreToCoreJson["results"]["min"][line] += resultsMin[line * nbTestCores + col];
+            coreToCoreJson["results"]["mean"][line] += resultsMean[line * nbTestCores + col];
         }
     }
     return coreToCoreJson;

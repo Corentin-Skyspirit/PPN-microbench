@@ -2,6 +2,7 @@ from elements.bench.base import AbstractBench
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+from matplotlib.ticker import MaxNLocator
 import numpy as np
 import os.path
 
@@ -59,12 +60,16 @@ class CoreToCoreLatency(AbstractBench):
             # Axis options
             fig_width, _ = fig.get_size_inches() * fig.dpi
 
-            # 1 tick every 10 pixels
-            tick_spacing = int(matrix.shape[0] / (fig_width / 10) + 1)
-            tick_indices = np.arange(0, matrix.shape[0], tick_spacing)
-            tick_indices = np.arange(0, matrix.shape[1], tick_spacing)
+            # # 1 tick every 10 pixels
+            # tick_spacing = int(matrix.shape[0] / (fig_width / 10) + 1)
+            # tick_indices = np.arange(0, matrix.shape[0], tick_spacing)
+            # tick_indices = np.arange(0, matrix.shape[1], tick_spacing)
 
-            # ax.set_yticklabels(f"Core {j}" for j in range(matrix.shape[0]))
+            print(self.bench_obj["testedCores"])
+            ax.set_xticks(range(len(self.bench_obj["testedCores"])))
+            ax.set_xticklabels(self.bench_obj["testedCores"])
+            ax.set_yticks(range(len(self.bench_obj["testedCores"])))
+            ax.set_yticklabels(self.bench_obj["testedCores"])
             ax.xaxis.set_ticks_position('top')
             ax.tick_params(axis='x', labeltop=True, labelbottom=False)
             ax.set_aspect('equal')
